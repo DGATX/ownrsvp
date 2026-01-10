@@ -52,7 +52,7 @@ services:
   # Database migrations - runs once on startup
   migrate:
     image: dgatx/ownrsvp:latest
-    command: sh -c "node node_modules/.bin/prisma migrate deploy"
+    command: sh -c "npx prisma@5.22.0 migrate deploy"
     environment:
       - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@db:5432/rsvp_db?schema=public
     depends_on:
