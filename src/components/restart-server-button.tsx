@@ -1,6 +1,8 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -20,6 +22,7 @@ interface RestartMethod {
 }
 
 export function RestartServerButton() {
+  const router = useRouter();
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isRestarting, setIsRestarting] = useState(false);
@@ -39,7 +42,7 @@ export function RestartServerButton() {
         setRestartMethod(data.method);
       }
     } catch (error) {
-      console.error('Failed to load restart method:', error);
+      logger.error('Failed to load restart method:', error);
     } finally {
       setIsLoadingMethod(false);
     }
@@ -81,7 +84,7 @@ export function RestartServerButton() {
 
             // Wait a bit then try to refresh
             setTimeout(() => {
-              window.location.reload();
+              router.refresh();
             }, 3000);
           }
         } else {
@@ -95,7 +98,7 @@ export function RestartServerButton() {
         throw new Error(data.error || 'Failed to restart server');
       }
     } catch (error) {
-      console.error('Restart error:', error);
+      logger.error('Restart error:', error);
       toast({
         title: 'Error',
         description: error instanceof Error ? error.message : 'Failed to restart server. Please restart manually.',
@@ -162,7 +165,7 @@ export function RestartServerButton() {
                   Note:
                 </p>
                 <p className="text-amber-700 dark:text-amber-300">
-                  Automatic restart is not available in this environment. The server will shut down gracefully, and you'll need to restart it manually.
+                  Automatic restart is not available in this environment. The server will shut down gracefully, and you&apos;ll need to restart it manually.
                 </p>
               </div>
             )}

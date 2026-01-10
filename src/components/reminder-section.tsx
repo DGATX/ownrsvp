@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -54,7 +55,7 @@ export function ReminderSection({ eventId, reminderSchedule, canEdit }: Reminder
 
       setIsDialogOpen(false);
     } catch (error) {
-      console.error('Update reminders error:', error);
+      logger.error('Update reminders error:', error);
       toast({
         title: 'Error',
         description: error instanceof Error ? error.message : 'Failed to update reminders',

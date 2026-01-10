@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -55,7 +56,7 @@ export default function LoginPage() {
         });
       }
     } catch (error) {
-      console.error('Login error:', error);
+      logger.error('Login error:', error);
       toast({
         title: 'Error',
         description: error instanceof Error ? error.message : 'Something went wrong. Please try again.',

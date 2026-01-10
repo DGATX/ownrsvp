@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,6 +13,7 @@ interface PublicCommentFormProps {
 }
 
 export function PublicCommentForm({ eventId }: PublicCommentFormProps) {
+  const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
@@ -41,9 +43,9 @@ export function PublicCommentForm({ eventId }: PublicCommentFormProps) {
 
       setName('');
       setContent('');
-      
+
       // Refresh to show new comment
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       toast({
         title: 'Error',

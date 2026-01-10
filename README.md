@@ -1,26 +1,48 @@
 # OwnRSVP - Self-Hosted Event Management
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docker](https://img.shields.io/badge/docker-ready-brightgreen.svg)](https://www.docker.com/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dgatx/ownrsvp.svg)](https://hub.docker.com/r/dgatx/ownrsvp)
+[![Docker Image Size](https://img.shields.io/docker/image-size/dgatx/ownrsvp/latest)](https://hub.docker.com/r/dgatx/ownrsvp)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 
 A beautiful, self-hosted event invitation and RSVP management platform. Create events, send email invitations, and track RSVPs—all from your own server.
 
-## 🚀 Quick Start
+## 🚀 Quick Start (3 steps, 5 minutes)
 
-Get up and running in 5 minutes with Docker Compose:
+### Using Pre-Built Docker Image (Recommended)
 
 ```bash
-# 1. Configure environment
-cp .env.example .env
-# Edit .env with your SMTP credentials
+# 1. Download configuration files
+wget https://raw.githubusercontent.com/DGATX/ownrsvp/main/docker-compose.yml
+wget https://raw.githubusercontent.com/DGATX/ownrsvp/main/.env.example
 
-# 2. Start services
+# 2. Configure your environment
+cp .env.example .env
+# Edit .env and set:
+#   - AUTH_SECRET (generate: openssl rand -base64 32)
+#   - SMTP settings (for email invitations)
+#   - Optional: Twilio settings (for SMS)
+
+# 3. Start the application
 docker compose up -d
 
-# 3. Wait 30-60 seconds, then visit
-# http://localhost:3000/register
+# 4. Visit http://localhost:3000/register to create your account
+```
+
+### Building from Source (For Developers)
+
+```bash
+# 1. Clone repository
+git clone https://github.com/DGATX/ownrsvp.git
+cd ownrsvp
+
+# 2. Configure environment
+cp .env.example .env
+# Edit .env with your settings
+
+# 3. Build and start
+docker compose -f docker-compose.dev.yml up -d
 ```
 
 **Need more details?** See [QUICKSTART.md](QUICKSTART.md) for step-by-step instructions.

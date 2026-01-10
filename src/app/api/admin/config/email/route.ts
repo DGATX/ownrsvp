@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { getEmailConfig, updateEmailConfig, syncToEnvFile } from '@/lib/config';
 import { sendInvitation } from '@/lib/email';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 const emailConfigSchema = z.object({
   host: z.string().min(1, 'SMTP host is required'),
@@ -55,7 +56,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('Get email config error:', error);
+    logger.error('Get email config error', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -100,7 +101,7 @@ export async function PATCH(request: Request) {
     try {
       await syncToEnvFile();
     } catch (error) {
-      console.error('Failed to sync to .env file:', error);
+      logger.error('Failed to sync to .env file', error);
       // Continue anyway - database update succeeded
     }
 
@@ -119,7 +120,7 @@ export async function PATCH(request: Request) {
       restartRequired: true,
     });
   } catch (error) {
-    console.error('Update email config error:', error);
+    logger.error('Update email config error', error);
     return NextResponse.json(
       { error: 'Failed to update email configuration' },
       { status: 500 }
@@ -197,7 +198,7 @@ export async function POST(request: Request) {
         message: `Test email sent successfully to ${testEmail}`,
       });
     } catch (emailError) {
-      console.error('Test email error:', emailError);
+      logger.error('Test email error', emailError);
       return NextResponse.json({
         success: false,
         error: 'Failed to send test email',
@@ -205,7 +206,7 @@ export async function POST(request: Request) {
       }, { status: 500 });
     }
   } catch (error) {
-    console.error('Test email endpoint error:', error);
+    logger.error('Test email endpoint error', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

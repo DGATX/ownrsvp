@@ -127,10 +127,9 @@ export function PastEventsBulkActions({ events: initialEvents, isAdmin = false }
 
       setIsDeleteDialogOpen(false);
       setSelectedEvents(new Set());
-      
+
       // Refresh the page to update the list
       router.refresh();
-      window.location.reload();
     } catch (error) {
       toast({
         title: 'Error',

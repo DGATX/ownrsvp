@@ -1,4 +1,5 @@
 import { prisma } from './prisma';
+import { logger } from './logger';
 
 export interface EmailConfig {
   host: string;
@@ -49,7 +50,7 @@ export async function getEmailConfig(): Promise<EmailConfig | null> {
       };
     }
   } catch (error) {
-    console.error('Error reading email config from database:', error);
+    logger.error('Error reading email config from database', error);
   }
 
   // Fallback to environment variables
@@ -129,7 +130,7 @@ export async function getSmsConfig(): Promise<SmsConfig | null> {
       return baseConfig;
     }
   } catch (error) {
-    console.error('Error reading SMS config from database:', error);
+    logger.error('Error reading SMS config from database', error);
   }
 
   // Fallback to environment variables (Twilio default)
@@ -332,7 +333,7 @@ export async function syncToEnvFile(): Promise<void> {
     // Write back to file
     await fs.writeFile(envPath, envContent.trim() + '\n', 'utf-8');
   } catch (error) {
-    console.error('Error syncing config to .env file:', error);
+    logger.error('Error syncing config to .env file', error);
     throw error;
   }
 }

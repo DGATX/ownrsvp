@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { validateSmtpConfig } from '@/lib/env-validation';
 import { sendInvitation } from '@/lib/email';
 import { getEmailConfig } from '@/lib/config';
+import { logger } from '@/lib/logger';
 
 /**
  * Test endpoint to verify SMTP email configuration
@@ -99,7 +100,7 @@ export async function POST(request: Request) {
         warnings: smtpConfig.warnings,
       });
     } catch (emailError) {
-      console.error('Test email error:', emailError);
+      logger.error('Test email error', emailError);
       return NextResponse.json({
         success: false,
         error: 'Failed to send test email',
@@ -112,7 +113,7 @@ export async function POST(request: Request) {
       }, { status: 500 });
     }
   } catch (error) {
-    console.error('Test email endpoint error:', error);
+    logger.error('Test email endpoint error', error);
     return NextResponse.json(
       { 
         success: false,
@@ -160,7 +161,7 @@ export async function GET() {
       } : null,
     });
   } catch (error) {
-    console.error('Get SMTP config error:', error);
+    logger.error('Get SMTP config error', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

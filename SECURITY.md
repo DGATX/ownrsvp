@@ -11,10 +11,9 @@ We provide security updates for the following versions:
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability, please **do not** open a public issue. Instead, please report it via one of the following methods:
+If you discover a security vulnerability, please **do not** open a public issue. Instead, please report it via:
 
-1. **Email**: Send details to [your-email@example.com] (replace with your email)
-2. **GitHub Security Advisory**: Use GitHub's private vulnerability reporting feature
+**GitHub Security Advisory**: Use GitHub's private vulnerability reporting feature at https://github.com/DGATX/ownrsvp/security/advisories
 
 ### What to Include
 

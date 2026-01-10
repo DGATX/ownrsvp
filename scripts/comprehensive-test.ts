@@ -212,9 +212,9 @@ class HTTPClient {
   async request(url: string, options: RequestInit = {}): Promise<Response> {
     const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`;
     
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...options.headers as Record<string, string>,
     };
 
     if (this.cookies) {
@@ -223,7 +223,7 @@ class HTTPClient {
 
     const response = await fetch(fullUrl, {
       ...options,
-      headers,
+      headers: headers as HeadersInit,
       credentials: 'include',
     });
 

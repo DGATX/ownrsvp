@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { getEmailConfig, getSmsConfig, syncToEnvFile } from '@/lib/config';
+import { logger } from '@/lib/logger';
 
 /**
  * GET - Get all configuration status
@@ -35,7 +36,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('Get config status error:', error);
+    logger.error('Get config status error', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -72,7 +73,7 @@ export async function POST(request: Request) {
           message: 'Configuration synced to .env file successfully',
         });
       } catch (error) {
-        console.error('Sync to .env error:', error);
+        logger.error('Sync to .env error', error);
         return NextResponse.json(
           { error: 'Failed to sync to .env file' },
           { status: 500 }
@@ -82,7 +83,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ error: 'Invalid endpoint' }, { status: 404 });
   } catch (error) {
-    console.error('Config route error:', error);
+    logger.error('Config route error', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

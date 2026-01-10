@@ -7,6 +7,7 @@ import { sendEventChangeSms } from '@/lib/sms';
 import { z } from 'zod';
 import { format } from 'date-fns';
 import { parseReminderSchedule, serializeReminderSchedule, validateReminders } from '@/lib/reminder-utils';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -61,7 +62,7 @@ export async function GET(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ event });
   } catch (error) {
-    console.error('Get event error:', error);
+    logger.error('Get event error', error);
     return NextResponse.json(
       { error: 'Failed to fetch event' },
       { status: 500 }
@@ -294,7 +295,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
                   changes,
                   rsvpToken: guest.token,
                 }).catch((error) => {
-                  console.error(`Failed to send email to ${guest.email}:`, error);
+                  logger.error(`Failed to send email to ${guest.email}`, error);
                   // Don't throw - we want to continue sending to other guests
                 })
               );
@@ -310,7 +311,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
                 }).then(() => {
                   // Convert to void
                 }).catch((error) => {
-                  console.error(`Failed to send SMS to ${guest.phone}:`, error);
+                  logger.error(`Failed to send SMS to ${guest.phone}`, error);
                   // Don't throw - we want to continue sending to other guests
                 })
               );
@@ -319,9 +320,9 @@ export async function PATCH(request: Request, { params }: RouteParams) {
             await Promise.all(notificationPromises);
           })
         );
-        console.log(`Successfully sent notifications to ${guests.length} guests`);
+        logger.info(`Successfully sent notifications to ${guests.length} guests`);
       } catch (error) {
-        console.error('Error during notification sending:', error);
+        logger.error('Error during notification sending', error);
         // Continue execution - notifications are not critical to the update operation
       }
 
@@ -340,7 +341,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ event, changesNotified: notifyGuests && changes.length > 0 ? changes.length : 0 });
   } catch (error) {
-    console.error('Update event error:', error);
+    logger.error('Update event error', error);
     return NextResponse.json(
       { error: 'Failed to update event' },
       { status: 500 }
@@ -376,7 +377,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Delete event error:', error);
+    logger.error('Delete event error', error);
     return NextResponse.json(
       { error: 'Failed to delete event' },
       { status: 500 }

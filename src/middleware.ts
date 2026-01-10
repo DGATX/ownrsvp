@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 import { isValidEmail } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 export default auth(async (req) => {
   try {
@@ -57,7 +58,7 @@ export default auth(async (req) => {
 
     return NextResponse.next();
   } catch (error) {
-    console.error('Middleware error:', error);
+    logger.error('Middleware error', error);
     // On error, allow the request to proceed to avoid breaking the app
     return NextResponse.next();
   }

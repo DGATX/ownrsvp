@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -101,7 +102,7 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
         }
       }
     } catch (error) {
-      console.error('Failed to load email config:', error);
+      logger.error('Failed to load email config:', error);
       // Even if API fails, try to load password from localStorage
       const storedPassword = localStorage.getItem('smtp_password');
       if (storedPassword) {

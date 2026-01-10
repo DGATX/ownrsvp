@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
@@ -165,8 +166,8 @@ export default function EditEventPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error('API Error Response:', JSON.stringify(data, null, 2));
-        console.error('Response Status:', response.status);
+        logger.error('API Error Response:', JSON.stringify(data, null, 2));
+        logger.error('Response Status:', response.status);
         const errorMessage = data.error || (data.details ? JSON.stringify(data.details) : 'Failed to update event');
         throw new Error(errorMessage);
       }
@@ -180,7 +181,7 @@ export default function EditEventPage() {
 
       router.push(`/dashboard/events/${params.id}`);
     } catch (error) {
-      console.error('Update event error:', error);
+      logger.error('Update event error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to update event';
       toast({
         title: 'Error',

@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { validateGuestLimit } from '@/lib/rsvp-validation';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string; guestId: string }>;
@@ -126,7 +127,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ guest: updatedGuest });
   } catch (error) {
-    console.error('Update guest error:', error);
+    logger.error('Update guest error', error);
     return NextResponse.json(
       { error: 'Failed to update guest' },
       { status: 500 }
@@ -158,7 +159,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Delete guest error:', error);
+    logger.error('Delete guest error', error);
     return NextResponse.json(
       { error: 'Failed to delete guest' },
       { status: 500 }

@@ -5,6 +5,7 @@
  */
 
 import type { SmsProvider, SmsProviderConfig, SmsResult } from '../types';
+import { logger } from '../../logger';
 
 export class GenericProvider implements SmsProvider {
   private webhookUrl: string | null = null;
@@ -69,7 +70,7 @@ export class GenericProvider implements SmsProvider {
         messageId: data.messageId || data.id || undefined,
       };
     } catch (error) {
-      console.error('Generic webhook SMS error:', error);
+      logger.error('Generic webhook SMS error', error);
       return {
         sent: false,
         reason: error instanceof Error ? error.message : 'UNKNOWN_ERROR',

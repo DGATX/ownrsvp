@@ -3,14 +3,23 @@ import Credentials from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 const loginSchema = z.object({
   email: z.string().min(1), // This field accepts either email or username
   password: z.string().min(1),
 });
 
+// Validate AUTH_SECRET is set in production
+if (process.env.NODE_ENV === 'production' && !process.env.AUTH_SECRET) {
+  throw new Error(
+    'AUTH_SECRET environment variable is required in production. ' +
+    'Generate a secure secret with: openssl rand -base64 32'
+  );
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  secret: process.env.AUTH_SECRET || 'dev-secret-key-change-in-production-abc123xyz',
+  secret: process.env.AUTH_SECRET,
   // Trust proxy host - required for reverse proxy setups
   trustHost: true,
   // Use AUTH_URL for callbacks when behind reverse proxy
@@ -58,7 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             role: user.role,
           };
         } catch (error) {
-          console.error('Auth error:', error);
+          logger.error('Auth error', error);
           return null;
         }
       },

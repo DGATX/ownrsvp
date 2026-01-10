@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -50,6 +51,7 @@ interface EditGuestFormProps {
 }
 
 export function EditGuestForm({ eventId, guest, open, onOpenChange, onSuccess }: EditGuestFormProps) {
+  const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(guest.name || '');
@@ -112,7 +114,7 @@ export function EditGuestForm({ eventId, guest, open, onOpenChange, onSuccess }:
       if (onSuccess) {
         onSuccess();
       } else {
-        window.location.reload();
+        router.refresh();
       }
     } catch (error) {
       toast({

@@ -5,6 +5,7 @@
  */
 
 import type { SmsProvider, SmsProviderConfig, SmsResult } from '../types';
+import { logger } from '../../logger';
 
 export class VonageProvider implements SmsProvider {
   private apiKey: string | null = null;
@@ -27,7 +28,7 @@ export class VonageProvider implements SmsProvider {
           apiSecret: this.apiSecret,
         });
       } catch (error) {
-        console.warn('Vonage SDK not available. Install @vonage/server-sdk to use Vonage provider.');
+        logger.warn('Vonage SDK not available. Install @vonage/server-sdk to use Vonage provider');
       }
     }
   }
@@ -74,7 +75,7 @@ export class VonageProvider implements SmsProvider {
         };
       }
     } catch (error) {
-      console.error('Vonage SMS error:', error);
+      logger.error('Vonage SMS error', error);
       return {
         sent: false,
         reason: error instanceof Error ? error.message : 'UNKNOWN_ERROR',

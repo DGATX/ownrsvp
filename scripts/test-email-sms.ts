@@ -2,11 +2,13 @@
 
 /**
  * Comprehensive Email and SMS Testing Script
- * 
+ *
  * This script creates test data and tests all email and SMS functionality
  * while preserving existing SMTP and SMS configurations.
  */
 
+import * as fs from 'fs';
+import * as path from 'path';
 import { PrismaClient } from '@prisma/client';
 import { getEmailConfig, getSmsConfig } from '../src/lib/config';
 import {

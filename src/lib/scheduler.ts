@@ -1,6 +1,7 @@
 import cron from 'node-cron';
 import { prisma } from './prisma';
 import { sendReminder } from './email';
+import { logger } from './logger';
 
 // Send reminders for events happening in the next 2 days
 // to guests who haven't responded yet
@@ -47,14 +48,14 @@ async function sendEventReminders() {
             data: { reminderSentAt: new Date() },
           });
 
-          console.log(`Sent reminder to ${guest.email} for event: ${event.title}`);
+          logger.info('Sent reminder', { email: guest.email, event: event.title });
         } catch (error) {
-          console.error(`Failed to send reminder to ${guest.email}:`, error);
+          logger.error('Failed to send reminder', error, { email: guest.email });
         }
       }
     }
   } catch (error) {
-    console.error('Error in sendEventReminders:', error);
+    logger.error('Error in sendEventReminders', error);
   }
 }
 
@@ -62,11 +63,11 @@ async function sendEventReminders() {
 export function initScheduler() {
   // Run every day at 9 AM
   cron.schedule('0 9 * * *', () => {
-    console.log('Running scheduled reminder job...');
+    logger.info('Running scheduled reminder job');
     sendEventReminders();
   });
 
-  console.log('Scheduler initialized - reminders will be sent daily at 9 AM');
+  logger.info('Scheduler initialized - reminders will be sent daily at 9 AM');
 }
 
 // Export for manual triggering

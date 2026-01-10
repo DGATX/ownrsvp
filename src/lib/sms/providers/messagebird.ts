@@ -5,6 +5,7 @@
  */
 
 import type { SmsProvider, SmsProviderConfig, SmsResult } from '../types';
+import { logger } from '../../logger';
 
 export class MessageBirdProvider implements SmsProvider {
   private apiKey: string | null = null;
@@ -22,7 +23,7 @@ export class MessageBirdProvider implements SmsProvider {
         const messagebird = require('messagebird');
         this.messagebirdClient = messagebird(this.apiKey);
       } catch (error) {
-        console.warn('MessageBird SDK not available. Install messagebird to use MessageBird provider.');
+        logger.warn('MessageBird SDK not available. Install messagebird to use MessageBird provider');
       }
     }
   }
@@ -60,7 +61,7 @@ export class MessageBirdProvider implements SmsProvider {
           },
           (err: any, response: any) => {
             if (err) {
-              console.error('MessageBird SMS error:', err);
+              logger.error('MessageBird SMS error', err);
               resolve({
                 sent: false,
                 reason: err.message || 'UNKNOWN_ERROR',
@@ -75,7 +76,7 @@ export class MessageBirdProvider implements SmsProvider {
         );
       });
     } catch (error) {
-      console.error('MessageBird SMS error:', error);
+      logger.error('MessageBird SMS error', error);
       return {
         sent: false,
         reason: error instanceof Error ? error.message : 'UNKNOWN_ERROR',

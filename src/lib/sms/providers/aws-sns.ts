@@ -5,6 +5,7 @@
  */
 
 import type { SmsProvider, SmsProviderConfig, SmsResult } from '../types';
+import { logger } from '../../logger';
 
 export class AwsSnsProvider implements SmsProvider {
   private accessKeyId: string | null = null;
@@ -35,7 +36,7 @@ export class AwsSnsProvider implements SmsProvider {
           PublishCommand,
         };
       } catch (error) {
-        console.warn('AWS SDK not available. Install @aws-sdk/client-sns to use AWS SNS provider.');
+        logger.warn('AWS SDK not available. Install @aws-sdk/client-sns to use AWS SNS provider');
       }
     }
   }
@@ -77,7 +78,7 @@ export class AwsSnsProvider implements SmsProvider {
         messageId: result.MessageId,
       };
     } catch (error) {
-      console.error('AWS SNS SMS error:', error);
+      logger.error('AWS SNS SMS error', error);
       return {
         sent: false,
         reason: error instanceof Error ? error.message : 'UNKNOWN_ERROR',

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -37,6 +38,7 @@ interface ImportGuestsDialogProps {
 }
 
 export function ImportGuestsDialog({ open, onOpenChange, eventId }: ImportGuestsDialogProps) {
+  const router = useRouter();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -167,7 +169,7 @@ export function ImportGuestsDialog({ open, onOpenChange, eventId }: ImportGuests
       // Refresh page after successful import
       if (data.results.imported > 0) {
         setTimeout(() => {
-          window.location.reload();
+          router.refresh();
         }, 1500);
       }
     } catch (error) {

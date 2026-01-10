@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ token: string }>;
@@ -57,7 +58,7 @@ export async function GET(request: Request, { params }: RouteParams) {
       role: invitation.user.role,
     });
   } catch (error) {
-    console.error('Verify invitation token error:', error);
+    logger.error('Verify invitation token error', error);
     return NextResponse.json(
       { valid: false, error: 'An error occurred' },
       { status: 500 }
@@ -155,7 +156,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       },
     });
   } catch (error) {
-    console.error('Accept invitation error:', error);
+    logger.error('Accept invitation error', error);
     return NextResponse.json(
       { error: 'An error occurred. Please try again.' },
       { status: 500 }

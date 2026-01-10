@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { canManageEvent, isEventHost } from '@/lib/event-access';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -45,7 +46,7 @@ export async function GET(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ coHosts });
   } catch (error) {
-    console.error('Get co-hosts error:', error);
+    logger.error('Get co-hosts error', error);
     return NextResponse.json(
       { error: 'Failed to fetch co-hosts' },
       { status: 500 }
@@ -151,7 +152,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ coHost });
   } catch (error) {
-    console.error('Add co-host error:', error);
+    logger.error('Add co-host error', error);
     return NextResponse.json(
       { error: 'Failed to add co-host' },
       { status: 500 }

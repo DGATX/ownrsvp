@@ -7,6 +7,7 @@ import { sendSmsInvitation } from '@/lib/sms';
 import { sendReminder } from '@/lib/email';
 import { sendSmsReminder } from '@/lib/sms';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -101,7 +102,7 @@ export async function POST(request: Request, { params }: RouteParams) {
                   rsvpToken: guest.token,
                   hostName: event.host.name,
                 }).catch((error) => {
-                  console.error(`Failed to send invitation email to ${guest.email}:`, error);
+                  logger.error(`Failed to send invitation email to ${guest.email}`, error);
                 })
               );
             }
@@ -119,7 +120,7 @@ export async function POST(request: Request, { params }: RouteParams) {
                   rsvpToken: guest.token,
                   hostName: event.host.name,
                 }).catch((error) => {
-                  console.error(`Failed to send invitation SMS to ${guest.phone}:`, error);
+                  logger.error(`Failed to send invitation SMS to ${guest.phone}`, error);
                 })
               );
             }
@@ -150,7 +151,7 @@ export async function POST(request: Request, { params }: RouteParams) {
                   },
                   rsvpToken: guest.token,
                 }).catch((error) => {
-                  console.error(`Failed to send reminder email to ${guest.email}:`, error);
+                  logger.error(`Failed to send reminder email to ${guest.email}`, error);
                 })
               );
             }
@@ -167,7 +168,7 @@ export async function POST(request: Request, { params }: RouteParams) {
                   },
                   rsvpToken: guest.token,
                 }).catch((error) => {
-                  console.error(`Failed to send reminder SMS to ${guest.phone}:`, error);
+                  logger.error(`Failed to send reminder SMS to ${guest.phone}`, error);
                 })
               );
             }
@@ -212,7 +213,7 @@ export async function POST(request: Request, { params }: RouteParams) {
         failedCount++;
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         errors.push(`${guest.email || guest.id}: ${errorMessage}`);
-        console.error(`Bulk action failed for guest ${guest.id}:`, error);
+        logger.error(`Bulk action failed for guest ${guest.id}`, error);
       }
     }
 
@@ -223,7 +224,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       errors: errors.length > 0 ? errors : undefined,
     });
   } catch (error) {
-    console.error('Bulk guest operation error:', error);
+    logger.error('Bulk guest operation error', error);
     return NextResponse.json(
       { error: 'Failed to process bulk operation' },
       { status: 500 }

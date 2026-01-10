@@ -5,6 +5,7 @@ import { canManageEvent } from '@/lib/event-access';
 import { sendInvitation } from '@/lib/email';
 import { sendSmsInvitation } from '@/lib/sms';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 const addGuestSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -97,7 +98,7 @@ export async function POST(request: Request, { params }: RouteParams) {
             rsvpToken: guest.token,
             hostName: event.host.name,
           }).catch((error) => {
-            console.error('Failed to send invitation email:', error);
+            logger.error('Failed to send invitation email', error);
           })
         );
       }
@@ -116,7 +117,7 @@ export async function POST(request: Request, { params }: RouteParams) {
             rsvpToken: guest.token,
             hostName: event.host.name,
           }).catch((error) => {
-            console.error('Failed to send invitation SMS:', error);
+            logger.error('Failed to send invitation SMS', error);
           })
         );
       }
@@ -126,7 +127,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ guest });
   } catch (error) {
-    console.error('Add guest error:', error);
+    logger.error('Add guest error', error);
     return NextResponse.json(
       { error: 'Failed to add guest' },
       { status: 500 }

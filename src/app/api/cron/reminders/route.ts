@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { sendReminder } from '@/lib/email';
 import { sendSmsReminder } from '@/lib/sms';
 import { parseReminderSchedule, shouldSendReminder } from '@/lib/reminder-utils';
+import { logger } from '@/lib/logger';
 
 // This endpoint can be called by an external cron service (e.g., cron-job.org)
 // or by the built-in scheduler. Protect with a secret in production.
@@ -87,7 +88,7 @@ export async function POST(request: Request) {
                 emailsSent++;
               })
               .catch((error) => {
-                console.error(`Failed to send email reminder to ${guest.email}:`, error);
+                logger.error('Failed to send email reminder', error, { email: guest.email });
                 errorCount++;
               })
           );
@@ -110,7 +111,7 @@ export async function POST(request: Request) {
                 smsSent++;
               })
               .catch((error) => {
-                console.error(`Failed to send SMS reminder to ${guest.phone}:`, error);
+                logger.error('Failed to send SMS reminder', error, { phone: guest.phone });
                 errorCount++;
               })
           );
@@ -138,7 +139,7 @@ export async function POST(request: Request) {
       errors: errorCount,
     });
   } catch (error) {
-    console.error('Cron reminders error:', error);
+    logger.error('Cron reminders error', error);
     return NextResponse.json(
       { error: 'Failed to process reminders' },
       { status: 500 }

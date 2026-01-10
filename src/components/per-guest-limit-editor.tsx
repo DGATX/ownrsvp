@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -94,7 +95,7 @@ export function PerGuestLimitEditor({
       onOpenChange(false);
       router.refresh();
     } catch (error) {
-      console.error('Update guest limit error:', error);
+      logger.error('Update guest limit error:', error);
       toast({
         title: 'Error',
         description: error instanceof Error ? error.message : 'Failed to update guest limit',

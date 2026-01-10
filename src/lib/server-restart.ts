@@ -1,5 +1,6 @@
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { logger } from './logger';
 
 const execAsync = promisify(exec);
 
@@ -273,8 +274,8 @@ export async function attemptRestart(): Promise<RestartResult> {
 export function gracefulShutdown(): void {
   // In development, we can't actually restart, but we can exit
   // The process manager (if any) will handle the restart
-  console.log('Graceful shutdown initiated by admin...');
-  
+  logger.info('Graceful shutdown initiated by admin');
+
   // Give a moment for the response to be sent
   setTimeout(() => {
     process.exit(0);

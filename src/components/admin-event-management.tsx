@@ -116,10 +116,9 @@ export function AdminEventManagement({ events: initialEvents }: AdminEventManage
 
       setIsDeleteDialogOpen(false);
       setSelectedEvents(new Set());
-      
+
       // Refresh the page to update the list
       router.refresh();
-      window.location.reload();
     } catch (error) {
       toast({
         title: 'Error',
@@ -155,7 +154,6 @@ export function AdminEventManagement({ events: initialEvents }: AdminEventManage
 
       // Refresh the page
       router.refresh();
-      window.location.reload();
     } catch (error) {
       toast({
         title: 'Error',

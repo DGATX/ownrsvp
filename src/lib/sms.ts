@@ -1,7 +1,8 @@
 import { formatDateTime } from './utils';
 import { getSmsConfig } from './config';
 import { createSmsProvider, getDefaultProvider } from './sms/provider-factory';
-import type { SmsProviderConfig } from './sms/types';
+import type { SmsProviderConfig, SmsResult } from './sms/types';
+import { logger } from './logger';
 
 // Cache provider instance to avoid recreating it on every call
 let cachedProvider: ReturnType<typeof createSmsProvider> | null = null;
@@ -27,12 +28,16 @@ async function getSmsProvider() {
       return cachedProvider;
     }
 
-    // Create new provider instance
-    cachedProvider = createSmsProvider(config);
-    cachedConfig = config;
+    // Create new provider instance (ensure provider is defined, default to twilio)
+    const providerConfig: SmsProviderConfig = {
+      ...config,
+      provider: config.provider || 'twilio'
+    };
+    cachedProvider = createSmsProvider(providerConfig);
+    cachedConfig = providerConfig;
     return cachedProvider;
   } catch (error) {
-    console.error('Error getting SMS provider:', error);
+    logger.error('Error getting SMS provider', error);
     // Fallback to default Twilio provider
     return getDefaultProvider();
   }
@@ -65,7 +70,7 @@ export async function sendSmsInvitation({
   const provider = await getSmsProvider();
   
   if (!provider.isConfigured()) {
-    console.log('SMS not configured - skipping SMS invitation');
+    logger.info('SMS not configured - skipping SMS invitation');
     return { sent: false, reason: 'SMS_NOT_CONFIGURED' };
   }
 
@@ -96,7 +101,7 @@ export async function sendSmsReminder({
   const provider = await getSmsProvider();
   
   if (!provider.isConfigured()) {
-    console.log('SMS not configured - skipping SMS reminder');
+    logger.info('SMS not configured - skipping SMS reminder');
     return { sent: false, reason: 'SMS_NOT_CONFIGURED' };
   }
 
@@ -126,7 +131,7 @@ export async function sendSmsConfirmation({
   const provider = await getSmsProvider();
   
   if (!provider.isConfigured()) {
-    console.log('SMS not configured - skipping SMS confirmation');
+    logger.info('SMS not configured - skipping SMS confirmation');
     return { sent: false, reason: 'SMS_NOT_CONFIGURED' };
   }
 
@@ -188,7 +193,7 @@ export async function sendBroadcastSms({
   const provider = await getSmsProvider();
   
   if (!provider.isConfigured()) {
-    console.log('SMS not configured - skipping broadcast SMS');
+    logger.info('SMS not configured - skipping broadcast SMS');
     return { sent: false, reason: 'SMS_NOT_CONFIGURED' };
   }
 
@@ -215,7 +220,7 @@ export async function sendEventChangeSms({
   const provider = await getSmsProvider();
   
   if (!provider.isConfigured()) {
-    console.log('SMS not configured - skipping event change SMS');
+    logger.info('SMS not configured - skipping event change SMS');
     return { sent: false, reason: 'SMS_NOT_CONFIGURED' };
   }
 

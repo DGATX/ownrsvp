@@ -7,6 +7,7 @@
 
 import twilio from 'twilio';
 import type { SmsProvider, SmsProviderConfig, SmsResult } from '../types';
+import { logger } from '../../logger';
 
 // Helper to format phone numbers to E.164 format
 function formatPhoneNumber(phone: string): string {
@@ -70,7 +71,7 @@ export class TwilioProvider implements SmsProvider {
         messageId: result.sid,
       };
     } catch (error) {
-      console.error('Twilio SMS error:', error);
+      logger.error('Twilio SMS error', error);
       return {
         sent: false,
         reason: error instanceof Error ? error.message : 'UNKNOWN_ERROR',

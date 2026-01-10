@@ -5,6 +5,7 @@ import { canManageEvent } from '@/lib/event-access';
 import { z } from 'zod';
 import { sendInvitation } from '@/lib/email';
 import { sendSmsInvitation } from '@/lib/sms';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -112,7 +113,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     // Send invitations to imported guests if requested
     if (sendInvites && results.imported > 0) {
-      console.log(`Sending invitations to ${results.imported} newly imported guests`);
+      logger.info(`Sending invitations to ${results.imported} newly imported guests`);
 
       // Fetch the newly imported guests with their tokens
       const newlyImportedGuests = await prisma.guest.findMany({
@@ -146,7 +147,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       });
 
       if (!eventWithHost) {
-        console.error('Event not found after import');
+        logger.error('Event not found after import');
         return NextResponse.json({
           success: true,
           results,
@@ -186,7 +187,7 @@ export async function POST(request: Request, { params }: RouteParams) {
                   invitationResults.emailsSent++;
                 })
                 .catch((error) => {
-                  console.error(`Failed to send email invitation to ${guest.email}:`, error);
+                  logger.error(`Failed to send email invitation to ${guest.email}`, error);
                   invitationResults.emailsFailed++;
                 })
             );
@@ -211,11 +212,11 @@ export async function POST(request: Request, { params }: RouteParams) {
                     invitationResults.smsSent++;
                   } else {
                     invitationResults.smsFailed++;
-                    console.log(`SMS not sent to ${guest.phone}: ${result.reason}`);
+                    logger.info(`SMS not sent to ${guest.phone}: ${result.reason}`);
                   }
                 })
                 .catch((error) => {
-                  console.error(`Failed to send SMS invitation to ${guest.phone}:`, error);
+                  logger.error(`Failed to send SMS invitation to ${guest.phone}`, error);
                   invitationResults.smsFailed++;
                 })
             );
@@ -225,7 +226,7 @@ export async function POST(request: Request, { params }: RouteParams) {
         })
       );
 
-      console.log('Invitation results:', invitationResults);
+      logger.info('Invitation results', invitationResults);
 
       return NextResponse.json({
         success: true,
@@ -240,7 +241,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       results,
     });
   } catch (error) {
-    console.error('Import guests error:', error);
+    logger.error('Import guests error', error);
     return NextResponse.json(
       { error: 'Failed to import guests' },
       { status: 500 }

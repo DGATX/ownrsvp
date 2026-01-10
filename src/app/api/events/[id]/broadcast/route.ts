@@ -5,6 +5,7 @@ import { canManageEvent } from '@/lib/event-access';
 import { sendBroadcastEmail } from '@/lib/email';
 import { sendBroadcastSms } from '@/lib/sms';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -91,7 +92,7 @@ export async function POST(request: Request, { params }: RouteParams) {
           sentCount++;
         }
       } catch (error) {
-        console.error(`Failed to send to ${guest.email}:`, error);
+        logger.error(`Failed to send to ${guest.email}`, error);
         errors.push(guest.email);
       }
     }
@@ -114,7 +115,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       errors: errors.length > 0 ? errors : undefined,
     });
   } catch (error) {
-    console.error('Broadcast error:', error);
+    logger.error('Broadcast error', error);
     return NextResponse.json(
       { error: 'Failed to send broadcast' },
       { status: 500 }
@@ -145,7 +146,7 @@ export async function GET(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ updates });
   } catch (error) {
-    console.error('Get broadcasts error:', error);
+    logger.error('Get broadcasts error', error);
     return NextResponse.json(
       { error: 'Failed to fetch broadcasts' },
       { status: 500 }

@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -62,7 +63,7 @@ export function FactoryResetButton() {
         await signOut({ callbackUrl: '/login' });
       }, 2000);
     } catch (error) {
-      console.error('Factory reset error:', error);
+      logger.error('Factory reset error:', error);
       toast({
         title: 'Error',
         description: error instanceof Error ? error.message : 'Failed to reset to factory defaults',
@@ -165,13 +166,13 @@ export function FactoryResetButton() {
               Factory Reset - Final Confirmation
             </DialogTitle>
             <DialogDescription>
-              Type <strong>"delete"</strong> in the field below to confirm you want to reset to factory defaults.
+              Type <strong>&quot;delete&quot;</strong> in the field below to confirm you want to reset to factory defaults.
             </DialogDescription>
           </DialogHeader>
 
           <div className="py-4 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="confirmation">Type "delete" to confirm:</Label>
+              <Label htmlFor="confirmation">Type &quot;delete&quot; to confirm:</Label>
               <Input
                 id="confirmation"
                 value={confirmationText}

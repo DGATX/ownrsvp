@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -132,8 +133,8 @@ export default function NewEventPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error('API Error Response:', JSON.stringify(data, null, 2));
-        console.error('Response Status:', response.status);
+        logger.error('API Error Response:', JSON.stringify(data, null, 2));
+        logger.error('Response Status:', response.status);
         const errorMessage = data.error || (data.details ? JSON.stringify(data.details) : 'Failed to create event');
         throw new Error(errorMessage);
       }
@@ -145,7 +146,7 @@ export default function NewEventPage() {
 
       router.push(`/dashboard/events/${data.event.id}`);
     } catch (error) {
-      console.error('Create event error:', error);
+      logger.error('Create event error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to create event';
       toast({
         title: 'Error',

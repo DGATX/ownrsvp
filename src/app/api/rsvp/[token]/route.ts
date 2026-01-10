@@ -4,6 +4,7 @@ import { sendConfirmation, sendRsvpChangeNotification, getEventHostsForNotificat
 import { sendSmsConfirmation } from '@/lib/sms';
 import { validateGuestLimit } from '@/lib/rsvp-validation';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ token: string }>;
@@ -33,7 +34,6 @@ export async function GET(request: Request, { params }: RouteParams) {
             slug: true,
             rsvpDeadline: true,
             maxGuestsPerInvitee: true,
-            maxGuests: true,
           },
         },
         additionalGuests: true,
@@ -49,7 +49,7 @@ export async function GET(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ guest, deadlinePassed });
   } catch (error) {
-    console.error('Get RSVP error:', error);
+    logger.error('Get RSVP error', error);
     return NextResponse.json(
       { error: 'Failed to fetch RSVP' },
       { status: 500 }
@@ -175,7 +175,6 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     });
 
     // Send confirmations if status changed
-    const finalStatus = status || existingGuest.status;
     const confirmationPromises = [];
 
     if (updatedGuest.notifyByEmail) {
@@ -191,7 +190,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
           status: finalStatus,
           rsvpToken: token,
         }).catch((error) => {
-          console.error('Failed to send confirmation email:', error);
+          logger.error('Failed to send confirmation email', error);
         })
       );
     }
@@ -208,7 +207,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
           },
           status: finalStatus,
         }).catch((error) => {
-          console.error('Failed to send confirmation SMS:', error);
+          logger.error('Failed to send confirmation SMS', error);
         })
       );
     }
@@ -258,19 +257,19 @@ export async function PATCH(request: Request, { params }: RouteParams) {
               previousStatus: statusChanged ? existingGuest.status : null,
               eventUrl,
             }).catch((error) => {
-              console.error(`Failed to send RSVP notification to host ${host.email}:`, error);
+              logger.error(`Failed to send RSVP notification to host ${host.email}`, error);
             })
           );
           return Promise.all(notificationPromises);
         })
         .catch((error) => {
-          console.error('Failed to send host notifications:', error);
+          logger.error('Failed to send host notifications', error);
         });
     }
 
     return NextResponse.json({ guest: updatedGuest });
   } catch (error) {
-    console.error('Update RSVP error:', error);
+    logger.error('Update RSVP error', error);
     return NextResponse.json(
       { error: 'Failed to update RSVP' },
       { status: 500 }

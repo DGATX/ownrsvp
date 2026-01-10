@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import { isValidEmail } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 type UserWithOptionalUsername = {
   id: string;
@@ -44,7 +45,7 @@ export async function PATCH(request: Request) {
     const parsed = updateProfileSchema.safeParse(body);
 
     if (!parsed.success) {
-      console.error('Validation error:', parsed.error.errors);
+      logger.error('Validation error', parsed.error.errors);
       return NextResponse.json(
         { 
           error: parsed.error.errors[0].message,
@@ -77,7 +78,7 @@ export async function PATCH(request: Request) {
         const error = dbError as { message?: string; code?: string };
         // If username field doesn't exist in database yet, skip username update
         if (error?.message?.includes('username') || error?.code === 'P2009') {
-          console.warn('Username field not found in database, skipping username update. Please run database migration.');
+          logger.warn('Username field not found in database, skipping username update. Please run database migration.');
           // Don't add username to updateData
         } else {
           throw dbError;
@@ -153,9 +154,9 @@ export async function PATCH(request: Request) {
       passwordChanged: !!updateData.password,
     });
   } catch (error) {
-    console.error('Update profile error:', error);
+    logger.error('Update profile error', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('Error details:', errorMessage);
+    logger.error('Error details', errorMessage);
     return NextResponse.json(
       { 
         error: 'Failed to update profile',
@@ -191,7 +192,7 @@ export async function GET() {
       const error = dbError as { message?: string; code?: string };
       // If username field doesn't exist, try without it
       if (error?.message?.includes('username') || error?.code === 'P2009') {
-        console.warn('Username field not found in database, fetching without it');
+        logger.warn('Username field not found in database, fetching without it');
         user = await prisma.user.findUnique({
           where: { id: session.user.id },
           select: {
@@ -212,9 +213,9 @@ export async function GET() {
 
     return NextResponse.json({ user });
   } catch (error) {
-    console.error('Get profile error:', error);
+    logger.error('Get profile error', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('Error details:', errorMessage);
+    logger.error('Error details', errorMessage);
     return NextResponse.json(
       { 
         error: 'Failed to get profile',

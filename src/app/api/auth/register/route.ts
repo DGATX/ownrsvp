@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { nanoid } from 'nanoid';
 import { sendUserInvitationEmail } from '@/lib/email';
 import { isValidEmail } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 const registerSchema = z.object({
   name: z.string().optional(),
@@ -145,7 +146,7 @@ export async function POST(request: Request) {
         invitedByName: adminUser?.name || null,
         role,
       }).catch((error) => {
-        console.error('Failed to send invitation email:', error);
+        logger.error('Failed to send invitation email', error);
       });
 
       return NextResponse.json({
@@ -170,7 +171,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error('Registration error:', error);
+    logger.error('Registration error', error);
     return NextResponse.json(
       { error: 'An error occurred during registration' },
       { status: 500 }

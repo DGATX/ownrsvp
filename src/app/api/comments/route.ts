@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 const commentSchema = z.object({
   eventId: z.string(),
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ comment });
   } catch (error) {
-    console.error('Comment error:', error);
+    logger.error('Comment error', error);
     return NextResponse.json(
       { error: 'Failed to post comment' },
       { status: 500 }

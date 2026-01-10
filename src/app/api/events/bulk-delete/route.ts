@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { canManageEvent } from '@/lib/event-access';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 const bulkDeleteSchema = z.object({
   eventIds: z.array(z.string().min(1)).min(1, 'At least one event ID is required'),
@@ -120,7 +121,7 @@ export async function POST(request: Request) {
       failedCount: 0,
     });
   } catch (error) {
-    console.error('Bulk delete events error:', error);
+    logger.error('Bulk delete events error', error);
     return NextResponse.json(
       { error: 'Failed to delete events' },
       { status: 500 }

@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { nanoid } from 'nanoid';
 import { generateSlug } from '@/lib/utils';
 import { parseReminderSchedule, serializeReminderSchedule, validateReminders } from '@/lib/reminder-utils';
+import { logger } from '@/lib/logger';
 
 const createEventSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -40,8 +41,8 @@ export async function POST(request: Request) {
     const parsed = createEventSchema.safeParse(body);
 
     if (!parsed.success) {
-      console.error('Validation error:', JSON.stringify(parsed.error.errors, null, 2));
-      console.error('Request body:', JSON.stringify(body, null, 2));
+      logger.error('Validation error', JSON.stringify(parsed.error.errors, null, 2));
+      logger.error('Request body', JSON.stringify(body, null, 2));
       return NextResponse.json(
         { error: parsed.error.errors[0].message, details: parsed.error.errors },
         { status: 400 }
@@ -143,9 +144,15 @@ export async function POST(request: Request) {
       rsvpDeadline: eventData.rsvpDeadline?.toISOString() || null,
       coverImage: eventData.coverImage ? `${eventData.coverImage.substring(0, 50)}...` : null,
     };
-    console.log('Creating event with data:', JSON.stringify(logData, null, 2));
-    console.log('Event data keys:', Object.keys(eventData));
-    console.log('Event data types:', Object.entries(eventData).map(([k, v]) => [k, typeof v, v === null ? 'null' : 'not null']));
+    logger.debug('Creating event with data', { data: logData });
+    logger.debug('Event data keys', { keys: Object.keys(eventData) });
+    logger.debug('Event data types', {
+      types: Object.entries(eventData).map(([k, v]) => ({
+        key: k,
+        type: typeof v,
+        isNull: v === null
+      }))
+    });
 
     const event = await prisma.event.create({
       data: eventData,
@@ -153,11 +160,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ event });
   } catch (error) {
-    console.error('Create event error:', error);
-    console.error('Error type:', typeof error);
-    console.error('Error name:', error instanceof Error ? error.name : 'N/A');
-    console.error('Error message:', error instanceof Error ? error.message : String(error));
-    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    logger.error('Create event error', error, {
+      errorType: typeof error,
+      errorName: error instanceof Error ? error.name : 'N/A',
+      errorStack: error instanceof Error ? error.stack : 'No stack trace'
+    });
     
     // If it's a Prisma error, extract more details
     let errorMessage = error instanceof Error ? error.message : String(error);
@@ -167,8 +174,10 @@ export async function POST(request: Request) {
     // Check if it's a Prisma known request error (has code)
     if (error && typeof error === 'object' && 'code' in error) {
       prismaErrorCode = (error as any).code;
-      console.error('Prisma error code:', prismaErrorCode);
-      console.error('Prisma error meta:', JSON.stringify((error as any).meta, null, 2));
+      logger.error('Prisma error details', undefined, {
+        code: prismaErrorCode,
+        meta: (error as any).meta
+      });
       
       // Get full error details for validation errors
       if (error instanceof Error) {
@@ -189,7 +198,7 @@ export async function POST(request: Request) {
     
     // Handle Prisma validation errors (PrismaClientValidationError)
     if (error instanceof Error && error.name === 'PrismaClientValidationError') {
-      console.error('Prisma validation error detected');
+      logger.error('Prisma validation error detected', error);
       // Try to extract the actual validation issue from the message
       const msg = error.message;
       if (msg.includes('Argument `data`')) {
@@ -243,7 +252,7 @@ export async function GET() {
 
     return NextResponse.json({ events });
   } catch (error) {
-    console.error('Get events error:', error);
+    logger.error('Get events error', error);
     return NextResponse.json(
       { error: 'Failed to fetch events' },
       { status: 500 }

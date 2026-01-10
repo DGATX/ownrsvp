@@ -4,6 +4,7 @@ import { sendConfirmation, sendRsvpChangeNotification, getEventHostsForNotificat
 import { sendSmsConfirmation } from '@/lib/sms';
 import { validateGuestLimit } from '@/lib/rsvp-validation';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 const rsvpSchema = z.object({
   eventId: z.string(),
@@ -146,7 +147,7 @@ export async function POST(request: Request) {
           status,
           rsvpToken: guest.token,
         }).catch((error) => {
-          console.error('Failed to send confirmation email:', error);
+          logger.error('Failed to send confirmation email', error);
         })
       );
     }
@@ -164,7 +165,7 @@ export async function POST(request: Request) {
           },
           status,
         }).catch((error) => {
-          console.error('Failed to send confirmation SMS:', error);
+          logger.error('Failed to send confirmation SMS', error);
         })
       );
     }
@@ -197,18 +198,18 @@ export async function POST(request: Request) {
             changeType: existingGuest ? 'UPDATED' : 'NEW',
             eventUrl,
           }).catch((error) => {
-            console.error(`Failed to send RSVP notification to host ${host.email}:`, error);
+            logger.error(`Failed to send RSVP notification to host ${host.email}`, error);
           })
         );
         return Promise.all(notificationPromises);
       })
       .catch((error) => {
-        console.error('Failed to send host notifications:', error);
+        logger.error('Failed to send host notifications', error);
       });
 
     return NextResponse.json({ guest });
   } catch (error) {
-    console.error('RSVP error:', error);
+    logger.error('RSVP error', error);
     return NextResponse.json(
       { error: 'Failed to submit RSVP' },
       { status: 500 }

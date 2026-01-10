@@ -255,7 +255,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
               )}
             </div>
             <p className="text-sm text-muted-foreground">
-              {maxGuestsPerInvitee === null
+              {(maxGuestsPerInvitee === null || maxGuestsPerInvitee === undefined)
                 ? "Add the names of any additional guests you're bringing"
                 : `You can bring up to ${maxGuestsPerInvitee - 1} additional guest${maxGuestsPerInvitee - 1 !== 1 ? 's' : ''} (total of ${maxGuestsPerInvitee} including yourself)`}
             </p>
@@ -300,7 +300,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
               <Plus className="w-4 h-4 mr-2" />
               Add Another Guest
             </Button>
-            {!canAddMoreGuests && maxGuestsPerInvitee !== null && (
+            {!canAddMoreGuests && maxGuestsPerInvitee !== null && maxGuestsPerInvitee !== undefined && (
               <p className="text-xs text-amber-600 dark:text-amber-400">
                 You&apos;ve reached the maximum number of guests allowed ({maxGuestsPerInvitee} total including yourself)
               </p>

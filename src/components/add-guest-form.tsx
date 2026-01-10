@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,6 +22,7 @@ interface AddGuestFormProps {
 }
 
 export function AddGuestForm({ eventId }: AddGuestFormProps) {
+  const router = useRouter();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +86,7 @@ export function AddGuestForm({ eventId }: AddGuestFormProps) {
       setNotifyBySms(false);
 
       // Refresh to show new guest
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       toast({
         title: 'Error',

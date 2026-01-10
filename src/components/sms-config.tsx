@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -162,7 +163,7 @@ export function SmsConfig({ onConfigChange }: SmsConfigProps) {
         }
       }
     } catch (error) {
-      console.error('Failed to load SMS config:', error);
+      logger.error('Failed to load SMS config:', error);
     } finally {
       setIsLoading(false);
     }
@@ -353,7 +354,7 @@ export function SmsConfig({ onConfigChange }: SmsConfigProps) {
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-3 rounded-md text-sm flex items-start gap-2">
               <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
               <p className="text-blue-800 dark:text-blue-200">
-                Twilio is the default and recommended SMS provider. It's optimized for performance and reliability.
+                Twilio is the default and recommended SMS provider. It&apos;s optimized for performance and reliability.
               </p>
             </div>
           )}

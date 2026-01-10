@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
+import { logger } from '@/lib/logger';
 
 const resetPasswordSchema = z.object({
   token: z.string().min(1, 'Token is required'),
@@ -77,7 +78,7 @@ export async function POST(request: Request) {
       message: 'Password has been reset successfully',
     });
   } catch (error) {
-    console.error('Reset password error:', error);
+    logger.error('Reset password error', error);
     return NextResponse.json(
       { error: 'An error occurred. Please try again.' },
       { status: 500 }
@@ -112,7 +113,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ valid: true });
   } catch (error) {
-    console.error('Verify token error:', error);
+    logger.error('Verify token error', error);
     return NextResponse.json(
       { valid: false, error: 'An error occurred' },
       { status: 500 }

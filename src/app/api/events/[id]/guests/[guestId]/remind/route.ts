@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { sendReminder } from '@/lib/email';
 import { sendSmsReminder } from '@/lib/sms';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string; guestId: string }>;
@@ -56,7 +57,7 @@ export async function POST(request: Request, { params }: RouteParams) {
           },
           rsvpToken: guest.token,
         }).catch((error) => {
-          console.error('Failed to send reminder email:', error);
+          logger.error('Failed to send reminder email', error);
         })
       );
     }
@@ -74,7 +75,7 @@ export async function POST(request: Request, { params }: RouteParams) {
           },
           rsvpToken: guest.token,
         }).catch((error) => {
-          console.error('Failed to send reminder SMS:', error);
+          logger.error('Failed to send reminder SMS', error);
         })
       );
     }
@@ -92,7 +93,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Send reminder error:', error);
+    logger.error('Send reminder error', error);
     return NextResponse.json(
       { error: 'Failed to send reminder' },
       { status: 500 }

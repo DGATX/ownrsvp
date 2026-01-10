@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 import nodemailer from 'nodemailer';
 import { getEmailConfig } from '@/lib/config';
+import { logger } from '@/lib/logger';
 
 async function createTransporter() {
   const config = await getEmailConfig();
@@ -178,7 +179,7 @@ export async function POST(request: Request) {
       message: 'If an RSVP exists for this email, you will receive an edit link shortly.',
     });
   } catch (error) {
-    console.error('Send edit link error:', error);
+    logger.error('Send edit link error', error);
     return NextResponse.json(
       { error: 'Failed to send edit link' },
       { status: 500 }

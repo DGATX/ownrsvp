@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -65,6 +66,7 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests }: Gu
   const filteredGuests = filterStatus
     ? guests.filter((guest) => guest.status === filterStatus)
     : guests;
+  const router = useRouter();
   const { toast } = useToast();
   const [loadingStates, setLoadingStates] = useState<Record<string, string>>({});
   const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
@@ -135,7 +137,7 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests }: Gu
       });
 
       // Refresh the page to update the list
-      window.location.reload();
+      router.refresh();
     } catch {
       toast({
         title: 'Error',
@@ -206,7 +208,7 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests }: Gu
 
       // Clear selection and refresh
       setSelectedGuests(new Set());
-      window.location.reload();
+      router.refresh();
     } catch {
       toast({
         title: 'Error',
@@ -530,7 +532,7 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests }: Gu
           }}
           onSuccess={() => {
             setEditingGuestId(null);
-            window.location.reload();
+            router.refresh();
           }}
         />
       )}

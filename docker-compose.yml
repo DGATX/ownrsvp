@@ -2,9 +2,8 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # Pull pre-built image from Docker Hub
+    image: dgatx/ownrsvp:latest
     ports:
       - "3000:3000"
     environment:
@@ -52,16 +51,13 @@ services:
 
   # Database migrations - runs once on startup
   migrate:
-    build:
-      context: .
-      dockerfile: Dockerfile.migrate
+    image: dgatx/ownrsvp:latest
+    command: sh -c "npx prisma migrate deploy"
     environment:
       - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@db:5432/rsvp_db?schema=public
     depends_on:
       db:
         condition: service_healthy
-    restart: "no"
 
 volumes:
   postgres_data:
-

@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,7 +29,7 @@ export function ConfigManagement() {
         setSmsConfigured(data.sms?.configured || false);
       }
     } catch (error) {
-      console.error('Failed to load config status:', error);
+      logger.error('Failed to load config status:', error);
     } finally {
       setIsLoading(false);
     }

@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -45,7 +46,7 @@ export function EmailTest() {
         });
       }
     } catch (error) {
-      console.error('Failed to check email config:', error);
+      logger.error('Failed to check email config:', error);
       setConfigStatus({
         configured: false,
         missing: [],

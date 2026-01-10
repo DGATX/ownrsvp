@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { sendInvitation } from '@/lib/email';
 import { sendSmsInvitation } from '@/lib/sms';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 const inviteSchema = z.object({
   notifyByEmail: z.boolean().optional().default(true),
@@ -69,7 +70,7 @@ export async function POST(request: Request, { params }: RouteParams) {
           rsvpToken: guest.token,
           hostName: event.host.name,
         }).catch((error) => {
-          console.error('Failed to send invitation email:', error);
+          logger.error('Failed to send invitation email', error);
         })
       );
     }
@@ -87,7 +88,7 @@ export async function POST(request: Request, { params }: RouteParams) {
           rsvpToken: guest.token,
           hostName: event.host.name,
         }).catch((error) => {
-          console.error('Failed to send invitation SMS:', error);
+          logger.error('Failed to send invitation SMS', error);
         })
       );
     }
@@ -103,7 +104,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Send invitation error:', error);
+    logger.error('Send invitation error', error);
     return NextResponse.json(
       { error: 'Failed to send invitation' },
       { status: 500 }

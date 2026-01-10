@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -53,7 +54,7 @@ export function GuestLimitEditor({ eventId, maxGuestsPerInvitee: initialMaxGuest
       setIsEditing(false);
       router.refresh();
     } catch (error) {
-      console.error('Update guest limit error:', error);
+      logger.error('Update guest limit error:', error);
       toast({
         title: 'Error',
         description: error instanceof Error ? error.message : 'Failed to update guest limit',
@@ -65,8 +66,8 @@ export function GuestLimitEditor({ eventId, maxGuestsPerInvitee: initialMaxGuest
   };
 
   const handleCancel = () => {
-    setMaxGuestsPerInvitee(initialMaxGuestsPerInvitee);
-    setUnlimitedGuests(initialMaxGuestsPerInvitee === null);
+    setMaxGuestsPerInvitee(initialMaxGuestsPerInvitee ?? null);
+    setUnlimitedGuests(initialMaxGuestsPerInvitee === null || initialMaxGuestsPerInvitee === undefined);
     setIsEditing(false);
   };
 

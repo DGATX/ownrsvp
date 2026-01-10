@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
@@ -51,7 +52,7 @@ function ProfilePageContent() {
             setName(data.user.name || '');
             // Ensure username is set - if null/undefined, generate a default or show error
             if (!data.user.username) {
-              console.warn('User does not have a username. This should not happen after migration.');
+              logger.warn('User does not have a username. This should not happen after migration.');
               // Try to generate a username from email as fallback
               const emailPrefix = data.user.email?.split('@')[0]?.toLowerCase().replace(/[^a-z0-9]/g, '') || 'user';
               setUsername(emailPrefix);
@@ -63,7 +64,7 @@ function ProfilePageContent() {
           }
         } else {
           const errorData = await response.json();
-          console.error('Failed to fetch user data:', errorData);
+          logger.error('Failed to fetch user data:', errorData);
           toast({
             title: 'Error',
             description: errorData.error || 'Failed to load profile data',
@@ -71,7 +72,7 @@ function ProfilePageContent() {
           });
         }
       } catch (error) {
-        console.error('Failed to fetch user data:', error);
+        logger.error('Failed to fetch user data:', error);
         toast({
           title: 'Error',
           description: 'Failed to load profile data. Please refresh the page.',
@@ -118,7 +119,7 @@ function ProfilePageContent() {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error('Profile update error:', data);
+        logger.error('Profile update error:', data);
         throw new Error(data.error || data.details?.[0]?.message || 'Failed to update profile');
       }
 
@@ -160,7 +161,7 @@ function ProfilePageContent() {
       });
     } catch {
       // Theme is already applied locally, just log the error
-      console.error('Failed to save theme preference');
+      logger.error('Failed to save theme preference');
     } finally {
       setIsSavingTheme(false);
     }

@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ userId: string }>;
@@ -94,7 +95,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       user: updatedUser,
     });
   } catch (error) {
-    console.error('Update user error:', error);
+    logger.error('Update user error', error);
     return NextResponse.json(
       { error: 'Failed to update user' },
       { status: 500 }
@@ -139,7 +140,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Delete user error:', error);
+    logger.error('Delete user error', error);
     return NextResponse.json(
       { error: 'Failed to delete user' },
       { status: 500 }

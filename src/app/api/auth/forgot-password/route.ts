@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
 import { sendPasswordResetEmail } from '@/lib/email';
+import { logger } from '@/lib/logger';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -61,7 +62,7 @@ export async function POST(request: Request) {
       message: 'If an account exists with this email, you will receive a password reset link.',
     });
   } catch (error) {
-    console.error('Forgot password error:', error);
+    logger.error('Forgot password error', error);
     return NextResponse.json(
       { error: 'An error occurred. Please try again.' },
       { status: 500 }

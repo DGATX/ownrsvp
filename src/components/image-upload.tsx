@@ -1,4 +1,5 @@
 'use client';
+import { logger } from '@/lib/logger';
 
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
@@ -75,7 +76,7 @@ export function ImageUpload({
       };
       reader.readAsDataURL(compressedFile);
     } catch (error) {
-      console.error('Image compression error:', error);
+      logger.error('Image compression error:', error);
       setIsCompressing(false);
       setCompressionStatus('Compression failed, using original image');
       

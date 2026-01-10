@@ -3,6 +3,7 @@ import { formatDateTime } from './utils';
 import { validateSmtpConfig, isEmailConfigured } from './env-validation';
 import { getEmailConfig } from './config';
 import { prisma } from './prisma';
+import { logger } from './logger';
 
 // Helper to get "from" address
 async function getFromAddress(): Promise<string> {
@@ -26,13 +27,13 @@ async function createTransporter() {
       });
     }
   } catch (error) {
-    console.error('Error creating transporter from config:', error);
+    logger.error('Error creating transporter from config', error);
   }
 
   // Fallback to environment variables
   const smtpConfig = await validateSmtpConfig();
   if (smtpConfig.warnings.length > 0) {
-    console.warn('SMTP Configuration warnings:', smtpConfig.warnings);
+    logger.warn('SMTP Configuration warnings', { warnings: smtpConfig.warnings });
   }
 
   if (smtpConfig.isValid) {
@@ -76,7 +77,7 @@ export async function sendInvitation({
 }: SendInvitationParams) {
   const transporter = await createTransporter();
   if (!transporter) {
-    console.warn('Email not configured - skipping invitation email to', to);
+    logger.warn('Email not configured - skipping invitation email', { to });
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
@@ -169,7 +170,7 @@ export async function sendReminder({
 }: SendReminderParams) {
   const transporter = await createTransporter();
   if (!transporter) {
-    console.warn('Email not configured - skipping reminder email to', to);
+    logger.warn('Email not configured - skipping reminder email', { to });
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
@@ -258,7 +259,7 @@ export async function sendConfirmation({
 }: SendConfirmationParams) {
   const transporter = await createTransporter();
   if (!transporter) {
-    console.warn('Email not configured - skipping confirmation email to', to);
+    logger.warn('Email not configured - skipping confirmation email', { to });
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
@@ -353,7 +354,7 @@ export async function sendPasswordResetEmail(
 ) {
   const transporter = await createTransporter();
   if (!transporter) {
-    console.warn('Email not configured - skipping password reset email to', to);
+    logger.warn('Email not configured - skipping password reset email', { to });
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
@@ -440,7 +441,7 @@ export async function sendBroadcastEmail({
 }: SendBroadcastEmailParams) {
   const transporter = await createTransporter();
   if (!transporter) {
-    console.warn('Email not configured - skipping broadcast email to', to);
+    logger.warn('Email not configured - skipping broadcast email', { to });
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
@@ -513,7 +514,7 @@ export async function sendUserInvitationEmail({
 }: SendUserInvitationEmailParams) {
   const transporter = await createTransporter();
   if (!transporter) {
-    console.warn('Email not configured - skipping user invitation email to', to);
+    logger.warn('Email not configured - skipping user invitation email', { to });
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
@@ -615,7 +616,7 @@ export async function sendEventChangeEmail({
 }: SendEventChangeEmailParams) {
   const transporter = await createTransporter();
   if (!transporter) {
-    console.warn('Email not configured - skipping event change email to', to);
+    logger.warn('Email not configured - skipping event change email', { to });
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
@@ -717,7 +718,7 @@ export async function sendRsvpChangeNotification({
 }: SendRsvpChangeNotificationParams) {
   const transporter = await createTransporter();
   if (!transporter) {
-    console.warn('Email not configured - skipping RSVP change notification to', to);
+    logger.warn('Email not configured - skipping RSVP change notification', { to });
     return;
   }
 

@@ -1,6 +1,6 @@
 /**
  * SMS Provider Factory
- * 
+ *
  * Creates and returns the appropriate SMS provider instance.
  * Twilio is the default and preferred provider.
  */
@@ -11,6 +11,7 @@ import { AwsSnsProvider } from './providers/aws-sns';
 import { VonageProvider } from './providers/vonage';
 import { MessageBirdProvider } from './providers/messagebird';
 import { GenericProvider } from './providers/generic';
+import { logger } from '../logger';
 
 /**
  * Create an SMS provider instance based on configuration
@@ -39,7 +40,7 @@ export function createSmsProvider(config: SmsProviderConfig): SmsProvider {
 
     default:
       // Fallback to Twilio if unknown provider specified
-      console.warn(`Unknown SMS provider "${providerType}", defaulting to Twilio`);
+      logger.warn('Unknown SMS provider, defaulting to Twilio', { providerType });
       return new TwilioProvider(config);
   }
 }

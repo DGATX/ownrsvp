@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { isEventHost } from '@/lib/event-access';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string; cohostId: string }>;
@@ -62,7 +63,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ coHost });
   } catch (error) {
-    console.error('Update co-host error:', error);
+    logger.error('Update co-host error', error);
     return NextResponse.json(
       { error: 'Failed to update co-host' },
       { status: 500 }
@@ -112,7 +113,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Remove co-host error:', error);
+    logger.error('Remove co-host error', error);
     return NextResponse.json(
       { error: 'Failed to remove co-host' },
       { status: 500 }

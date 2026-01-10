@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { detectRestartMethod, attemptRestart, gracefulShutdown } from '@/lib/server-restart';
+import { logger } from '@/lib/logger';
 
 /**
  * POST - Attempt to restart the server
@@ -24,7 +25,7 @@ export async function POST() {
     }
 
     // Log restart attempt
-    console.log(`[RESTART] Admin ${session.user.id} initiated server restart`);
+    logger.info('Admin initiated server restart', { userId: session.user.id });
 
     // Detect restart method
     const method = await detectRestartMethod();
@@ -50,11 +51,11 @@ export async function POST() {
     // Attempt automatic restart
     const result = await attemptRestart();
 
-    // If graceful shutdown is needed (development or Docker from inside), perform it
-    if (result.requiresManualRestart && (method.type === 'graceful' || (method.type === 'docker' && result.requiresManualRestart))) {
+    // If manual restart is required (can't auto-restart), perform graceful shutdown
+    if (result.requiresManualRestart) {
       // Only shutdown gracefully if we're in development or can't auto-restart
       // In production with PM2/systemd, don't shutdown if restart command exists
-      if (method.type === 'graceful' || (method.type === 'docker' && !result.success)) {
+      if (method.type === 'docker' && !result.success) {
         setImmediate(() => {
           gracefulShutdown();
         });
@@ -73,7 +74,7 @@ export async function POST() {
       error: result.error,
     });
   } catch (error) {
-    console.error('Restart endpoint error:', error);
+    logger.error('Restart endpoint error', error);
     return NextResponse.json(
       { 
         success: false,
@@ -117,7 +118,7 @@ export async function GET() {
       isDevelopment: process.env.NODE_ENV === 'development',
     });
   } catch (error) {
-    console.error('Get restart method error:', error);
+    logger.error('Get restart method error', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

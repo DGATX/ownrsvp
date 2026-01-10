@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -44,6 +45,7 @@ interface AdminUserManagementProps {
 }
 
 export function AdminUserManagement({ users: initialUsers }: AdminUserManagementProps) {
+  const router = useRouter();
   const { toast } = useToast();
   const [users, setUsers] = useState(initialUsers);
   const [isLoading, setIsLoading] = useState(false);
@@ -130,7 +132,7 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
       setIsDialogOpen(false);
 
       // Refresh the page to show new user
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       toast({
         title: 'Error',
@@ -180,7 +182,7 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
 
       setIsEditDialogOpen(false);
       setEditingUser(null);
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       toast({
         title: 'Error',
@@ -279,7 +281,7 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
       });
 
       // Refresh the page
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       toast({
         title: 'Error',

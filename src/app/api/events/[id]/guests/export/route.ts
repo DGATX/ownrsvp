@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { canManageEvent } from '@/lib/event-access';
 import { format } from 'date-fns';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -85,7 +86,7 @@ export async function GET(request: Request, { params }: RouteParams) {
       },
     });
   } catch (error) {
-    console.error('Export guests error:', error);
+    logger.error('Export guests error', error);
     return NextResponse.json(
       { error: 'Failed to export guests' },
       { status: 500 }

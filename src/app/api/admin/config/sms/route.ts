@@ -5,6 +5,7 @@ import { getSmsConfig, updateSmsConfig, syncToEnvFile } from '@/lib/config';
 import { sendSmsInvitation } from '@/lib/sms';
 import { createSmsProvider } from '@/lib/sms/provider-factory';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 // Base schema - provider-specific validation happens in route
 const smsConfigSchema = z.object({
@@ -99,7 +100,7 @@ export async function GET() {
       provider,
     });
   } catch (error) {
-    console.error('Get SMS config error:', error);
+    logger.error('Get SMS config error', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -184,7 +185,7 @@ export async function PATCH(request: Request) {
     try {
       await syncToEnvFile();
     } catch (error) {
-      console.error('Failed to sync to .env file:', error);
+      logger.error('Failed to sync to .env file', error);
       // Continue anyway - database update succeeded
     }
 
@@ -214,7 +215,7 @@ export async function PATCH(request: Request) {
       restartRequired: true,
     });
   } catch (error) {
-    console.error('Update SMS config error:', error);
+    logger.error('Update SMS config error', error);
     return NextResponse.json(
       { error: 'Failed to update SMS configuration' },
       { status: 500 }
@@ -269,9 +270,13 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    // Create provider instance for testing
+    // Create provider instance for testing (ensure provider is never undefined)
     const { createSmsProvider } = await import('@/lib/sms/provider-factory');
-    const provider = createSmsProvider(config);
+    const providerConfig = {
+      ...config,
+      provider: config.provider || 'twilio' as const,
+    };
+    const provider = createSmsProvider(providerConfig);
 
     if (!provider.isConfigured()) {
       return NextResponse.json({
@@ -302,7 +307,7 @@ export async function POST(request: Request) {
         }, { status: 500 });
       }
     } catch (smsError) {
-      console.error('Test SMS error:', smsError);
+      logger.error('Test SMS error', smsError);
       return NextResponse.json({
         success: false,
         error: 'Failed to send test SMS',
@@ -310,7 +315,7 @@ export async function POST(request: Request) {
       }, { status: 500 });
     }
   } catch (error) {
-    console.error('Test SMS endpoint error:', error);
+    logger.error('Test SMS endpoint error', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

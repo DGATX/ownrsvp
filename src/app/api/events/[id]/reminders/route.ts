@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { canManageEvent } from '@/lib/event-access';
 import { parseReminderSchedule, serializeReminderSchedule, validateReminders } from '@/lib/reminder-utils';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -70,7 +71,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     return NextResponse.json({ event });
   } catch (error) {
-    console.error('Update reminders error:', error);
+    logger.error('Update reminders error', error);
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(
