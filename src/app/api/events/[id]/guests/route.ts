@@ -3,7 +3,6 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { canManageEvent } from '@/lib/event-access';
 import { sendInvitation } from '@/lib/email';
-import { sendSmsInvitation } from '@/lib/sms';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
 
@@ -12,7 +11,6 @@ const addGuestSchema = z.object({
   phone: z.string().optional(),
   name: z.string().optional(),
   notifyByEmail: z.boolean().optional().default(true),
-  notifyBySms: z.boolean().optional().default(false),
   sendInvite: z.boolean().optional().default(true),
 });
 
@@ -53,7 +51,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       );
     }
 
-    const { email, phone, name, notifyByEmail, notifyBySms, sendInvite } = parsed.data;
+    const { email, phone, name, notifyByEmail, sendInvite } = parsed.data;
 
     // Check if guest already exists
     const existingGuest = await prisma.guest.findUnique({
@@ -75,54 +73,27 @@ export async function POST(request: Request, { params }: RouteParams) {
         phone: phone || null,
         name: name || null,
         notifyByEmail,
-        notifyBySms: notifyBySms && !!phone,
       },
     });
 
-    // Send invitations if requested
-    if (sendInvite) {
-      const invitationPromises = [];
-
-      // Send email invitation
-      if (notifyByEmail) {
-        invitationPromises.push(
-          sendInvitation({
-            to: email,
-            guestName: name,
-            event: {
-              title: event.title,
-              date: event.date,
-              location: event.location,
-              description: event.description,
-            },
-            rsvpToken: guest.token,
-            hostName: event.host.name,
-          }).catch((error) => {
-            logger.error('Failed to send invitation email', error);
-          })
-        );
+    // Send invitation if requested
+    if (sendInvite && notifyByEmail) {
+      try {
+        await sendInvitation({
+          to: email,
+          guestName: name,
+          event: {
+            title: event.title,
+            date: event.date,
+            location: event.location,
+            description: event.description,
+          },
+          rsvpToken: guest.token,
+          hostName: event.host.name,
+        });
+      } catch (error) {
+        logger.error('Failed to send invitation email', error);
       }
-
-      // Send SMS invitation
-      if (notifyBySms && phone) {
-        invitationPromises.push(
-          sendSmsInvitation({
-            to: phone,
-            guestName: name,
-            event: {
-              title: event.title,
-              date: event.date,
-              location: event.location,
-            },
-            rsvpToken: guest.token,
-            hostName: event.host.name,
-          }).catch((error) => {
-            logger.error('Failed to send invitation SMS', error);
-          })
-        );
-      }
-
-      await Promise.all(invitationPromises);
     }
 
     return NextResponse.json({ guest });

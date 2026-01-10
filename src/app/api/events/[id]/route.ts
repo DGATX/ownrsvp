@@ -3,7 +3,6 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { canManageEvent } from '@/lib/event-access';
 import { sendEventChangeEmail } from '@/lib/email';
-import { sendEventChangeSms } from '@/lib/sms';
 import { z } from 'zod';
 import { format } from 'date-fns';
 import { parseReminderSchedule, serializeReminderSchedule, validateReminders } from '@/lib/reminder-utils';
@@ -296,22 +295,6 @@ export async function PATCH(request: Request, { params }: RouteParams) {
                   rsvpToken: guest.token,
                 }).catch((error) => {
                   logger.error(`Failed to send email to ${guest.email}`, error);
-                  // Don't throw - we want to continue sending to other guests
-                })
-              );
-            }
-
-            if (guest.notifyBySms && guest.phone) {
-              notificationPromises.push(
-                sendEventChangeSms({
-                  to: guest.phone,
-                  guestName: guest.name,
-                  eventTitle: event.title,
-                  changes: changes.map((c) => `${c.field}: ${c.newValue}`),
-                }).then(() => {
-                  // Convert to void
-                }).catch((error) => {
-                  logger.error(`Failed to send SMS to ${guest.phone}`, error);
                   // Don't throw - we want to continue sending to other guests
                 })
               );

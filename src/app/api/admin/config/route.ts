@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import { getEmailConfig, getSmsConfig, syncToEnvFile } from '@/lib/config';
+import { getEmailConfig, syncToEnvFile } from '@/lib/config';
 import { logger } from '@/lib/logger';
 
 /**
@@ -25,14 +25,10 @@ export async function GET() {
     }
 
     const emailConfig = await getEmailConfig();
-    const smsConfig = await getSmsConfig();
 
     return NextResponse.json({
       email: {
         configured: !!emailConfig,
-      },
-      sms: {
-        configured: !!smsConfig,
       },
     });
   } catch (error) {
@@ -90,4 +86,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

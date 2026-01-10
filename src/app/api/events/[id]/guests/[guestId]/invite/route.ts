@@ -2,14 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { sendInvitation } from '@/lib/email';
-import { sendSmsInvitation } from '@/lib/sms';
-import { z } from 'zod';
 import { logger } from '@/lib/logger';
-
-const inviteSchema = z.object({
-  notifyByEmail: z.boolean().optional().default(true),
-  notifyBySms: z.boolean().optional().default(false),
-});
 
 interface RouteParams {
   params: Promise<{ id: string; guestId: string }>;
@@ -48,59 +41,27 @@ export async function POST(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: 'Guest not found' }, { status: 404 });
     }
 
-    // Parse request body
-    const body = await request.json().catch(() => ({}));
-    const parsed = inviteSchema.safeParse(body);
-    const { notifyByEmail = true, notifyBySms = false } = parsed.success ? parsed.data : {};
-
-    // Send invitations
-    const invitationPromises = [];
-
-    if (notifyByEmail) {
-      invitationPromises.push(
-        sendInvitation({
-          to: guest.email,
-          guestName: guest.name,
-          event: {
-            title: event.title,
-            date: event.date,
-            location: event.location,
-            description: event.description,
-          },
-          rsvpToken: guest.token,
-          hostName: event.host.name,
-        }).catch((error) => {
-          logger.error('Failed to send invitation email', error);
-        })
-      );
-    }
-
-    if (notifyBySms && guest.phone) {
-      invitationPromises.push(
-        sendSmsInvitation({
-          to: guest.phone,
-          guestName: guest.name,
-          event: {
-            title: event.title,
-            date: event.date,
-            location: event.location,
-          },
-          rsvpToken: guest.token,
-          hostName: event.host.name,
-        }).catch((error) => {
-          logger.error('Failed to send invitation SMS', error);
-        })
-      );
-    }
-
-    if (invitationPromises.length === 0) {
+    // Send invitation email
+    try {
+      await sendInvitation({
+        to: guest.email,
+        guestName: guest.name,
+        event: {
+          title: event.title,
+          date: event.date,
+          location: event.location,
+          description: event.description,
+        },
+        rsvpToken: guest.token,
+        hostName: event.host.name,
+      });
+    } catch (error) {
+      logger.error('Failed to send invitation email', error);
       return NextResponse.json(
-        { error: 'Please select at least one delivery method' },
-        { status: 400 }
+        { error: 'Failed to send invitation email' },
+        { status: 500 }
       );
     }
-
-    await Promise.all(invitationPromises);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -111,4 +72,3 @@ export async function POST(request: Request, { params }: RouteParams) {
     );
   }
 }
-

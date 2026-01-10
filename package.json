@@ -30,14 +30,7 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
-    "db:seed": "npx tsx prisma/seed.ts",
-    "test": "playwright test",
-    "test:dockerhub": "bash tests/environments/dockerhub/setup.sh && npm run test && bash tests/environments/dockerhub/teardown.sh",
-    "test:github": "bash tests/environments/github/setup.sh && npm run test && bash tests/environments/github/teardown.sh",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed",
-    "test:debug": "playwright test --debug",
-    "test:report": "playwright show-report"
+    "db:seed": "npx tsx prisma/seed.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -77,12 +70,9 @@
     "react-hook-form": "^7.50.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
-    "twilio": "^5.11.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.2.0",
-    "@playwright/test": "^1.48.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.11.19",
     "@types/node-cron": "^3.0.11",

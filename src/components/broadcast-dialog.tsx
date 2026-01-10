@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -23,7 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-import { Megaphone, Loader2, Mail, MessageSquare, Send } from 'lucide-react';
+import { Megaphone, Loader2, Send } from 'lucide-react';
 
 interface BroadcastDialogProps {
   eventId: string;
@@ -42,8 +41,6 @@ export function BroadcastDialog({ eventId, stats }: BroadcastDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
-  const [sendEmail, setSendEmail] = useState(true);
-  const [sendSms, setSendSms] = useState(false);
   const [filterStatus, setFilterStatus] = useState<'ALL' | 'ATTENDING' | 'NOT_ATTENDING' | 'MAYBE' | 'PENDING'>('ALL');
 
   const getRecipientCount = () => {
@@ -71,27 +68,15 @@ export function BroadcastDialog({ eventId, stats }: BroadcastDialogProps) {
       return;
     }
 
-    if (!sendEmail && !sendSms) {
-      toast({
-        title: 'Select delivery method',
-        description: 'Please select at least one delivery method (Email or SMS).',
-        variant: 'destructive',
-      });
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const sendVia = sendEmail && sendSms ? 'BOTH' : sendEmail ? 'EMAIL' : 'SMS';
-
       const response = await fetch(`/api/events/${eventId}/broadcast`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           subject,
           message,
-          sendVia,
           filterStatus,
         }),
       });
@@ -110,8 +95,6 @@ export function BroadcastDialog({ eventId, stats }: BroadcastDialogProps) {
       // Reset form and close
       setSubject('');
       setMessage('');
-      setSendEmail(true);
-      setSendSms(false);
       setFilterStatus('ALL');
       setIsOpen(false);
     } catch (error) {
@@ -142,7 +125,7 @@ export function BroadcastDialog({ eventId, stats }: BroadcastDialogProps) {
             Send Broadcast
           </DialogTitle>
           <DialogDescription>
-            Send an update to your guests via email and/or SMS.
+            Send an email update to your guests.
           </DialogDescription>
         </DialogHeader>
 
@@ -168,37 +151,6 @@ export function BroadcastDialog({ eventId, stats }: BroadcastDialogProps) {
             </Select>
           </div>
 
-          {/* Delivery Method */}
-          <div className="space-y-2">
-            <Label>Delivery Method</Label>
-            <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="send-email"
-                  checked={sendEmail}
-                  onCheckedChange={(checked) => setSendEmail(!!checked)}
-                  disabled={isLoading}
-                />
-                <Label htmlFor="send-email" className="flex items-center gap-1 cursor-pointer font-normal">
-                  <Mail className="w-4 h-4" />
-                  Email
-                </Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="send-sms"
-                  checked={sendSms}
-                  onCheckedChange={(checked) => setSendSms(!!checked)}
-                  disabled={isLoading}
-                />
-                <Label htmlFor="send-sms" className="flex items-center gap-1 cursor-pointer font-normal">
-                  <MessageSquare className="w-4 h-4" />
-                  SMS
-                </Label>
-              </div>
-            </div>
-          </div>
-
           {/* Subject */}
           <div className="space-y-2">
             <Label htmlFor="subject">Subject</Label>
@@ -222,13 +174,6 @@ export function BroadcastDialog({ eventId, stats }: BroadcastDialogProps) {
               rows={4}
               disabled={isLoading}
             />
-            <p className="text-xs text-muted-foreground">
-              {sendSms && message.length > 160 && (
-                <span className="text-amber-600">
-                  SMS messages over 160 characters may be split into multiple messages.
-                </span>
-              )}
-            </p>
           </div>
         </div>
 
@@ -263,4 +208,3 @@ export function BroadcastDialog({ eventId, stats }: BroadcastDialogProps) {
     </Dialog>
   );
 }
-

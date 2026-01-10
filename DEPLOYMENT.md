@@ -251,22 +251,6 @@ SMTP_PASSWORD="your-mailgun-password"
 SMTP_FROM="Events <noreply@your-domain.com>"
 ```
 
-### SMS Configuration (Optional)
-
-SMS is optional. The app works perfectly without it.
-
-#### Twilio Setup
-
-1. Create account at [Twilio](https://www.twilio.com/try-twilio)
-2. Get Account SID and Auth Token from console
-3. Get a phone number capable of sending SMS
-
-```env
-TWILIO_ACCOUNT_SID="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-TWILIO_AUTH_TOKEN="your-auth-token"
-TWILIO_PHONE_NUMBER="+15551234567"
-```
-
 ### Cron Configuration (Optional)
 
 #### CRON_SECRET (Optional)

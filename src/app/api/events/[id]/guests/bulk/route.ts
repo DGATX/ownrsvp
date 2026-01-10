@@ -2,10 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { canManageEvent } from '@/lib/event-access';
-import { sendInvitation } from '@/lib/email';
-import { sendSmsInvitation } from '@/lib/sms';
-import { sendReminder } from '@/lib/email';
-import { sendSmsReminder } from '@/lib/sms';
+import { sendInvitation, sendReminder } from '@/lib/email';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
 
@@ -86,11 +83,9 @@ export async function POST(request: Request, { params }: RouteParams) {
       try {
         switch (action) {
           case 'invite': {
-            const invitationPromises = [];
-
             if (guest.notifyByEmail) {
-              invitationPromises.push(
-                sendInvitation({
+              try {
+                await sendInvitation({
                   to: guest.email,
                   guestName: guest.name,
                   event: {
@@ -101,32 +96,16 @@ export async function POST(request: Request, { params }: RouteParams) {
                   },
                   rsvpToken: guest.token,
                   hostName: event.host.name,
-                }).catch((error) => {
-                  logger.error(`Failed to send invitation email to ${guest.email}`, error);
-                })
-              );
+                });
+                successCount++;
+              } catch (error) {
+                logger.error(`Failed to send invitation email to ${guest.email}`, error);
+                failedCount++;
+                errors.push(`${guest.email}: Failed to send invitation`);
+              }
+            } else {
+              successCount++;
             }
-
-            if (guest.notifyBySms && guest.phone) {
-              invitationPromises.push(
-                sendSmsInvitation({
-                  to: guest.phone,
-                  guestName: guest.name,
-                  event: {
-                    title: event.title,
-                    date: event.date,
-                    location: event.location,
-                  },
-                  rsvpToken: guest.token,
-                  hostName: event.host.name,
-                }).catch((error) => {
-                  logger.error(`Failed to send invitation SMS to ${guest.phone}`, error);
-                })
-              );
-            }
-
-            await Promise.all(invitationPromises);
-            successCount++;
             break;
           }
 
@@ -137,11 +116,9 @@ export async function POST(request: Request, { params }: RouteParams) {
               continue;
             }
 
-            const reminderPromises = [];
-
             if (guest.notifyByEmail && !guest.reminderSentAt) {
-              reminderPromises.push(
-                sendReminder({
+              try {
+                await sendReminder({
                   to: guest.email,
                   guestName: guest.name,
                   event: {
@@ -150,42 +127,23 @@ export async function POST(request: Request, { params }: RouteParams) {
                     location: event.location,
                   },
                   rsvpToken: guest.token,
-                }).catch((error) => {
-                  logger.error(`Failed to send reminder email to ${guest.email}`, error);
-                })
-              );
-            }
+                });
 
-            if (guest.notifyBySms && guest.phone && !guest.smsReminderSentAt) {
-              reminderPromises.push(
-                sendSmsReminder({
-                  to: guest.phone,
-                  guestName: guest.name,
-                  event: {
-                    title: event.title,
-                    date: event.date,
-                    location: event.location,
+                await prisma.guest.update({
+                  where: { id: guest.id },
+                  data: {
+                    reminderSentAt: new Date(),
                   },
-                  rsvpToken: guest.token,
-                }).catch((error) => {
-                  logger.error(`Failed to send reminder SMS to ${guest.phone}`, error);
-                })
-              );
+                });
+                successCount++;
+              } catch (error) {
+                logger.error(`Failed to send reminder email to ${guest.email}`, error);
+                failedCount++;
+                errors.push(`${guest.email}: Failed to send reminder`);
+              }
+            } else {
+              successCount++;
             }
-
-            if (reminderPromises.length > 0) {
-              await Promise.all(reminderPromises);
-
-              await prisma.guest.update({
-                where: { id: guest.id },
-                data: {
-                  reminderSentAt: guest.notifyByEmail && !guest.reminderSentAt ? new Date() : undefined,
-                  smsReminderSentAt: guest.notifyBySms && guest.phone && !guest.smsReminderSentAt ? new Date() : undefined,
-                },
-              });
-            }
-
-            successCount++;
             break;
           }
 
@@ -231,4 +189,3 @@ export async function POST(request: Request, { params }: RouteParams) {
     );
   }
 }
-

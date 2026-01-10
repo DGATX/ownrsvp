@@ -15,6 +15,7 @@ coverage
 *.pem
 .env*
 !.env.example
+.secrets
 
 # Debug
 logs

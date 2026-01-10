@@ -4,7 +4,6 @@ import { prisma } from '@/lib/prisma';
 import { canManageEvent } from '@/lib/event-access';
 import { z } from 'zod';
 import { sendInvitation } from '@/lib/email';
-import { sendSmsInvitation } from '@/lib/sms';
 import { logger } from '@/lib/logger';
 
 interface RouteParams {
@@ -30,7 +29,7 @@ export async function POST(request: Request, { params }: RouteParams) {
   try {
     const { id: eventId } = await params;
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -100,10 +99,9 @@ export async function POST(request: Request, { params }: RouteParams) {
             name: name || null,
             phone: phone || null,
             notifyByEmail: true,
-            notifyBySms: !!phone,
           },
         });
-        
+
         existingEmails.add(email.toLowerCase());
         results.imported++;
       } catch (error) {
@@ -129,10 +127,8 @@ export async function POST(request: Request, { params }: RouteParams) {
           id: true,
           email: true,
           name: true,
-          phone: true,
           token: true,
           notifyByEmail: true,
-          notifyBySms: true,
         },
       });
 
@@ -160,18 +156,13 @@ export async function POST(request: Request, { params }: RouteParams) {
       const invitationResults = {
         emailsSent: 0,
         emailsFailed: 0,
-        smsSent: 0,
-        smsFailed: 0,
       };
 
       await Promise.all(
         newlyImportedGuests.map(async (guest) => {
-          const promises: Promise<void>[] = [];
-
-          // Send email invitation
           if (guest.notifyByEmail) {
-            promises.push(
-              sendInvitation({
+            try {
+              await sendInvitation({
                 to: guest.email,
                 guestName: guest.name,
                 event: {
@@ -182,47 +173,13 @@ export async function POST(request: Request, { params }: RouteParams) {
                 },
                 rsvpToken: guest.token,
                 hostName: eventWithHost.host.name,
-              })
-                .then(() => {
-                  invitationResults.emailsSent++;
-                })
-                .catch((error) => {
-                  logger.error(`Failed to send email invitation to ${guest.email}`, error);
-                  invitationResults.emailsFailed++;
-                })
-            );
+              });
+              invitationResults.emailsSent++;
+            } catch (error) {
+              logger.error(`Failed to send email invitation to ${guest.email}`, error);
+              invitationResults.emailsFailed++;
+            }
           }
-
-          // Send SMS invitation
-          if (guest.notifyBySms && guest.phone) {
-            promises.push(
-              sendSmsInvitation({
-                to: guest.phone,
-                guestName: guest.name,
-                event: {
-                  title: eventWithHost.title,
-                  date: eventWithHost.date,
-                  location: eventWithHost.location,
-                },
-                rsvpToken: guest.token,
-                hostName: eventWithHost.host.name,
-              })
-                .then((result) => {
-                  if (result.sent) {
-                    invitationResults.smsSent++;
-                  } else {
-                    invitationResults.smsFailed++;
-                    logger.info(`SMS not sent to ${guest.phone}: ${result.reason}`);
-                  }
-                })
-                .catch((error) => {
-                  logger.error(`Failed to send SMS invitation to ${guest.phone}`, error);
-                  invitationResults.smsFailed++;
-                })
-            );
-          }
-
-          await Promise.all(promises);
         })
       );
 
@@ -248,4 +205,3 @@ export async function POST(request: Request, { params }: RouteParams) {
     );
   }
 }
-

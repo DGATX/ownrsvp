@@ -27,7 +27,6 @@ nano .env  # or use your preferred editor
 **Minimum required settings:**
 - `AUTH_SECRET` - Generate with: `openssl rand -base64 32`
 - `SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD` - For email invitations
-- See [GMAIL_SETUP.md](GMAIL_SETUP.md) for Gmail configuration
 
 ### Step 3: Start Services
 

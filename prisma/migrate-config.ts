@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { updateEmailConfig, updateSmsConfig } from '../src/lib/config';
+import { updateEmailConfig } from '../src/lib/config';
 
 const prisma = new PrismaClient();
 
@@ -17,10 +17,6 @@ async function main() {
   // Check if config already exists in database
   const existingEmailConfig = await prisma.appConfig.findFirst({
     where: { category: 'email' },
-  });
-
-  const existingSmsConfig = await prisma.appConfig.findFirst({
-    where: { category: 'sms' },
   });
 
   // Migrate email config if env vars exist and DB is empty
@@ -41,24 +37,6 @@ async function main() {
     console.log('ℹ️  Email configuration already exists in database');
   } else {
     console.log('ℹ️  No email configuration found in environment variables');
-  }
-
-  // Migrate SMS config if env vars exist and DB is empty
-  if (!existingSmsConfig && process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_PHONE_NUMBER) {
-    console.log('📱 Migrating SMS configuration...');
-    await updateSmsConfig(
-      {
-        accountSid: process.env.TWILIO_ACCOUNT_SID,
-        authToken: process.env.TWILIO_AUTH_TOKEN,
-        phoneNumber: process.env.TWILIO_PHONE_NUMBER,
-      },
-      adminId
-    );
-    console.log('✅ SMS configuration migrated');
-  } else if (existingSmsConfig) {
-    console.log('ℹ️  SMS configuration already exists in database');
-  } else {
-    console.log('ℹ️  No SMS configuration found in environment variables');
   }
 
   console.log('✅ Migration complete!');

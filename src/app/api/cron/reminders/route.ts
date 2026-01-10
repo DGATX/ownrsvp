@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendReminder } from '@/lib/email';
-import { sendSmsReminder } from '@/lib/sms';
 import { parseReminderSchedule, shouldSendReminder } from '@/lib/reminder-utils';
 import { logger } from '@/lib/logger';
 
@@ -41,13 +40,12 @@ export async function POST(request: Request) {
     });
 
     let emailsSent = 0;
-    let smsSent = 0;
     let errorCount = 0;
 
     // Helper function to check if any reminder should be sent now
     const shouldSendReminderNow = (event: typeof upcomingEvents[0]): boolean => {
       const eventDate = new Date(event.date);
-      
+
       // If event has custom reminder schedule
       if (event.reminderSchedule) {
         const reminders = parseReminderSchedule(event.reminderSchedule);
@@ -69,12 +67,10 @@ export async function POST(request: Request) {
       }
 
       for (const guest of event.guests) {
-        const reminderPromises = [];
-
         // Send email reminder if not already sent
         if (guest.notifyByEmail && !guest.reminderSentAt) {
-          reminderPromises.push(
-            sendReminder({
+          try {
+            await sendReminder({
               to: guest.email,
               guestName: guest.name,
               event: {
@@ -83,51 +79,20 @@ export async function POST(request: Request) {
                 location: event.location,
               },
               rsvpToken: guest.token,
-            })
-              .then(() => {
-                emailsSent++;
-              })
-              .catch((error) => {
-                logger.error('Failed to send email reminder', error, { email: guest.email });
-                errorCount++;
-              })
-          );
-        }
+            });
+            emailsSent++;
 
-        // Send SMS reminder if not already sent
-        if (guest.notifyBySms && guest.phone && !guest.smsReminderSentAt) {
-          reminderPromises.push(
-            sendSmsReminder({
-              to: guest.phone,
-              guestName: guest.name,
-              event: {
-                title: event.title,
-                date: event.date,
-                location: event.location,
+            // Update reminder sent timestamp
+            await prisma.guest.update({
+              where: { id: guest.id },
+              data: {
+                reminderSentAt: new Date(),
               },
-              rsvpToken: guest.token,
-            })
-              .then(() => {
-                smsSent++;
-              })
-              .catch((error) => {
-                logger.error('Failed to send SMS reminder', error, { phone: guest.phone });
-                errorCount++;
-              })
-          );
-        }
-
-        if (reminderPromises.length > 0) {
-          await Promise.all(reminderPromises);
-
-          // Update reminder sent timestamps
-          await prisma.guest.update({
-            where: { id: guest.id },
-            data: {
-              reminderSentAt: guest.notifyByEmail && !guest.reminderSentAt ? new Date() : undefined,
-              smsReminderSentAt: guest.notifyBySms && guest.phone && !guest.smsReminderSentAt ? new Date() : undefined,
-            },
-          });
+            });
+          } catch (error) {
+            logger.error('Failed to send email reminder', error, { email: guest.email });
+            errorCount++;
+          }
         }
       }
     }
@@ -135,7 +100,6 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       emailsSent,
-      smsSent,
       errors: errorCount,
     });
   } catch (error) {

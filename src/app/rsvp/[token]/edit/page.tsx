@@ -58,7 +58,7 @@ export default function EditRsvpPage() {
     }
     // Use per-guest limit if set, otherwise use global limit
     return validateGuestLimit(guest.event.maxGuestsPerInvitee, formData.additionalGuests.length, guest.maxGuests);
-  }, [guest, guest?.event.maxGuestsPerInvitee, guest?.maxGuests, formData.additionalGuests.length, selectedStatus]);
+  }, [guest, formData.additionalGuests.length, selectedStatus]);
 
   const canAddMoreGuests = guestLimitValidation.remaining !== undefined && guestLimitValidation.remaining > 0;
 

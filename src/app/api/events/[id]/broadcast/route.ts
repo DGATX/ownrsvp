@@ -3,7 +3,6 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { canManageEvent } from '@/lib/event-access';
 import { sendBroadcastEmail } from '@/lib/email';
-import { sendBroadcastSms } from '@/lib/sms';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
 
@@ -14,7 +13,6 @@ interface RouteParams {
 const broadcastSchema = z.object({
   subject: z.string().min(1, 'Subject is required'),
   message: z.string().min(1, 'Message is required'),
-  sendVia: z.enum(['EMAIL', 'SMS', 'BOTH']),
   filterStatus: z.enum(['ALL', 'ATTENDING', 'NOT_ATTENDING', 'MAYBE', 'PENDING']).optional().default('ALL'),
 });
 
@@ -22,7 +20,7 @@ export async function POST(request: Request, { params }: RouteParams) {
   try {
     const { id: eventId } = await params;
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -43,7 +41,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       );
     }
 
-    const { subject, message, sendVia, filterStatus } = parsed.data;
+    const { subject, message, filterStatus } = parsed.data;
 
     // Get event with guests
     const event = await prisma.event.findUnique({
@@ -63,13 +61,10 @@ export async function POST(request: Request, { params }: RouteParams) {
     let sentCount = 0;
     const errors: string[] = [];
 
-    // Send messages
+    // Send emails
     for (const guest of guests) {
-      const sendEmail = (sendVia === 'EMAIL' || sendVia === 'BOTH') && guest.notifyByEmail;
-      const sendSms = (sendVia === 'SMS' || sendVia === 'BOTH') && guest.notifyBySms && guest.phone;
-
-      try {
-        if (sendEmail) {
+      if (guest.notifyByEmail) {
+        try {
           await sendBroadcastEmail({
             to: guest.email,
             guestName: guest.name,
@@ -77,23 +72,11 @@ export async function POST(request: Request, { params }: RouteParams) {
             message,
             eventTitle: event.title,
           });
-        }
-
-        if (sendSms) {
-          await sendBroadcastSms({
-            to: guest.phone!,
-            guestName: guest.name,
-            message,
-            eventTitle: event.title,
-          });
-        }
-
-        if (sendEmail || sendSms) {
           sentCount++;
+        } catch (error) {
+          logger.error(`Failed to send to ${guest.email}`, error);
+          errors.push(guest.email);
         }
-      } catch (error) {
-        logger.error(`Failed to send to ${guest.email}`, error);
-        errors.push(guest.email);
       }
     }
 
@@ -103,7 +86,7 @@ export async function POST(request: Request, { params }: RouteParams) {
         eventId,
         subject,
         message,
-        sentVia: sendVia,
+        sentVia: 'EMAIL',
         sentTo: sentCount,
         sentBy: session.user.id,
       },
@@ -128,7 +111,7 @@ export async function GET(request: Request, { params }: RouteParams) {
   try {
     const { id: eventId } = await params;
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -153,4 +136,3 @@ export async function GET(request: Request, { params }: RouteParams) {
     );
   }
 }
-

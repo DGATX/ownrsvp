@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendConfirmation, sendRsvpChangeNotification, getEventHostsForNotification } from '@/lib/email';
-import { sendSmsConfirmation } from '@/lib/sms';
 import { validateGuestLimit } from '@/lib/rsvp-validation';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
@@ -191,23 +190,6 @@ export async function PATCH(request: Request, { params }: RouteParams) {
           rsvpToken: token,
         }).catch((error) => {
           logger.error('Failed to send confirmation email', error);
-        })
-      );
-    }
-
-    if (updatedGuest.notifyBySms && updatedGuest.phone) {
-      confirmationPromises.push(
-        sendSmsConfirmation({
-          to: updatedGuest.phone,
-          guestName: updatedGuest.name || existingGuest.email,
-          event: {
-            title: updatedGuest.event.title,
-            date: updatedGuest.event.date,
-            location: updatedGuest.event.location,
-          },
-          status: finalStatus,
-        }).catch((error) => {
-          logger.error('Failed to send confirmation SMS', error);
         })
       );
     }

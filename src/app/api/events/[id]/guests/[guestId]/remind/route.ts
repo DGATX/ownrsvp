@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { sendReminder } from '@/lib/email';
-import { sendSmsReminder } from '@/lib/sms';
 import { logger } from '@/lib/logger';
 
 interface RouteParams {
@@ -42,12 +41,10 @@ export async function POST(request: Request, { params }: RouteParams) {
       );
     }
 
-    const reminderPromises = [];
-
     // Send email reminder
     if (guest.notifyByEmail) {
-      reminderPromises.push(
-        sendReminder({
+      try {
+        await sendReminder({
           to: guest.email,
           guestName: guest.name,
           event: {
@@ -56,38 +53,21 @@ export async function POST(request: Request, { params }: RouteParams) {
             location: event.location,
           },
           rsvpToken: guest.token,
-        }).catch((error) => {
-          logger.error('Failed to send reminder email', error);
-        })
-      );
+        });
+      } catch (error) {
+        logger.error('Failed to send reminder email', error);
+        return NextResponse.json(
+          { error: 'Failed to send reminder email' },
+          { status: 500 }
+        );
+      }
     }
 
-    // Send SMS reminder
-    if (guest.notifyBySms && guest.phone) {
-      reminderPromises.push(
-        sendSmsReminder({
-          to: guest.phone,
-          guestName: guest.name,
-          event: {
-            title: event.title,
-            date: event.date,
-            location: event.location,
-          },
-          rsvpToken: guest.token,
-        }).catch((error) => {
-          logger.error('Failed to send reminder SMS', error);
-        })
-      );
-    }
-
-    await Promise.all(reminderPromises);
-
-    // Update reminder sent timestamps
+    // Update reminder sent timestamp
     await prisma.guest.update({
       where: { id: guestId },
       data: {
         reminderSentAt: new Date(),
-        smsReminderSentAt: guest.notifyBySms && guest.phone ? new Date() : undefined,
       },
     });
 

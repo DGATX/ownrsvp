@@ -1,24 +1,45 @@
+# OwnRSVP - One-Click Docker Installation
+# ========================================
+#
+# Quick Start (no .env file required!):
+#   docker compose up -d
+#
+# Then visit: http://localhost:3000/register
+#
+# Features:
+#   - AUTH_SECRET auto-generated on first run
+#   - First registered user becomes admin
+#   - SMTP can be configured later via Admin UI
+#
+# For custom configuration, create a .env file with your settings.
+
 services:
   app:
-    # Pull pre-built image from Docker Hub
     image: dgatx/ownrsvp:latest
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@db:5432/rsvp_db?schema=public
-      - AUTH_SECRET=${AUTH_SECRET}
+      # Database - uses internal PostgreSQL
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-ownrsvp_secure_2024}@db:5432/rsvp_db?schema=public
+
+      # Auth - set to 'auto' to auto-generate, or provide your own
+      - AUTH_SECRET=${AUTH_SECRET:-auto}
       - AUTH_URL=${AUTH_URL:-http://localhost:3000}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
       - AUTH_TRUST_HOST=${AUTH_TRUST_HOST:-true}
-      - SMTP_HOST=${SMTP_HOST}
+
+      # SMTP - Optional! Configure via Admin UI after setup
+      - SMTP_HOST=${SMTP_HOST:-}
       - SMTP_PORT=${SMTP_PORT:-587}
-      - SMTP_USER=${SMTP_USER}
-      - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - SMTP_FROM=${SMTP_FROM}
-      - CRON_SECRET=${CRON_SECRET}
-      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
-      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
-      - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - SMTP_FROM=${SMTP_FROM:-}
+
+      # Cron - Optional, for automated reminders
+      - CRON_SECRET=${CRON_SECRET:-}
+    volumes:
+      # Persist auto-generated secrets across container restarts
+      - app_secrets:/app/.secrets
     depends_on:
       db:
         condition: service_healthy
@@ -36,7 +57,7 @@ services:
     image: postgres:16-alpine
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ownrsvp_secure_2024}
       - POSTGRES_DB=rsvp_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -52,10 +73,11 @@ services:
     image: dgatx/ownrsvp:latest
     command: sh -c "npx prisma@5.22.0 migrate deploy"
     environment:
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@db:5432/rsvp_db?schema=public
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-ownrsvp_secure_2024}@db:5432/rsvp_db?schema=public
     depends_on:
       db:
         condition: service_healthy
 
 volumes:
   postgres_data:
+  app_secrets:

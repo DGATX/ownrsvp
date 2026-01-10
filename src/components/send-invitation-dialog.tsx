@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -11,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Mail, Phone, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 interface SendInvitationDialogProps {
@@ -31,25 +30,13 @@ export function SendInvitationDialog({
   guestId,
   eventId,
   guestEmail,
-  guestPhone,
   guestName,
   guestStatus = 'PENDING',
 }: SendInvitationDialogProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [notifyByEmail, setNotifyByEmail] = useState(true);
-  const [notifyBySms, setNotifyBySms] = useState(false);
 
   const handleSend = async () => {
-    if (!notifyByEmail && !notifyBySms) {
-      toast({
-        title: 'Please select a delivery method',
-        description: 'Choose email, SMS, or both to send the invitation.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
     setIsLoading(true);
 
     try {
@@ -57,8 +44,7 @@ export function SendInvitationDialog({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          notifyByEmail,
-          notifyBySms: notifyBySms && !!guestPhone,
+          notifyByEmail: true,
         }),
       });
 
@@ -68,14 +54,10 @@ export function SendInvitationDialog({
         throw new Error(data.error || 'Failed to send invitation');
       }
 
-      const notifications = [];
-      if (notifyByEmail) notifications.push('email');
-      if (notifyBySms && guestPhone) notifications.push('SMS');
-
       const isResend = guestStatus !== 'PENDING';
       toast({
         title: isResend ? 'Invite link resent!' : 'Invitation sent!',
-        description: `${isResend ? 'Invite link' : 'Invitation'} sent via ${notifications.join(' and ')}.`,
+        description: `${isResend ? 'Invite link' : 'Invitation'} sent via email.`,
       });
 
       onOpenChange(false);
@@ -98,58 +80,16 @@ export function SendInvitationDialog({
             {guestStatus === 'PENDING' ? 'Send Invitation' : 'Resend Invite Link'}
           </DialogTitle>
           <DialogDescription>
-            {guestStatus === 'PENDING' 
-              ? `Choose how to send the invitation to ${guestName || guestEmail}.`
+            {guestStatus === 'PENDING'
+              ? `Send an invitation email to ${guestName || guestEmail}.`
               : `Resend the invite link to ${guestName || guestEmail}. They can use this link to view or edit their RSVP.`}
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="border rounded-lg p-4 space-y-3">
-            <Label className="text-sm font-medium">Send Via</Label>
-            <p className="text-xs text-muted-foreground mb-2">
-              Select email, SMS, or both to send the invitation.
-            </p>
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="inviteEmail"
-                checked={notifyByEmail}
-                onChange={(e) => setNotifyByEmail(e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300"
-                disabled={isLoading}
-              />
-              <Label htmlFor="inviteEmail" className="text-sm font-normal flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                Email
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="inviteSms"
-                checked={notifyBySms}
-                onChange={(e) => setNotifyBySms(e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300"
-                disabled={isLoading || !guestPhone}
-              />
-              <Label htmlFor="inviteSms" className="text-sm font-normal flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                SMS
-                {!guestPhone && <span className="text-xs text-muted-foreground">(no phone number)</span>}
-              </Label>
-            </div>
-            {!notifyByEmail && !notifyBySms && (
-              <p className="text-xs text-amber-600 dark:text-amber-400">
-                Please select at least one method.
-              </p>
-            )}
-          </div>
-        </div>
         <DialogFooter>
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isLoading}>
             Cancel
           </Button>
-          <Button onClick={handleSend} disabled={isLoading || (!notifyByEmail && !notifyBySms)}>
+          <Button onClick={handleSend} disabled={isLoading}>
             {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             {guestStatus === 'PENDING' ? 'Send Invitation' : 'Resend Link'}
           </Button>
@@ -158,4 +98,3 @@ export function SendInvitationDialog({
     </Dialog>
   );
 }
-
