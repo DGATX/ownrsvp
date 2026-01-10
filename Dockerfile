@@ -16,6 +16,10 @@ COPY . .
 # Generate Prisma client
 RUN npx prisma generate
 
+# Set dummy environment variables for build (will be overridden at runtime)
+ENV AUTH_SECRET="dummy-secret-for-build-only"
+ENV DATABASE_URL="file:./dummy.db"
+
 # Build the application
 RUN npm run build
 
