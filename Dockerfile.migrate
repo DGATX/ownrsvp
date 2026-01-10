@@ -11,5 +11,5 @@ RUN npm ci
 RUN npm install -g prisma@latest
 
 # Run migrations with retry logic
-CMD ["sh", "-c", "npx prisma generate && npx prisma db push --skip-generate --accept-data-loss || exit 1"]
+CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy || exit 1"]
 

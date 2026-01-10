@@ -14,8 +14,13 @@ A beautiful, self-hosted event invitation and RSVP management platform. Create e
 
 ```bash
 # 1. Download configuration files
+# For Linux:
 wget https://raw.githubusercontent.com/DGATX/ownrsvp/main/docker-compose.yml
 wget https://raw.githubusercontent.com/DGATX/ownrsvp/main/.env.example
+
+# For macOS:
+curl -O https://raw.githubusercontent.com/DGATX/ownrsvp/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/DGATX/ownrsvp/main/.env.example
 
 # 2. Configure your environment
 cp .env.example .env
