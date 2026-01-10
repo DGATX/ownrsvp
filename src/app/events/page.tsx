@@ -6,6 +6,9 @@ import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import { PublicNav } from '@/components/public-nav';
 
+// Force dynamic rendering to avoid database queries at build time
+export const dynamic = 'force-dynamic';
+
 export default async function PublicEventsPage() {
   const events = await prisma.event.findMany({
     where: {
