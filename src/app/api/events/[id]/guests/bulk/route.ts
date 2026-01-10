@@ -1,0 +1,233 @@
+import { NextResponse } from 'next/server';
+import { auth } from '@/auth';
+import { prisma } from '@/lib/prisma';
+import { canManageEvent } from '@/lib/event-access';
+import { sendInvitation } from '@/lib/email';
+import { sendSmsInvitation } from '@/lib/sms';
+import { sendReminder } from '@/lib/email';
+import { sendSmsReminder } from '@/lib/sms';
+import { z } from 'zod';
+
+interface RouteParams {
+  params: Promise<{ id: string }>;
+}
+
+const bulkActionSchema = z.object({
+  action: z.enum(['invite', 'remind', 'delete', 'changeStatus']),
+  guestIds: z.array(z.string()).min(1, 'At least one guest must be selected'),
+  status: z.enum(['PENDING', 'ATTENDING', 'NOT_ATTENDING', 'MAYBE']).optional(),
+});
+
+export async function POST(request: Request, { params }: RouteParams) {
+  try {
+    const { id: eventId } = await params;
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Verify user can manage this event
+    const canManage = await canManageEvent(session.user.id, eventId);
+    if (!canManage) {
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    }
+
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      include: { host: { select: { name: true } } },
+    });
+
+    if (!event) {
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    }
+
+    const body = await request.json();
+    const parsed = bulkActionSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.errors[0].message },
+        { status: 400 }
+      );
+    }
+
+    const { action, guestIds, status } = parsed.data;
+
+    // Validate status is provided for changeStatus action
+    if (action === 'changeStatus' && !status) {
+      return NextResponse.json(
+        { error: 'Status is required for changeStatus action' },
+        { status: 400 }
+      );
+    }
+
+    // Fetch all guests
+    const guests = await prisma.guest.findMany({
+      where: {
+        id: { in: guestIds },
+        eventId,
+      },
+    });
+
+    if (guests.length === 0) {
+      return NextResponse.json(
+        { error: 'No valid guests found' },
+        { status: 400 }
+      );
+    }
+
+    let successCount = 0;
+    let failedCount = 0;
+    const errors: string[] = [];
+
+    // Process each guest based on action
+    for (const guest of guests) {
+      try {
+        switch (action) {
+          case 'invite': {
+            const invitationPromises = [];
+
+            if (guest.notifyByEmail) {
+              invitationPromises.push(
+                sendInvitation({
+                  to: guest.email,
+                  guestName: guest.name,
+                  event: {
+                    title: event.title,
+                    date: event.date,
+                    location: event.location,
+                    description: event.description,
+                  },
+                  rsvpToken: guest.token,
+                  hostName: event.host.name,
+                }).catch((error) => {
+                  console.error(`Failed to send invitation email to ${guest.email}:`, error);
+                })
+              );
+            }
+
+            if (guest.notifyBySms && guest.phone) {
+              invitationPromises.push(
+                sendSmsInvitation({
+                  to: guest.phone,
+                  guestName: guest.name,
+                  event: {
+                    title: event.title,
+                    date: event.date,
+                    location: event.location,
+                  },
+                  rsvpToken: guest.token,
+                  hostName: event.host.name,
+                }).catch((error) => {
+                  console.error(`Failed to send invitation SMS to ${guest.phone}:`, error);
+                })
+              );
+            }
+
+            await Promise.all(invitationPromises);
+            successCount++;
+            break;
+          }
+
+          case 'remind': {
+            if (guest.status !== 'PENDING') {
+              errors.push(`${guest.email}: Guest has already responded`);
+              failedCount++;
+              continue;
+            }
+
+            const reminderPromises = [];
+
+            if (guest.notifyByEmail && !guest.reminderSentAt) {
+              reminderPromises.push(
+                sendReminder({
+                  to: guest.email,
+                  guestName: guest.name,
+                  event: {
+                    title: event.title,
+                    date: event.date,
+                    location: event.location,
+                  },
+                  rsvpToken: guest.token,
+                }).catch((error) => {
+                  console.error(`Failed to send reminder email to ${guest.email}:`, error);
+                })
+              );
+            }
+
+            if (guest.notifyBySms && guest.phone && !guest.smsReminderSentAt) {
+              reminderPromises.push(
+                sendSmsReminder({
+                  to: guest.phone,
+                  guestName: guest.name,
+                  event: {
+                    title: event.title,
+                    date: event.date,
+                    location: event.location,
+                  },
+                  rsvpToken: guest.token,
+                }).catch((error) => {
+                  console.error(`Failed to send reminder SMS to ${guest.phone}:`, error);
+                })
+              );
+            }
+
+            if (reminderPromises.length > 0) {
+              await Promise.all(reminderPromises);
+
+              await prisma.guest.update({
+                where: { id: guest.id },
+                data: {
+                  reminderSentAt: guest.notifyByEmail && !guest.reminderSentAt ? new Date() : undefined,
+                  smsReminderSentAt: guest.notifyBySms && guest.phone && !guest.smsReminderSentAt ? new Date() : undefined,
+                },
+              });
+            }
+
+            successCount++;
+            break;
+          }
+
+          case 'delete': {
+            await prisma.guest.delete({
+              where: { id: guest.id },
+            });
+            successCount++;
+            break;
+          }
+
+          case 'changeStatus': {
+            await prisma.guest.update({
+              where: { id: guest.id },
+              data: {
+                status: status!,
+                respondedAt: status !== 'PENDING' ? new Date() : null,
+              },
+            });
+            successCount++;
+            break;
+          }
+        }
+      } catch (error) {
+        failedCount++;
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        errors.push(`${guest.email || guest.id}: ${errorMessage}`);
+        console.error(`Bulk action failed for guest ${guest.id}:`, error);
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      successCount,
+      failedCount,
+      errors: errors.length > 0 ? errors : undefined,
+    });
+  } catch (error) {
+    console.error('Bulk guest operation error:', error);
+    return NextResponse.json(
+      { error: 'Failed to process bulk operation' },
+      { status: 500 }
+    );
+  }
+}
+

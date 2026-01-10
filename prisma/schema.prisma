@@ -1,0 +1,235 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  username      String    @unique
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  theme         String    @default("system") // "light", "dark", or "system"
+  role          String    @default("USER") // "ADMIN" or "USER"
+  notifyOnRsvpChanges Boolean   @default(true) // Receive email notifications when guests RSVP or update their RSVP
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts       Account[]
+  sessions       Session[]
+  events         Event[]
+  coHostedEvents EventCoHost[]
+  invitation     UserInvitation?
+
+  @@index([username])
+  @@index([email])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Event {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  description     String?
+  location        String?
+  date            DateTime
+  endDate         DateTime?
+  rsvpDeadline    DateTime?
+  coverImage      String?
+  photoAlbumUrl   String?
+  reminderSchedule String?  // JSON array: [{type: "day", value: 7}, {type: "hour", value: 2}]
+  maxGuestsPerInvitee Int?  // null = unlimited, number = max total guests (including invitee)
+  hostId          String
+  isPublic        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  host     User          @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  guests   Guest[]
+  comments Comment[]
+  coHosts  EventCoHost[]
+  updates  EventUpdate[]
+
+  @@index([hostId])
+  @@index([date])
+}
+
+model Guest {
+  id              String    @id @default(cuid())
+  eventId         String
+  email           String
+  phone           String?
+  name            String?   // Name of the invited person
+  status          String    @default("PENDING")
+  dietaryNotes    String?
+  notifyByEmail   Boolean   @default(true)
+  notifyBySms     Boolean   @default(false)
+  token           String    @unique @default(cuid())
+  invitedAt       DateTime  @default(now())
+  respondedAt     DateTime?
+  reminderSentAt  DateTime?
+  smsReminderSentAt DateTime?
+  maxGuests      Int?              // null = use event's maxGuestsPerInvitee, number = override for this guest
+
+  event           Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  comments        Comment[]
+  additionalGuests AdditionalGuest[]
+
+  @@unique([eventId, email])
+  @@index([eventId])
+  @@index([token])
+}
+
+model AdditionalGuest {
+  id        String   @id @default(cuid())
+  guestId   String
+  name      String   // Name of the additional guest
+  createdAt DateTime @default(now())
+
+  guest Guest @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([guestId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  eventId   String
+  guestId   String?
+  authorName String
+  content   String
+  createdAt DateTime @default(now())
+
+  event Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  guest Guest? @relation(fields: [guestId], references: [id], onDelete: SetNull)
+
+  @@index([eventId])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([token])
+}
+
+model UserInvitation {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  userId    String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+  invitedBy String   // User ID of the admin who sent the invitation
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@index([token])
+  @@index([userId])
+}
+
+model EventCoHost {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  role      String   @default("COHOST") // "COHOST" or "VIEWER"
+  invitedAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([eventId])
+  @@index([userId])
+}
+
+model EventUpdate {
+  id        String   @id @default(cuid())
+  eventId   String
+  subject   String
+  message   String
+  sentVia   String   // "EMAIL", "SMS", "BOTH"
+  sentTo    Int      // Number of recipients
+  sentAt    DateTime @default(now())
+  sentBy    String   // User ID who sent it
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
+model AppConfig {
+  id        String   @id @default(cuid())
+  category  String   // "email" or "sms"
+  key       String   // "SMTP_HOST", "TWILIO_ACCOUNT_SID", etc.
+  value     String
+  encrypted Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  @@unique([category, key])
+  @@index([category])
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  name      String   @unique // "invitation", "reminder", "confirmation", etc.
+  subject   String
+  body      String   // HTML body
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SmsTemplate {
+  id        String   @id @default(cuid())
+  name      String   @unique // "invitation", "reminder", "confirmation", etc.
+  message   String   // SMS body
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

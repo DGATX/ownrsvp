@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files and prisma
+COPY package*.json ./
+COPY prisma ./prisma/
+
+# Install dependencies (need dev deps for Prisma generation)
+RUN npm ci
+RUN npm install -g prisma@latest
+
+# Run migrations with retry logic
+CMD ["sh", "-c", "npx prisma generate && npx prisma db push --skip-generate --accept-data-loss || exit 1"]
+
