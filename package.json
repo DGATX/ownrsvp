@@ -30,7 +30,14 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
-    "db:seed": "npx tsx prisma/seed.ts"
+    "db:seed": "npx tsx prisma/seed.ts",
+    "test": "playwright test",
+    "test:dockerhub": "bash tests/environments/dockerhub/setup.sh && npm run test && bash tests/environments/dockerhub/teardown.sh",
+    "test:github": "bash tests/environments/github/setup.sh && npm run test && bash tests/environments/github/teardown.sh",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -74,6 +81,8 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.2.0",
+    "@playwright/test": "^1.48.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.11.19",
     "@types/node-cron": "^3.0.11",
@@ -81,6 +90,9 @@
     "@types/react": "^18.2.57",
     "@types/react-dom": "^18.2.19",
     "autoprefixer": "^10.4.17",
+    "csv-parse": "^5.6.0",
+    "csv-stringify": "^6.5.2",
+    "dotenv": "^16.4.7",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.2.0",
     "postcss": "^8.4.35",
