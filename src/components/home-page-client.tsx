@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
@@ -21,8 +21,39 @@ function HomePageContent() {
   const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingSetup, setIsCheckingSetup] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  // Check if this is a fresh install (no users exist) and redirect to registration
+  useEffect(() => {
+    async function checkSetup() {
+      try {
+        const res = await fetch('/api/auth/public-register');
+        const data = await res.json();
+        if (data.registrationEnabled) {
+          // No users exist - redirect to registration
+          router.replace('/register');
+          return;
+        }
+      } catch {
+        // If check fails, just show the login page
+      }
+      setIsCheckingSetup(false);
+    }
+    checkSetup();
+  }, [router]);
+
+  // Show loading while checking setup status
+  if (isCheckingSetup) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-violet-600 mx-auto" />
+        </div>
+      </div>
+    );
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

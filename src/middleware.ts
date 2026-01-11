@@ -8,26 +8,6 @@ export default auth(async (req) => {
     const isLoggedIn = !!req.auth;
     const { pathname } = req.nextUrl;
 
-    // On home page or login, check if we need to redirect to registration
-    if (pathname === '/' || pathname === '/login') {
-      try {
-        // Check if any users exist via the API
-        const baseUrl = req.nextUrl.origin;
-        const response = await fetch(`${baseUrl}/api/auth/public-register`, {
-          headers: { 'x-middleware-check': '1' },
-        });
-        const data = await response.json();
-
-        // If registration is enabled (no users exist), redirect to register
-        if (data.registrationEnabled) {
-          return NextResponse.redirect(new URL('/register', req.nextUrl.origin));
-        }
-      } catch (error) {
-        // If we can't check, just continue normally
-        logger.error('Failed to check registration status in middleware', error);
-      }
-    }
-
     // Public routes
     const publicRoutes = ['/', '/login', '/register', '/events', '/rsvp', '/invite'];
     const isPublicRoute = publicRoutes.some(
