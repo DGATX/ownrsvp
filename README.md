@@ -14,6 +14,7 @@ A beautiful, self-hosted event invitation and RSVP management platform. Create e
 services:
   app:
     image: dgatx/ownrsvp:latest
+    container_name: ownrsvp
     ports:
       - "7787:7787"
     volumes:
@@ -64,6 +65,7 @@ You can configure email two ways:
 services:
   app:
     image: dgatx/ownrsvp:latest
+    container_name: ownrsvp
     ports:
       - "7787:7787"
     environment:

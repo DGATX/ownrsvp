@@ -10,6 +10,7 @@
 services:
   app:
     image: dgatx/ownrsvp:latest
+    container_name: ownrsvp
     ports:
       - "7787:7787"
     volumes:
