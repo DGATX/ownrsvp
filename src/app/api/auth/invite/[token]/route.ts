@@ -27,6 +27,7 @@ export async function GET(request: Request, { params }: RouteParams) {
             id: true,
             email: true,
             name: true,
+            username: true,
             role: true,
             password: true,
           },
@@ -51,10 +52,15 @@ export async function GET(request: Request, { params }: RouteParams) {
       });
     }
 
-    return NextResponse.json({ 
+    // Check if username is a temporary one (generated during invitation)
+    const hasTemporaryUsername = invitation.user.username?.startsWith('invited_') ?? false;
+
+    return NextResponse.json({
       valid: true,
       email: invitation.user.email,
       name: invitation.user.name,
+      username: hasTemporaryUsername ? null : invitation.user.username,
+      hasTemporaryUsername,
       role: invitation.user.role,
     });
   } catch (error) {

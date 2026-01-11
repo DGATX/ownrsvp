@@ -25,6 +25,7 @@ export default function InviteAcceptancePage() {
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string>('');
   const [role, setRole] = useState<string>('');
+  const [hasTemporaryUsername, setHasTemporaryUsername] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -49,9 +50,13 @@ export default function InviteAcceptancePage() {
           setIsValid(true);
           setEmail(data.email);
           setRole(data.role);
-          if (data.name) {
-            setFormData((prev) => ({ ...prev, name: data.name }));
-          }
+          setHasTemporaryUsername(data.hasTemporaryUsername || false);
+          // Pre-fill name and username if available (username only if not temporary)
+          setFormData((prev) => ({
+            ...prev,
+            name: data.name || '',
+            username: data.hasTemporaryUsername ? '' : (data.username || ''),
+          }));
         }
       } catch (error) {
         setIsValid(false);
@@ -211,19 +216,20 @@ export default function InviteAcceptancePage() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="username">Username *</Label>
+                  <Label htmlFor="username">Choose your username *</Label>
                   <Input
                     id="username"
                     type="text"
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })}
-                    placeholder="username"
+                    placeholder="Choose a username"
                     required
                     disabled={isSubmitting}
                     pattern="[a-zA-Z0-9_]+"
+                    autoFocus={hasTemporaryUsername}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Letters, numbers, and underscores only. Used for login.
+                    Letters, numbers, and underscores only. This will be your login username.
                   </p>
                 </div>
 
