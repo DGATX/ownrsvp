@@ -5,47 +5,16 @@
 #   docker compose up -d
 #
 # Then visit: http://localhost:7787
-# (7787 = "RSVP" on a phone keypad)
 # Create your admin account and start using it!
-#
-# For custom configuration, set environment variables or create a .env file.
 
 services:
   app:
     image: dgatx/ownrsvp:latest
     ports:
       - "7787:7787"
-    environment:
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-ownrsvp}@db:5432/rsvp_db?schema=public
-      - AUTH_URL=${AUTH_URL:-http://localhost:7787}
-      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:7787}
-      # Optional: SMTP for email invitations (can configure via Admin UI instead)
-      - SMTP_HOST=${SMTP_HOST:-}
-      - SMTP_PORT=${SMTP_PORT:-587}
-      - SMTP_USER=${SMTP_USER:-}
-      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
-      - SMTP_FROM=${SMTP_FROM:-}
     volumes:
-      - app_secrets:/app/.secrets
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: unless-stopped
-
-  db:
-    image: postgres:16-alpine
-    environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ownrsvp}
-      - POSTGRES_DB=rsvp_db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - ownrsvp_data:/app/data
     restart: unless-stopped
 
 volumes:
-  postgres_data:
-  app_secrets:
+  ownrsvp_data:

@@ -30,9 +30,6 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Install OpenSSL for Prisma
-RUN apk add --no-cache openssl3 openssl-dev
-
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -48,11 +45,8 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --chown=nextjs:nodejs start.sh ./
 RUN chmod +x start.sh
 
-# Install wget for health checks (alpine)
-RUN apk add --no-cache wget
-
-# Create secrets directory for AUTH_SECRET persistence
-RUN mkdir -p /app/.secrets && chown -R nextjs:nodejs /app/.secrets
+# Create data directory for SQLite database and secrets
+RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
 # Set ownership
 RUN chown -R nextjs:nodejs /app
@@ -65,7 +59,7 @@ ENV PORT=7787
 ENV HOSTNAME="0.0.0.0"
 ENV AUTH_SECRET="auto"
 ENV AUTH_TRUST_HOST="true"
+ENV DATABASE_URL="file:/app/data/ownrsvp.db"
 
 # Start the application (runs migrations then starts server)
 CMD ["./start.sh"]
-

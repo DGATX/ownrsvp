@@ -21,7 +21,7 @@ npm run db:studio        # Open Prisma Studio GUI
 npm run db:seed          # Seed database with demo data
 
 # Docker
-docker compose up -d     # Start production stack (PostgreSQL + app)
+docker compose up -d     # Start production stack
 docker compose logs app  # View application logs
 ```
 
@@ -49,7 +49,7 @@ docker compose logs app  # View application logs
 - Email templates are inline HTML in `email.ts`
 
 ### Database
-- Uses SQLite by default (`file:./dev.db`), PostgreSQL for production
+- Uses SQLite for both development (`file:./dev.db`) and Docker (`/app/data/ownrsvp.db`)
 - Path alias: `@/*` maps to `./src/*`
 - Key models: User, Event, Guest, AdditionalGuest, Comment, EventCoHost, AppConfig
 

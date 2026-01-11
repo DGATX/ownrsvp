@@ -16,27 +16,12 @@ services:
     image: dgatx/ownrsvp:latest
     ports:
       - "7787:7787"
-    environment:
-      - DATABASE_URL=postgresql://postgres:ownrsvp@db:5432/rsvp_db?schema=public
-    depends_on:
-      db:
-        condition: service_healthy
-
-  db:
-    image: postgres:16-alpine
-    environment:
-      - POSTGRES_PASSWORD=ownrsvp
-      - POSTGRES_DB=rsvp_db
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - ownrsvp_data:/app/data
+    restart: unless-stopped
 
 volumes:
-  postgres_data:
+  ownrsvp_data:
 ```
 
 > **Why port 7787?** It spells "RSVP" on a phone keypad!
@@ -49,7 +34,7 @@ docker compose up -d
 
 **3. Open http://localhost:7787 and create your admin account.**
 
-That's it. No `.env` file needed.
+That's it. No database setup, no `.env` file needed.
 
 ## Features
 
@@ -76,12 +61,22 @@ You can configure email two ways:
 **Option 2: Environment variables**
 
 ```yaml
-environment:
-  - SMTP_HOST=smtp.gmail.com
-  - SMTP_PORT=587
-  - SMTP_USER=your-email@gmail.com
-  - SMTP_PASSWORD=your-app-password
-  - SMTP_FROM=Events <noreply@yourdomain.com>
+services:
+  app:
+    image: dgatx/ownrsvp:latest
+    ports:
+      - "7787:7787"
+    environment:
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USER=your-email@gmail.com
+      - SMTP_PASSWORD=your-app-password
+      - SMTP_FROM=Events <noreply@yourdomain.com>
+    volumes:
+      - ownrsvp_data:/app/data
+
+volumes:
+  ownrsvp_data:
 ```
 
 ### Gmail Setup
@@ -97,31 +92,19 @@ For production with your own domain:
 
 ```yaml
 environment:
-  - DATABASE_URL=postgresql://postgres:ownrsvp@db:5432/rsvp_db?schema=public
   - AUTH_URL=https://yourdomain.com
   - NEXT_PUBLIC_APP_URL=https://yourdomain.com
-```
-
-### Change Database Password
-
-```yaml
-services:
-  app:
-    environment:
-      - DATABASE_URL=postgresql://postgres:YOUR_SECURE_PASSWORD@db:5432/rsvp_db?schema=public
-  db:
-    environment:
-      - POSTGRES_PASSWORD=YOUR_SECURE_PASSWORD
 ```
 
 ## Backups
 
 ```bash
-# Backup
-docker compose exec db pg_dump -U postgres rsvp_db > backup.sql
+# Backup (copies the SQLite database)
+docker compose cp app:/app/data/ownrsvp.db ./backup.db
 
 # Restore
-docker compose exec -T db psql -U postgres rsvp_db < backup.sql
+docker compose cp ./backup.db app:/app/data/ownrsvp.db
+docker compose restart app
 ```
 
 ## Development
@@ -134,9 +117,6 @@ cd ownrsvp
 # Install
 npm install
 
-# Start database
-docker run --name rsvp-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=rsvp_db -p 5432:5432 -d postgres:16-alpine
-
 # Setup database
 npm run db:push
 
@@ -147,7 +127,7 @@ npm run dev
 ## Tech Stack
 
 - **Framework**: Next.js 14
-- **Database**: PostgreSQL
+- **Database**: SQLite
 - **ORM**: Prisma
 - **Auth**: NextAuth.js
 - **Styling**: Tailwind CSS
