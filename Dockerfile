@@ -51,6 +51,9 @@ RUN chmod +x start.sh
 # Install wget for health checks (alpine)
 RUN apk add --no-cache wget
 
+# Create secrets directory for AUTH_SECRET persistence
+RUN mkdir -p /app/.secrets && chown -R nextjs:nodejs /app/.secrets
+
 # Set ownership
 RUN chown -R nextjs:nodejs /app
 

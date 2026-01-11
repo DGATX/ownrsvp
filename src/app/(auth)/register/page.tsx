@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,12 +65,27 @@ export default function RegisterPage() {
         throw new Error(data.error || 'Registration failed');
       }
 
-      toast({
-        title: 'Success!',
-        description: 'Admin account created. Please sign in.',
+      // Auto-login with the credentials just used
+      const signInResult = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
       });
 
-      router.push('/login');
+      if (signInResult?.error) {
+        // Fallback to manual login if auto-login fails
+        toast({
+          title: 'Account created',
+          description: 'Please sign in with your new credentials.',
+        });
+        router.push('/login');
+      } else {
+        toast({
+          title: 'Welcome!',
+          description: 'Your admin account is ready.',
+        });
+        router.push('/dashboard');
+      }
     } catch (error) {
       toast({
         title: 'Error',
