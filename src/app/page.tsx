@@ -6,14 +6,19 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // Server-side check: if no users exist, redirect to registration
+  let shouldRedirect = false;
+
   try {
     const userCount = await prisma.user.count();
     if (userCount === 0) {
-      redirect('/register');
+      shouldRedirect = true;
     }
   } catch {
     // If database check fails, show the page anyway
-    // The client-side will handle it
+  }
+
+  if (shouldRedirect) {
+    redirect('/register');
   }
 
   return <HomePageClient />;
