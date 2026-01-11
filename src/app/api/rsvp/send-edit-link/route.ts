@@ -82,7 +82,8 @@ export async function POST(request: Request) {
       });
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const { getAppUrl } = await import('@/lib/config');
+    const appUrl = await getAppUrl();
     const editLink = `${appUrl}/rsvp/${guest.token}/edit`;
 
     const transporter = await createTransporter();

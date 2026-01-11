@@ -154,9 +154,10 @@ export async function POST(request: Request) {
     await Promise.all(confirmationPromises);
 
     // Send notifications to hosts (async, don't block response)
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const { getAppUrl } = await import('@/lib/config');
+    const appUrl = await getAppUrl();
     const eventUrl = `${appUrl}/dashboard/events/${eventId}`;
-    
+
     getEventHostsForNotification(eventId)
       .then((hosts) => {
         const notificationPromises = hosts.map((host) =>

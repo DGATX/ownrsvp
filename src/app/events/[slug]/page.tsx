@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
+import { getAppUrl } from '@/lib/config';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Calendar, MapPin, Users, MessageSquare, Clock, Navigation } from 'lucide-react';
@@ -47,6 +48,8 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
   if (!event || !event.isPublic) {
     notFound();
   }
+
+  const appUrl = await getAppUrl();
 
   // Find guest by email if provided
   let guestToken: string | null = null;
@@ -157,7 +160,7 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                   location={event.location}
                   startDate={event.date}
                   endDate={event.endDate}
-                  url={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/events/${event.slug}`}
+                  url={`${appUrl}/events/${event.slug}`}
                 />
               </div>
             </CardHeader>

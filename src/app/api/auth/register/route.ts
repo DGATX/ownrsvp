@@ -132,7 +132,8 @@ export async function POST(request: Request) {
         },
       });
 
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      const { getAppUrl } = await import('@/lib/config');
+      const appUrl = await getAppUrl();
       const invitationUrl = `${appUrl}/invite/${token}`;
 
       // Get admin name for email

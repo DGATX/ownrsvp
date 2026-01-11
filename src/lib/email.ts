@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import { formatDateTime } from './utils';
 import { validateSmtpConfig, isEmailConfigured } from './env-validation';
-import { getEmailConfig } from './config';
+import { getEmailConfig, getAppUrl } from './config';
 import { prisma } from './prisma';
 import { logger } from './logger';
 
@@ -81,7 +81,7 @@ export async function sendInvitation({
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = await getAppUrl();
   const rsvpLink = `${appUrl}/rsvp/${rsvpToken}`;
 
   const html = `
@@ -174,7 +174,7 @@ export async function sendReminder({
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = await getAppUrl();
   const rsvpLink = `${appUrl}/rsvp/${rsvpToken}`;
 
   const html = `
@@ -263,6 +263,8 @@ export async function sendConfirmation({
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
+  const appUrl = await getAppUrl();
+
   const statusMessages: Record<string, string> = {
     ATTENDING: "We're excited to see you there!",
     NOT_ATTENDING: "We're sorry you can't make it. Maybe next time!",
@@ -313,7 +315,7 @@ export async function sendConfirmation({
                   
                   ${rsvpToken ? `
                   <div style="text-align: center; margin-top: 30px; padding-top: 30px; border-top: 1px solid #e5e7eb;">
-                    <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/rsvp/${rsvpToken}/edit" 
+                    <a href="${appUrl}/rsvp/${rsvpToken}/edit"
                        style="display: inline-block; background-color: #8b5cf6; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 500; font-size: 14px;">
                       Edit Your RSVP
                     </a>
@@ -620,7 +622,7 @@ export async function sendEventChangeEmail({
     throw new Error('Email service not configured. Please set SMTP environment variables.');
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = await getAppUrl();
   const rsvpLink = `${appUrl}/rsvp/${rsvpToken}`;
 
   const changesList = changes

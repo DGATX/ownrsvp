@@ -144,3 +144,55 @@ export async function migrateEnvToDatabase(userId?: string): Promise<void> {
     await updateEmailConfig(emailConfig, userId);
   }
 }
+
+/**
+ * Get the public app URL from database, fallback to environment variable
+ */
+export async function getAppUrl(): Promise<string> {
+  try {
+    const config = await prisma.appConfig.findUnique({
+      where: {
+        category_key: {
+          category: 'app',
+          key: 'APP_URL',
+        },
+      },
+    });
+    if (config?.value) {
+      return config.value;
+    }
+  } catch (error) {
+    logger.error('Error reading app URL from database', error);
+  }
+
+  // Fallback to environment variable or default
+  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+}
+
+/**
+ * Update the public app URL in database
+ */
+export async function updateAppUrl(appUrl: string, userId?: string): Promise<void> {
+  // Normalize URL - remove trailing slash
+  const normalizedUrl = appUrl.replace(/\/+$/, '');
+
+  await prisma.appConfig.upsert({
+    where: {
+      category_key: {
+        category: 'app',
+        key: 'APP_URL',
+      },
+    },
+    update: {
+      value: normalizedUrl,
+      updatedBy: userId,
+    },
+    create: {
+      category: 'app',
+      key: 'APP_URL',
+      value: normalizedUrl,
+      encrypted: false,
+      updatedBy: userId,
+    },
+  });
+}

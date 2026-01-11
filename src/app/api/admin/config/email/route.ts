@@ -177,7 +177,6 @@ export async function POST(request: Request) {
 
     // Send test email using the configured settings
     const testToken = 'test-token-' + Date.now();
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
     try {
       await sendInvitation({

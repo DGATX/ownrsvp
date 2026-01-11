@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
+import { getAppUrl } from '@/lib/config';
 import { canManageEvent, getEventRole } from '@/lib/event-access';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -92,7 +93,7 @@ export default async function EventPage({ params }: EventPageProps) {
     pending: event.guests.filter((g: typeof event.guests[0]) => g.status === 'PENDING').length,
   };
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appUrl = await getAppUrl();
   const publicUrl = `${appUrl}/events/${event.slug}`;
 
   // Check RSVP deadline

@@ -53,7 +53,8 @@ export async function POST(request: Request) {
     });
 
     // Send the reset email
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const { getAppUrl } = await import('@/lib/config');
+    const appUrl = await getAppUrl();
     const resetUrl = `${appUrl}/reset-password?token=${token}`;
 
     await sendPasswordResetEmail(email, resetUrl, user.name || 'User');

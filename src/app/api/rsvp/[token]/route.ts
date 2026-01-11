@@ -213,7 +213,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     // Send notifications to hosts (async, don't block response)
     if (hasChanges && fullEvent) {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      const { getAppUrl } = await import('@/lib/config');
+      const appUrl = await getAppUrl();
       const eventUrl = `${appUrl}/dashboard/events/${fullEvent.id}`;
       
       getEventHostsForNotification(fullEvent.id)
