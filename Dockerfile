@@ -56,9 +56,9 @@ RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 7787
 
-ENV PORT=3000
+ENV PORT=7787
 ENV HOSTNAME="0.0.0.0"
 ENV AUTH_SECRET="auto"
 ENV AUTH_TRUST_HOST="true"

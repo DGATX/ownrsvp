@@ -14,7 +14,7 @@ services:
   app:
     image: dgatx/ownrsvp:latest
     ports:
-      - "7787:3000"
+      - "7787:7787"
     environment:
       - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-ownrsvp}@db:5432/rsvp_db?schema=public
       - AUTH_URL=${AUTH_URL:-http://localhost:7787}
