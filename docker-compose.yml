@@ -1,17 +1,13 @@
 # OwnRSVP - One-Click Docker Installation
 # ========================================
 #
-# Quick Start (no .env file required!):
+# Quick Start:
 #   docker compose up -d
 #
-# Then visit: http://localhost:3000/register
+# Then visit: http://localhost:3000
+# Create your admin account and start using it!
 #
-# Features:
-#   - AUTH_SECRET auto-generated on first run
-#   - First registered user becomes admin
-#   - SMTP can be configured later via Admin UI
-#
-# For custom configuration, create a .env file with your settings.
+# For custom configuration, set environment variables or create a .env file.
 
 services:
   app:
@@ -19,45 +15,26 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # Database - uses internal PostgreSQL
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-ownrsvp_secure_2024}@db:5432/rsvp_db?schema=public
-
-      # Auth - set to 'auto' to auto-generate, or provide your own
-      - AUTH_SECRET=${AUTH_SECRET:-auto}
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-ownrsvp}@db:5432/rsvp_db?schema=public
       - AUTH_URL=${AUTH_URL:-http://localhost:3000}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
-      - AUTH_TRUST_HOST=${AUTH_TRUST_HOST:-true}
-
-      # SMTP - Optional! Configure via Admin UI after setup
+      # Optional: SMTP for email invitations (can configure via Admin UI instead)
       - SMTP_HOST=${SMTP_HOST:-}
       - SMTP_PORT=${SMTP_PORT:-587}
       - SMTP_USER=${SMTP_USER:-}
       - SMTP_PASSWORD=${SMTP_PASSWORD:-}
       - SMTP_FROM=${SMTP_FROM:-}
-
-      # Cron - Optional, for automated reminders
-      - CRON_SECRET=${CRON_SECRET:-}
     volumes:
-      # Persist auto-generated secrets across container restarts
       - app_secrets:/app/.secrets
     depends_on:
       db:
         condition: service_healthy
-      migrate:
-        condition: service_completed_successfully
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
     restart: unless-stopped
 
   db:
     image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ownrsvp_secure_2024}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ownrsvp}
       - POSTGRES_DB=rsvp_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -67,16 +44,6 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
-
-  # Database migrations - runs once on startup
-  migrate:
-    image: dgatx/ownrsvp:latest
-    command: sh -c "npx prisma@5.22.0 migrate deploy"
-    environment:
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-ownrsvp_secure_2024}@db:5432/rsvp_db?schema=public
-    depends_on:
-      db:
-        condition: service_healthy
 
 volumes:
   postgres_data:

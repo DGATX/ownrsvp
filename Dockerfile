@@ -44,6 +44,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
+# Copy startup script
+COPY --chown=nextjs:nodejs start.sh ./
+RUN chmod +x start.sh
+
 # Install wget for health checks (alpine)
 RUN apk add --no-cache wget
 
@@ -56,7 +60,9 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+ENV AUTH_SECRET="auto"
+ENV AUTH_TRUST_HOST="true"
 
-# Start the application
-CMD ["node", "server.js"]
+# Start the application (runs migrations then starts server)
+CMD ["./start.sh"]
 
