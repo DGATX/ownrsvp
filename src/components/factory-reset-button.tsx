@@ -55,12 +55,12 @@ export function FactoryResetButton() {
 
       toast({
         title: 'Factory Reset Complete',
-        description: 'All data has been deleted. You will be signed out and redirected to login.',
+        description: 'All data has been deleted. You will now create a new admin account.',
       });
 
-      // Sign out and redirect to login
+      // Sign out and redirect to register page for fresh admin setup
       setTimeout(async () => {
-        await signOut({ callbackUrl: '/login' });
+        await signOut({ callbackUrl: '/register' });
       }, 2000);
     } catch (error) {
       logger.error('Factory reset error:', error);
@@ -120,11 +120,7 @@ export function FactoryResetButton() {
                 After reset:
               </p>
               <p className="text-sm text-blue-800 dark:text-blue-300">
-                A default admin user will be created with:
-                <br />
-                <strong>Email:</strong> admin
-                <br />
-                <strong>Password:</strong> admin
+                You will be redirected to create a new admin account, just like a fresh installation.
               </p>
             </div>
 
@@ -133,7 +129,7 @@ export function FactoryResetButton() {
                 Warning:
               </p>
               <p className="text-sm text-amber-800 dark:text-amber-300">
-                This action cannot be undone. You will be signed out and must log in with the default admin credentials.
+                This action cannot be undone. All data will be permanently deleted.
               </p>
             </div>
           </div>

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
 import { logger } from '@/lib/logger';
 
 export async function POST(request: Request) {
@@ -59,26 +58,11 @@ export async function POST(request: Request) {
     const deletedUsers = await prisma.user.deleteMany({});
     logger.info(`Deleted ${deletedUsers.count} users`);
 
-    // 9. Create fresh default admin user
-    const hashedPassword = await bcrypt.hash('admin', 12);
-    const adminUser = await prisma.user.create({
-      data: {
-        email: 'admin',
-        username: 'admin',
-        name: 'Administrator',
-        password: hashedPassword,
-        role: 'ADMIN',
-      },
-    });
-    logger.info('Created default admin user');
+    logger.info('Factory reset completed - all data deleted');
 
     return NextResponse.json({
       success: true,
-      message: 'Factory reset completed successfully. Default admin user created.',
-      adminUser: {
-        email: adminUser.email,
-        username: adminUser.username,
-      },
+      message: 'Factory reset completed successfully. Please create a new admin account.',
     });
   } catch (error) {
     logger.error('Factory reset error', error);
