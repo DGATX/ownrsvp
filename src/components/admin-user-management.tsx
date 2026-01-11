@@ -54,7 +54,6 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'ADMIN' | 'USER'>('USER');
@@ -73,17 +72,6 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
     e.preventDefault();
     setIsLoading(true);
 
-    // Validate username format (only required when not sending invitation)
-    if (!sendInvitation && (!username || !/^[a-zA-Z0-9_]+$/.test(username))) {
-      toast({
-        title: 'Error',
-        description: 'Username is required and can only contain letters, numbers, and underscores',
-        variant: 'destructive',
-      });
-      setIsLoading(false);
-      return;
-    }
-
     // Validate: if not sending invitation, password is required
     if (!sendInvitation && !password) {
       toast({
@@ -101,7 +89,6 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: name || undefined,
-          username: sendInvitation ? undefined : username,
           email,
           password: sendInvitation ? undefined : password,
           role,
@@ -124,7 +111,6 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
 
       // Reset form
       setName('');
-      setUsername('');
       setEmail('');
       setPassword('');
       setRole('USER');
@@ -331,23 +317,6 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
                         Send invitation email (user will set their own password and username)
                       </Label>
                     </div>
-                    {!sendInvitation && (
-                      <div className="space-y-2">
-                        <Label htmlFor="username">Username *</Label>
-                        <Input
-                          id="username"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
-                          placeholder="username"
-                          required
-                          disabled={isLoading}
-                          pattern="[a-zA-Z0-9_]+"
-                        />
-                        <p className="text-xs text-muted-foreground">
-                          Letters, numbers, and underscores only
-                        </p>
-                      </div>
-                    )}
                     <div className="space-y-2">
                       <Label htmlFor="name">Name (optional)</Label>
                       <Input

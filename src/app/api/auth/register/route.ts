@@ -10,7 +10,6 @@ import { logger } from '@/lib/logger';
 
 const registerSchema = z.object({
   name: z.string().optional(),
-  username: z.string().regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores').optional(),
   email: z.string().min(1, 'Email is required').refine((val) => isValidEmail(val), {
     message: 'Invalid email address format',
   }),
@@ -26,15 +25,6 @@ const registerSchema = z.object({
 }, {
   message: 'Password is required when not sending invitation',
   path: ['password'],
-}).refine((data) => {
-  // If not sending invitation, username is required
-  if (!data.sendInvitation && !data.username) {
-    return false;
-  }
-  return true;
-}, {
-  message: 'Username is required when not sending invitation',
-  path: ['username'],
 });
 
 export async function POST(request: Request) {
@@ -73,11 +63,8 @@ export async function POST(request: Request) {
 
     const { name, email, password, role, sendInvitation } = parsed.data;
 
-    // Generate temp username for invited users if not provided
-    let username = parsed.data.username;
-    if (!username && sendInvitation) {
-      username = `invited_${nanoid(8)}`;
-    }
+    // Always generate a temporary username - users will set their own when accepting invitation or on first login
+    const username = `invited_${nanoid(8)}`;
 
     // Validate email format
     if (!isValidEmail(email)) {
@@ -99,24 +86,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if username already exists (username is always set at this point)
-    if (username) {
-      const existingUserByUsername = await prisma.user.findUnique({
-        where: { username },
-      });
+    // Check if generated username already exists (very unlikely with nanoid)
+    const existingUserByUsername = await prisma.user.findUnique({
+      where: { username },
+    });
 
-      if (existingUserByUsername) {
-        return NextResponse.json(
-          { error: 'An account with this username already exists' },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Ensure username is set (should never happen, but TypeScript safety)
-    if (!username) {
+    if (existingUserByUsername) {
       return NextResponse.json(
-        { error: 'Username is required' },
+        { error: 'An account with this username already exists. Please try again.' },
         { status: 400 }
       );
     }
