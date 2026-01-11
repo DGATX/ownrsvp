@@ -4,7 +4,8 @@
 # Quick Start:
 #   docker compose up -d
 #
-# Then visit: http://localhost:3000
+# Then visit: http://localhost:7787
+# (7787 = "RSVP" on a phone keypad)
 # Create your admin account and start using it!
 #
 # For custom configuration, set environment variables or create a .env file.
@@ -13,11 +14,11 @@ services:
   app:
     image: dgatx/ownrsvp:latest
     ports:
-      - "3000:3000"
+      - "7787:3000"
     environment:
       - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-ownrsvp}@db:5432/rsvp_db?schema=public
-      - AUTH_URL=${AUTH_URL:-http://localhost:3000}
-      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      - AUTH_URL=${AUTH_URL:-http://localhost:7787}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:7787}
       # Optional: SMTP for email invitations (can configure via Admin UI instead)
       - SMTP_HOST=${SMTP_HOST:-}
       - SMTP_PORT=${SMTP_PORT:-587}

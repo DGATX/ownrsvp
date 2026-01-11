@@ -15,7 +15,7 @@ services:
   app:
     image: dgatx/ownrsvp:latest
     ports:
-      - "3000:3000"
+      - "7787:3000"
     environment:
       - DATABASE_URL=postgresql://postgres:ownrsvp@db:5432/rsvp_db?schema=public
     depends_on:
@@ -39,13 +39,15 @@ volumes:
   postgres_data:
 ```
 
+> **Why port 7787?** It spells "RSVP" on a phone keypad!
+
 **2. Start it:**
 
 ```bash
 docker compose up -d
 ```
 
-**3. Open http://localhost:3000 and create your admin account.**
+**3. Open http://localhost:7787 and create your admin account.**
 
 That's it. No `.env` file needed.
 
@@ -160,7 +162,7 @@ docker compose ps
 docker compose logs -f
 
 # Health check
-curl http://localhost:3000/api/health
+curl http://localhost:7787/api/health
 
 # Reset everything (deletes data)
 docker compose down -v
