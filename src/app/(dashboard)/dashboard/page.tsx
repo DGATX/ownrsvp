@@ -5,7 +5,7 @@ import { canManageEvent } from '@/lib/event-access';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Calendar, Users, Clock, ExternalLink } from 'lucide-react';
+import { Plus, Calendar, Users, Clock } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import { EventCardActions } from '@/components/event-card-actions';
 import { PastEventsBulkActions } from '@/components/past-events-bulk-actions';
@@ -158,12 +158,9 @@ export default async function DashboardPage() {
                           </div>
                         )}
                         <CardHeader className="pb-2">
-                          <div className="flex justify-between items-start">
-                            <CardTitle className="text-lg group-hover:text-violet-600 transition-colors line-clamp-1 pr-8">
-                              {event.title}
-                            </CardTitle>
-                            <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                          </div>
+                          <CardTitle className="text-lg group-hover:text-violet-600 transition-colors line-clamp-1 pr-8">
+                            {event.title}
+                          </CardTitle>
                           <CardDescription>
                             {formatDate(event.date)}
                             {(isAdmin || event.isCoHost) && event.host && (

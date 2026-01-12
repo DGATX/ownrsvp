@@ -23,6 +23,9 @@ npm run db:seed          # Seed database with demo data
 # Docker
 docker compose up -d     # Start production stack
 docker compose logs app  # View application logs
+
+# Docker Hub (IMPORTANT: always build multi-platform)
+docker buildx build --platform linux/amd64,linux/arm64 -t dgatx/ownrsvp:latest --push .
 ```
 
 ## Architecture
