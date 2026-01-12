@@ -26,7 +26,7 @@ export default function NewEventPage() {
     description: '',
     location: '',
     date: '',
-    time: '',
+    time: '12:00',
     endDate: '',
     endTime: '',
     rsvpDeadlineDate: '',
@@ -184,6 +184,7 @@ export default function NewEventPage() {
                 onChange={handleChange}
                 required
                 disabled={isLoading}
+                data-testid="event-title-input"
               />
             </div>
 
@@ -197,6 +198,7 @@ export default function NewEventPage() {
                 onChange={handleChange}
                 rows={4}
                 disabled={isLoading}
+                data-testid="event-description-input"
               />
             </div>
 
@@ -215,6 +217,7 @@ export default function NewEventPage() {
                 value={formData.location}
                 onChange={handleChange}
                 disabled={isLoading}
+                data-testid="event-location-input"
               />
             </div>
 
@@ -245,6 +248,7 @@ export default function NewEventPage() {
                   onChange={handleChange}
                   required
                   disabled={isLoading}
+                  data-testid="event-date-input"
                 />
               </div>
               <div className="space-y-2">
@@ -257,6 +261,7 @@ export default function NewEventPage() {
                   onChange={handleChange}
                   required
                   disabled={isLoading}
+                  data-testid="event-time-input"
                 />
               </div>
             </div>
@@ -370,7 +375,7 @@ export default function NewEventPage() {
             </div>
 
             <div className="flex gap-4 pt-4">
-              <Button type="submit" className="flex-1" disabled={isLoading}>
+              <Button type="submit" className="flex-1" disabled={isLoading} data-testid="event-submit-button">
                 {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Create Event
               </Button>

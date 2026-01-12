@@ -25,6 +25,7 @@ interface Guest {
   respondedAt: Date | null;
   reminderSentAt: Date | null;
   additionalGuests?: AdditionalGuest[];
+  token: string;
 }
 
 interface Comment {
@@ -47,9 +48,10 @@ interface EventPageClientProps {
     pending: number;
   };
   maxGuestsPerInvitee?: number | null;
+  appUrl: string;
 }
 
-export function EventPageClient({ eventId, eventSlug, guests, comments, stats, maxGuestsPerInvitee }: EventPageClientProps) {
+export function EventPageClient({ eventId, eventSlug, guests, comments, stats, maxGuestsPerInvitee, appUrl }: EventPageClientProps) {
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
   return (
@@ -63,6 +65,7 @@ export function EventPageClient({ eventId, eventSlug, guests, comments, stats, m
           stats={stats}
           filterStatus={selectedFilter}
           maxGuestsPerInvitee={maxGuestsPerInvitee}
+          appUrl={appUrl}
         />
       </div>
 

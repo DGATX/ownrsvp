@@ -138,6 +138,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
         <button
           type="button"
           onClick={() => setSelectedStatus('ATTENDING')}
+          data-testid="rsvp-status-attending"
           className={cn(
             'p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2',
             selectedStatus === 'ATTENDING'
@@ -158,6 +159,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
         <button
           type="button"
           onClick={() => setSelectedStatus('MAYBE')}
+          data-testid="rsvp-status-maybe"
           className={cn(
             'p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2',
             selectedStatus === 'MAYBE'
@@ -178,6 +180,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
         <button
           type="button"
           onClick={() => setSelectedStatus('NOT_ATTENDING')}
+          data-testid="rsvp-status-not-attending"
           className={cn(
             'p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2',
             selectedStatus === 'NOT_ATTENDING'
@@ -209,6 +212,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
             onChange={handleChange}
             required
             disabled={isLoading}
+            data-testid="rsvp-name-input"
           />
         </div>
         <div className="space-y-2">
@@ -222,6 +226,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
             onChange={handleChange}
             required
             disabled={isLoading}
+            data-testid="rsvp-email-input"
           />
         </div>
       </div>
@@ -237,6 +242,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
           value={formData.phone}
           onChange={handleChange}
           disabled={isLoading}
+          data-testid="rsvp-phone-input"
         />
       </div>
 
@@ -296,6 +302,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
               }}
               disabled={isLoading || !canAddMoreGuests}
               className="w-full"
+              data-testid="rsvp-add-guest-button"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Another Guest
@@ -318,12 +325,13 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
               onChange={handleChange}
               rows={2}
               disabled={isLoading}
+              data-testid="rsvp-dietary-input"
             />
           </div>
         </>
       )}
 
-      <Button type="submit" className="w-full" size="lg" disabled={isLoading || !selectedStatus}>
+      <Button type="submit" className="w-full" size="lg" disabled={isLoading || !selectedStatus} data-testid="rsvp-submit-button">
         {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
         Submit RSVP
       </Button>

@@ -30,6 +30,7 @@ interface Guest {
   respondedAt: Date | null;
   reminderSentAt: Date | null;
   additionalGuests?: AdditionalGuest[];
+  token: string;
 }
 
 interface Comment {
@@ -52,9 +53,10 @@ interface EventGuestSectionProps {
   };
   filterStatus: string | null;
   maxGuestsPerInvitee?: number | null;
+  appUrl: string;
 }
 
-export function EventGuestSection({ eventId, guests, comments, stats, filterStatus, maxGuestsPerInvitee }: EventGuestSectionProps) {
+export function EventGuestSection({ eventId, guests, comments, stats, filterStatus, maxGuestsPerInvitee, appUrl }: EventGuestSectionProps) {
   const { toast } = useToast();
   const [isImportOpen, setIsImportOpen] = useState(false);
 
@@ -112,7 +114,7 @@ export function EventGuestSection({ eventId, guests, comments, stats, filterStat
         </CardHeader>
         <CardContent className="space-y-4">
           <GuestLimitEditor eventId={eventId} maxGuestsPerInvitee={maxGuestsPerInvitee ?? null} />
-          <GuestList guests={guests} eventId={eventId} filterStatus={filterStatus} globalMaxGuests={maxGuestsPerInvitee} />
+          <GuestList guests={guests} eventId={eventId} filterStatus={filterStatus} globalMaxGuests={maxGuestsPerInvitee} appUrl={appUrl} />
         </CardContent>
       </Card>
 

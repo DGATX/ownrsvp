@@ -123,7 +123,7 @@ export default async function EventPage({ params }: EventPageProps) {
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-start justify-between gap-4">
-                  <CardTitle className="text-2xl">{event.title}</CardTitle>
+                  <h1 className="text-2xl font-semibold leading-none tracking-tight">{event.title}</h1>
                   <div className="flex gap-2">
                     <Link href={`/dashboard/events/${event.id}/edit`}>
                       <Button variant="outline" size="sm" className="gap-2">
@@ -275,6 +275,7 @@ export default async function EventPage({ params }: EventPageProps) {
           comments={event.comments}
           stats={stats}
           maxGuestsPerInvitee={event.maxGuestsPerInvitee}
+          appUrl={appUrl}
         />
       </div>
     </div>

@@ -259,6 +259,7 @@ export default function EditEventPage() {
                 onChange={handleChange}
                 required
                 disabled={isLoading}
+                data-testid="event-title-input"
               />
             </div>
 
@@ -271,6 +272,7 @@ export default function EditEventPage() {
                 onChange={handleChange}
                 rows={4}
                 disabled={isLoading}
+                data-testid="event-description-input"
               />
             </div>
 
@@ -288,6 +290,7 @@ export default function EditEventPage() {
                 value={formData.location}
                 onChange={handleChange}
                 disabled={isLoading}
+                data-testid="event-location-input"
               />
             </div>
 
@@ -318,6 +321,7 @@ export default function EditEventPage() {
                   onChange={handleChange}
                   required
                   disabled={isLoading}
+                  data-testid="event-date-input"
                 />
               </div>
               <div className="space-y-2">
@@ -330,6 +334,7 @@ export default function EditEventPage() {
                   onChange={handleChange}
                   required
                   disabled={isLoading}
+                  data-testid="event-time-input"
                 />
               </div>
             </div>
@@ -464,7 +469,7 @@ export default function EditEventPage() {
             </div>
 
             <div className="flex gap-4 pt-4">
-              <Button type="submit" className="flex-1" disabled={isLoading || isDeleting}>
+              <Button type="submit" className="flex-1" disabled={isLoading || isDeleting} data-testid="event-submit-button">
                 {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Save Changes
               </Button>

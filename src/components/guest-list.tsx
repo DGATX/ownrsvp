@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Mail, Trash2, Send, Clock, Loader2, Phone, Edit, Users, CheckSquare, Square } from 'lucide-react';
+import { Mail, Trash2, Send, Clock, Loader2, Phone, Edit, Users, CheckSquare, Square, Link2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { EditGuestForm } from '@/components/edit-guest-form';
@@ -45,6 +45,7 @@ interface Guest {
   dietaryNotes?: string | null;
   additionalGuests?: AdditionalGuest[];
   maxGuests?: number | null;
+  token: string;
 }
 
 interface GuestListProps {
@@ -52,6 +53,7 @@ interface GuestListProps {
   eventId: string;
   filterStatus?: string | null;
   globalMaxGuests?: number | null;
+  appUrl: string;
 }
 
 const statusConfig: Record<string, { label: string; className: string }> = {
@@ -61,7 +63,7 @@ const statusConfig: Record<string, { label: string; className: string }> = {
   MAYBE: { label: 'Maybe', className: 'bg-amber-100 text-amber-700' },
 };
 
-export function GuestList({ guests, eventId, filterStatus, globalMaxGuests }: GuestListProps) {
+export function GuestList({ guests, eventId, filterStatus, globalMaxGuests, appUrl }: GuestListProps) {
   // Filter guests by status if filter is provided
   const filteredGuests = filterStatus
     ? guests.filter((guest) => guest.status === filterStatus)
@@ -90,6 +92,23 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests }: Gu
 
   const openInviteDialog = (guest: Guest) => {
     setInviteDialogGuest(guest);
+  };
+
+  const copyRsvpLink = async (token: string) => {
+    const rsvpLink = `${appUrl}/rsvp/${token}`;
+    try {
+      await navigator.clipboard.writeText(rsvpLink);
+      toast({
+        title: 'Link copied!',
+        description: 'RSVP link has been copied to clipboard.',
+      });
+    } catch {
+      toast({
+        title: 'Failed to copy',
+        description: 'Could not copy to clipboard.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const sendReminder = async (guestId: string) => {
@@ -361,7 +380,7 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests }: Gu
         const loadingAction = loadingStates[guest.id];
 
         return (
-          <div key={guest.id} className="py-4 flex items-center justify-between gap-4">
+          <div key={guest.id} className="py-4 flex items-center justify-between gap-4" data-testid={`guest-row-${guest.email}`}>
             <div className="flex items-center gap-3 min-w-0">
               {bulkSelectMode && (
                 <Checkbox
@@ -436,12 +455,30 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests }: Gu
                       size="icon"
                       onClick={() => openInviteDialog(guest)}
                       disabled={isLoading}
+                      data-testid={`guest-send-invite-${guest.email}`}
                     >
                       <Send className="w-4 h-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="top" className="text-base font-medium">
                     <p>{guest.status === 'PENDING' ? 'Send Invitation' : 'Resend Invite Link'}</p>
+                  </TooltipContent>
+                </Tooltip>
+                {/* Copy RSVP Link button */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => copyRsvpLink(guest.token)}
+                      disabled={isLoading}
+                      data-testid={`guest-copy-link-${guest.email}`}
+                    >
+                      <Link2 className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="text-base font-medium">
+                    <p>Copy RSVP Link</p>
                   </TooltipContent>
                 </Tooltip>
                 {/* Send Reminder button - only for PENDING guests who haven't received a reminder */}
@@ -504,6 +541,7 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests }: Gu
                       onClick={() => deleteGuest(guest.id)}
                       disabled={isLoading}
                       className="text-destructive hover:text-destructive"
+                      data-testid={`guest-delete-${guest.email}`}
                     >
                       {loadingAction === 'delete' ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
