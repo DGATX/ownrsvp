@@ -8,7 +8,22 @@ import { logger } from './logger';
 // Helper to get "from" address
 async function getFromAddress(): Promise<string> {
   const config = await getEmailConfig();
-  return config?.from || process.env.SMTP_FROM || process.env.SMTP_USER || config?.user || '';
+
+  // Use explicit "from" address if set
+  if (config?.from && config.from.trim()) {
+    return config.from;
+  }
+  if (process.env.SMTP_FROM && process.env.SMTP_FROM.trim()) {
+    return process.env.SMTP_FROM;
+  }
+
+  // Fall back to SMTP_USER but format it nicely with app name
+  const smtpUser = process.env.SMTP_USER || config?.user || '';
+  if (smtpUser) {
+    return `OwnRSVP <${smtpUser}>`;
+  }
+
+  return '';
 }
 
 // Create transporter dynamically using config manager
