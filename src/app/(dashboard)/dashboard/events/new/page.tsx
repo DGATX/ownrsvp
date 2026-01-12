@@ -33,6 +33,7 @@ export default function NewEventPage() {
     rsvpDeadlineTime: '',
     coverImage: null as string | null,
     photoAlbumUrl: '',
+    replyTo: '',
     reminderSchedule: [] as Reminder[],
     maxGuestsPerInvitee: null as number | null,
     unlimitedGuests: true,
@@ -98,6 +99,7 @@ export default function NewEventPage() {
       const description = formDataObj.get('description') as string;
       const location = formDataObj.get('location') as string;
       const photoAlbumUrl = formDataObj.get('photoAlbumUrl') as string;
+      const replyTo = formDataObj.get('replyTo') as string;
 
       const payload: Record<string, any> = {
         title,
@@ -111,6 +113,10 @@ export default function NewEventPage() {
 
       if (photoAlbumUrl && photoAlbumUrl.trim() !== '') {
         payload.photoAlbumUrl = photoAlbumUrl;
+      }
+
+      if (replyTo && replyTo.trim() !== '') {
+        payload.replyTo = replyTo;
       }
 
       const reminderScheduleStr = serializeReminderSchedule(formData.reminderSchedule);
@@ -234,6 +240,22 @@ export default function NewEventPage() {
               />
               <p className="text-sm text-muted-foreground">
                 Share a link to a Google Photos album or other photo sharing service. A QR code will be generated automatically.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="replyTo">Reply-To Email (optional)</Label>
+              <Input
+                id="replyTo"
+                name="replyTo"
+                type="email"
+                placeholder="your-email@example.com"
+                value={formData.replyTo}
+                onChange={handleChange}
+                disabled={isLoading}
+              />
+              <p className="text-sm text-muted-foreground">
+                When guests reply to invitation emails, their responses will go to this address instead of the system default.
               </p>
             </div>
 

@@ -79,6 +79,7 @@ export async function POST(request: Request) {
                 location: event.location,
               },
               rsvpToken: guest.token,
+              replyTo: event.replyTo,
             });
             emailsSent++;
 

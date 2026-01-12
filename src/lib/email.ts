@@ -81,6 +81,7 @@ interface SendInvitationParams {
   event: EventDetails;
   rsvpToken: string;
   hostName?: string | null;
+  replyTo?: string | null;
 }
 
 export async function sendInvitation({
@@ -89,6 +90,7 @@ export async function sendInvitation({
   event,
   rsvpToken,
   hostName,
+  replyTo,
 }: SendInvitationParams) {
   const transporter = await createTransporter();
   if (!transporter) {
@@ -165,6 +167,7 @@ export async function sendInvitation({
   await transporter.sendMail({
     from: await getFromAddress(),
     to,
+    replyTo: replyTo || undefined,
     subject: `You're invited to ${event.title}!`,
     html,
   });
@@ -175,6 +178,7 @@ interface SendReminderParams {
   guestName?: string | null;
   event: EventDetails;
   rsvpToken: string;
+  replyTo?: string | null;
 }
 
 export async function sendReminder({
@@ -182,6 +186,7 @@ export async function sendReminder({
   guestName,
   event,
   rsvpToken,
+  replyTo,
 }: SendReminderParams) {
   const transporter = await createTransporter();
   if (!transporter) {
@@ -252,6 +257,7 @@ export async function sendReminder({
   await transporter.sendMail({
     from: await getFromAddress(),
     to,
+    replyTo: replyTo || undefined,
     subject: `Reminder: Please RSVP for ${event.title}`,
     html,
   });
@@ -263,6 +269,7 @@ interface SendConfirmationParams {
   event: EventDetails;
   status: string;
   rsvpToken?: string;
+  replyTo?: string | null;
 }
 
 export async function sendConfirmation({
@@ -271,6 +278,7 @@ export async function sendConfirmation({
   event,
   status,
   rsvpToken,
+  replyTo,
 }: SendConfirmationParams) {
   const transporter = await createTransporter();
   if (!transporter) {
@@ -359,6 +367,7 @@ export async function sendConfirmation({
   await transporter.sendMail({
     from: await getFromAddress(),
     to,
+    replyTo: replyTo || undefined,
     subject: `RSVP Confirmed for ${event.title}`,
     html,
   });
@@ -447,6 +456,7 @@ interface SendBroadcastEmailParams {
   subject: string;
   message: string;
   eventTitle: string;
+  replyTo?: string | null;
 }
 
 export async function sendBroadcastEmail({
@@ -455,6 +465,7 @@ export async function sendBroadcastEmail({
   subject,
   message,
   eventTitle,
+  replyTo,
 }: SendBroadcastEmailParams) {
   const transporter = await createTransporter();
   if (!transporter) {
@@ -511,6 +522,7 @@ export async function sendBroadcastEmail({
   await transporter.sendMail({
     from: await getFromAddress(),
     to,
+    replyTo: replyTo || undefined,
     subject: `[${eventTitle}] ${subject}`,
     html,
   });
@@ -622,6 +634,7 @@ interface SendEventChangeEmailParams {
   eventTitle: string;
   changes: { field: string; oldValue: string; newValue: string }[];
   rsvpToken: string;
+  replyTo?: string | null;
 }
 
 export async function sendEventChangeEmail({
@@ -630,6 +643,7 @@ export async function sendEventChangeEmail({
   eventTitle,
   changes,
   rsvpToken,
+  replyTo,
 }: SendEventChangeEmailParams) {
   const transporter = await createTransporter();
   if (!transporter) {
@@ -703,6 +717,7 @@ export async function sendEventChangeEmail({
   await transporter.sendMail({
     from: await getFromAddress(),
     to,
+    replyTo: replyTo || undefined,
     subject: `Event Update: ${eventTitle}`,
     html,
   });

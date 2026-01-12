@@ -173,6 +173,7 @@ export async function POST(request: Request, { params }: RouteParams) {
                 },
                 rsvpToken: guest.token,
                 hostName: eventWithHost.host.name,
+                replyTo: eventWithHost.replyTo,
               });
               invitationResults.emailsSent++;
             } catch (error) {

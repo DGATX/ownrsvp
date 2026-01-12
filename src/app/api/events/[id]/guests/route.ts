@@ -90,6 +90,7 @@ export async function POST(request: Request, { params }: RouteParams) {
           },
           rsvpToken: guest.token,
           hostName: event.host.name,
+          replyTo: event.replyTo,
         });
       } catch (error) {
         logger.error('Failed to send invitation email', error);

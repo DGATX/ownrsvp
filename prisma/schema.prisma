@@ -80,6 +80,7 @@ model Event {
   photoAlbumUrl   String?
   reminderSchedule String?  // JSON array: [{type: "day", value: 7}, {type: "hour", value: 2}]
   maxGuestsPerInvitee Int?  // null = unlimited, number = max total guests (including invitee)
+  replyTo         String?   // Custom reply-to email for this event
   hostId          String
   isPublic        Boolean   @default(true)
   createdAt       DateTime  @default(now())

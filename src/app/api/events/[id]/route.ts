@@ -89,6 +89,7 @@ const updateEventSchema = z.object({
   photoAlbumUrl: z.string().nullable().optional(),
   reminderSchedule: z.string().optional().nullable(),
   maxGuestsPerInvitee: z.number().int().min(1).nullable().optional(),
+  replyTo: z.string().email().nullable().optional().or(z.literal('')),
   isPublic: z.boolean().optional(),
   notifyGuests: z.boolean().optional().default(false),
 });
@@ -163,7 +164,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       );
     }
 
-    const { notifyGuests, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, ...updateData } = parsed.data;
+    const { notifyGuests, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, replyTo: rawReplyTo, ...updateData } = parsed.data;
 
     // Validate end date is not before start date
     const finalDate = updateData.date || existingEvent.date;
@@ -196,6 +197,12 @@ export async function PATCH(request: Request, { params }: RouteParams) {
           photoAlbumUrl = null;
         }
       }
+    }
+
+    // Normalize replyTo
+    let replyTo: string | null | undefined = undefined;
+    if (rawReplyTo !== undefined) {
+      replyTo = (!rawReplyTo || rawReplyTo.trim() === '') ? null : rawReplyTo.trim();
     }
 
     // Parse and validate reminderSchedule (handles both old and new formats)
@@ -255,6 +262,10 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     if (maxGuestsPerInvitee !== undefined) {
       updateFields.maxGuestsPerInvitee = maxGuestsPerInvitee;
     }
+    // Only include replyTo if it's explicitly provided
+    if (replyTo !== undefined) {
+      updateFields.replyTo = replyTo;
+    }
     // Only include reminderSchedule if it's explicitly provided
     if (reminderScheduleValue !== undefined) {
       updateFields.reminderSchedule = reminderScheduleValue;
@@ -293,6 +304,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
                   eventTitle: event.title,
                   changes,
                   rsvpToken: guest.token,
+                  replyTo: event.replyTo,
                 }).catch((error) => {
                   logger.error(`Failed to send email to ${guest.email}`, error);
                   // Don't throw - we want to continue sending to other guests

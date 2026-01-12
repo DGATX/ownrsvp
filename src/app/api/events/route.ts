@@ -27,6 +27,7 @@ const createEventSchema = z.object({
   photoAlbumUrl: z.string().optional(),
   reminderSchedule: z.string().optional(),
   maxGuestsPerInvitee: z.number().int().min(1).nullable().optional(),
+  replyTo: z.string().email().optional().or(z.literal('')),
   isPublic: z.boolean().optional().default(true),
 });
 
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { title, description, location, date, endDate, rsvpDeadline, coverImage, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, isPublic } = parsed.data;
+    const { title, description, location, date, endDate, rsvpDeadline, coverImage, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, replyTo, isPublic } = parsed.data;
 
     // Validate end date is not before start date
     if (endDate && endDate < date) {
@@ -127,6 +128,7 @@ export async function POST(request: Request) {
       coverImage: coverImage ? String(coverImage) : null,
       photoAlbumUrl: (photoAlbumUrl && photoAlbumUrl.trim() !== '') ? String(photoAlbumUrl) : null,
       maxGuestsPerInvitee: maxGuestsPerInvitee !== undefined ? maxGuestsPerInvitee : null,
+      replyTo: (replyTo && replyTo.trim() !== '') ? String(replyTo) : null,
       isPublic: Boolean(isPublic ?? true),
       hostId: String(session.user.id),
     };

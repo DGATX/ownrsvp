@@ -188,6 +188,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
           },
           status: finalStatus,
           rsvpToken: token,
+          replyTo: updatedGuest.event.replyTo,
         }).catch((error) => {
           logger.error('Failed to send confirmation email', error);
         })

@@ -36,6 +36,7 @@ export default function EditEventPage() {
     rsvpDeadlineTime: '',
     coverImage: null as string | null,
     photoAlbumUrl: '',
+    replyTo: '',
     reminderSchedule: [] as Reminder[],
     maxGuestsPerInvitee: null as number | null,
     unlimitedGuests: true,
@@ -68,6 +69,7 @@ export default function EditEventPage() {
           rsvpDeadlineTime: rsvpDeadline ? rsvpDeadline.toTimeString().slice(0, 5) : '',
           coverImage: event.coverImage || null,
           photoAlbumUrl: event.photoAlbumUrl || '',
+          replyTo: event.replyTo || '',
           reminderSchedule,
           maxGuestsPerInvitee: event.maxGuestsPerInvitee,
           unlimitedGuests: event.maxGuestsPerInvitee === null,
@@ -110,6 +112,7 @@ export default function EditEventPage() {
       const rsvpDeadlineDate = formDataObj.get('rsvpDeadlineDate') as string;
       const rsvpDeadlineTime = formDataObj.get('rsvpDeadlineTime') as string;
       const photoAlbumUrl = formDataObj.get('photoAlbumUrl') as string;
+      const replyTo = formDataObj.get('replyTo') as string;
       const coverImage = formData.coverImage; // Image is handled via state from ImageUpload component
       const reminderSchedule = formData.reminderSchedule; // Reminder schedule from state
 
@@ -157,6 +160,7 @@ export default function EditEventPage() {
           rsvpDeadline: rsvpDeadline?.toISOString() || null,
           coverImage: coverImage || null,
           photoAlbumUrl: (photoAlbumUrl && photoAlbumUrl.trim() !== '') ? photoAlbumUrl : null,
+          replyTo: (replyTo && replyTo.trim() !== '') ? replyTo : null,
           reminderSchedule: serializeReminderSchedule(reminderSchedule),
           maxGuestsPerInvitee: !formData.unlimitedGuests && formData.maxGuestsPerInvitee ? formData.maxGuestsPerInvitee : null,
           notifyGuests,
@@ -307,6 +311,22 @@ export default function EditEventPage() {
               />
               <p className="text-sm text-muted-foreground">
                 Share a link to a Google Photos album or other photo sharing service. A QR code will be generated automatically.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="replyTo">Reply-To Email (optional)</Label>
+              <Input
+                id="replyTo"
+                name="replyTo"
+                type="email"
+                placeholder="your-email@example.com"
+                value={formData.replyTo}
+                onChange={handleChange}
+                disabled={isLoading}
+              />
+              <p className="text-sm text-muted-foreground">
+                When guests reply to invitation emails, their responses will go to this address instead of the system default.
               </p>
             </div>
 

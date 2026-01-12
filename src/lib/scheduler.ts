@@ -40,6 +40,7 @@ async function sendEventReminders() {
               location: event.location,
             },
             rsvpToken: guest.token,
+            replyTo: event.replyTo,
           });
 
           // Update reminder sent timestamp

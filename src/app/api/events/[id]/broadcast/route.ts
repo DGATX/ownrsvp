@@ -71,6 +71,7 @@ export async function POST(request: Request, { params }: RouteParams) {
             subject,
             message,
             eventTitle: event.title,
+            replyTo: event.replyTo,
           });
           sentCount++;
         } catch (error) {

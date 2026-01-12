@@ -145,6 +145,7 @@ export async function POST(request: Request) {
           },
           status,
           rsvpToken: guest.token,
+          replyTo: event.replyTo,
         }).catch((error) => {
           logger.error('Failed to send confirmation email', error);
         })

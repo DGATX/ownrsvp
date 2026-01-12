@@ -53,6 +53,7 @@ export async function POST(request: Request, { params }: RouteParams) {
             location: event.location,
           },
           rsvpToken: guest.token,
+          replyTo: event.replyTo,
         });
       } catch (error) {
         logger.error('Failed to send reminder email', error);
