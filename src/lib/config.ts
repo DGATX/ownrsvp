@@ -20,12 +20,14 @@ export async function getEmailConfig(): Promise<EmailConfig | null> {
 
     if (configs.length > 0) {
       const configMap = new Map(configs.map(c => [c.key, c.value]));
+      // Use nullish coalescing (??) to preserve empty strings, but treat them as unset for 'from'
+      const fromValue = configMap.get('SMTP_FROM');
       return {
         host: configMap.get('SMTP_HOST') || process.env.SMTP_HOST || '',
         port: configMap.get('SMTP_PORT') || process.env.SMTP_PORT || '587',
         user: configMap.get('SMTP_USER') || process.env.SMTP_USER || '',
         password: configMap.get('SMTP_PASSWORD') || process.env.SMTP_PASSWORD || '',
-        from: configMap.get('SMTP_FROM') || process.env.SMTP_FROM || undefined,
+        from: (fromValue && fromValue.trim()) ? fromValue : (process.env.SMTP_FROM || undefined),
       };
     }
   } catch (error) {
@@ -55,7 +57,8 @@ export async function updateEmailConfig(config: Partial<EmailConfig>, userId?: s
     { key: 'SMTP_PORT', value: config.port },
     { key: 'SMTP_USER', value: config.user },
     { key: 'SMTP_PASSWORD', value: config.password },
-    { key: 'SMTP_FROM', value: config.from },
+    // Only save SMTP_FROM if it has a non-empty value
+    { key: 'SMTP_FROM', value: config.from?.trim() || undefined },
   ].filter(item => item.value !== undefined);
 
   for (const item of emailConfigs) {
@@ -76,6 +79,16 @@ export async function updateEmailConfig(config: Partial<EmailConfig>, userId?: s
         value: item.value!,
         encrypted: item.key === 'SMTP_PASSWORD',
         updatedBy: userId,
+      },
+    });
+  }
+
+  // If SMTP_FROM was cleared (empty or undefined), delete it from database
+  if (!config.from?.trim()) {
+    await prisma.appConfig.deleteMany({
+      where: {
+        category: 'email',
+        key: 'SMTP_FROM',
       },
     });
   }
