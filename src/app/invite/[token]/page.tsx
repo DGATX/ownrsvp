@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -115,11 +116,24 @@ export default function InviteAcceptancePage() {
 
       toast({
         title: 'Success!',
-        description: 'Your account has been set up. You can now sign in.',
+        description: 'Your account has been set up. Signing you in...',
       });
 
-      // Redirect to login page
-      router.push('/login?message=Account setup complete. Please sign in.');
+      // Auto-login with the new credentials
+      const signInResult = await signIn('credentials', {
+        email: email, // Can use email or username
+        password: formData.password,
+        redirect: false,
+      });
+
+      if (signInResult?.error) {
+        // If auto-login fails, redirect to login page
+        router.push('/login?message=Account setup complete. Please sign in.');
+      } else {
+        // Successfully logged in, go to dashboard
+        router.push('/dashboard');
+        router.refresh();
+      }
     } catch (error) {
       toast({
         title: 'Error',

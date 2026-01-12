@@ -139,14 +139,27 @@ export async function POST(request: Request, { params }: RouteParams) {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    logger.info('Updating user with invitation acceptance', {
+      userId: invitation.user.id,
+      name,
+      username,
+      oldUsername: invitation.user.username,
+    });
+
     // Update the user's name, username, and password
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: invitation.user.id },
       data: {
         name,
         username,
         password: hashedPassword,
       },
+    });
+
+    logger.info('User updated successfully', {
+      userId: updatedUser.id,
+      name: updatedUser.name,
+      username: updatedUser.username,
     });
 
     // Delete the used invitation token
@@ -158,7 +171,8 @@ export async function POST(request: Request, { params }: RouteParams) {
       message: 'Account setup complete! You can now sign in.',
       user: {
         email: invitation.user.email,
-        name,
+        name: updatedUser.name,
+        username: updatedUser.username,
       },
     });
   } catch (error) {
