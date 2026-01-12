@@ -227,7 +227,7 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
             placeholder="resend or your-email@gmail.com"
           />
           <p className="text-xs text-muted-foreground">
-            For Resend use "resend", for Gmail use your email address
+            For Resend use &quot;resend&quot;, for Gmail use your email address
           </p>
         </div>
 
