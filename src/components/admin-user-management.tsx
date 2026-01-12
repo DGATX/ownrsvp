@@ -266,7 +266,10 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
         description: `${userEmail} has been removed.`,
       });
 
-      // Refresh the page
+      // Update local state to remove the deleted user
+      setUsers(users.filter(u => u.id !== userId));
+
+      // Also refresh server data
       router.refresh();
     } catch (error) {
       toast({
