@@ -6,13 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Loader2, Mail, Save, X } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -35,7 +28,7 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
   const [isTesting, setIsTesting] = useState(false);
   const [testEmail, setTestEmail] = useState('');
   const [config, setConfig] = useState<EmailConfigData>({
-    host: 'smtp.gmail.com',
+    host: '',
     port: '587',
     user: '',
     password: '',
@@ -63,7 +56,7 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
         const data = await response.json();
         if (data.configured && data.config) {
           const newConfig = {
-            host: data.config.host || 'smtp.gmail.com',
+            host: data.config.host || '',
             port: data.config.port || '587',
             user: data.config.user || '',
             password: data.config.password || '',
@@ -74,7 +67,7 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
         } else {
           // Config not set yet - set originalConfig to empty defaults so changes can be detected
           const emptyConfig = {
-            host: 'smtp.gmail.com',
+            host: '',
             port: '587',
             user: '',
             password: '',
@@ -88,7 +81,7 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
       logger.error('Failed to load email config:', error);
       // Even if API fails, set originalConfig so save button can work
       const emptyConfig = {
-        host: 'smtp.gmail.com',
+        host: '',
         port: '587',
         user: '',
         password: '',
@@ -185,21 +178,6 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
     }
   }
 
-  function handleHostChange(host: string) {
-    setConfig(prev => {
-      const newConfig = { ...prev, host };
-      // Auto-set port based on host
-      if (host === 'smtp.gmail.com') {
-        newConfig.port = '587';
-      } else if (host === 'smtp.sendgrid.net') {
-        newConfig.port = '587';
-      } else if (host === 'smtp.mailgun.org') {
-        newConfig.port = '587';
-      }
-      return newConfig;
-    });
-  }
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -213,24 +191,16 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="smtp-host">SMTP Host</Label>
-          <Select value={config.host} onValueChange={handleHostChange}>
-            <SelectTrigger id="smtp-host">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="smtp.gmail.com">Gmail (smtp.gmail.com)</SelectItem>
-              <SelectItem value="smtp.sendgrid.net">SendGrid (smtp.sendgrid.net)</SelectItem>
-              <SelectItem value="smtp.mailgun.org">Mailgun (smtp.mailgun.org)</SelectItem>
-              <SelectItem value="custom">Custom</SelectItem>
-            </SelectContent>
-          </Select>
-          {config.host === 'custom' && (
-            <Input
-              placeholder="Enter custom SMTP host"
-              value={config.host === 'custom' ? '' : config.host}
-              onChange={(e) => setConfig(prev => ({ ...prev, host: e.target.value }))}
-            />
-          )}
+          <Input
+            id="smtp-host"
+            type="text"
+            value={config.host}
+            onChange={(e) => setConfig(prev => ({ ...prev, host: e.target.value }))}
+            placeholder="smtp.resend.com"
+          />
+          <p className="text-xs text-muted-foreground">
+            e.g., smtp.resend.com, smtp.gmail.com, smtp.sendgrid.net
+          </p>
         </div>
 
         <div className="space-y-2">
@@ -248,40 +218,43 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="smtp-user">SMTP User (Email)</Label>
+          <Label htmlFor="smtp-user">SMTP Username</Label>
           <Input
             id="smtp-user"
-            type="email"
+            type="text"
             value={config.user}
             onChange={(e) => setConfig(prev => ({ ...prev, user: e.target.value }))}
-            placeholder="your-email@gmail.com"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="smtp-password">SMTP Password</Label>
-          <PasswordInput
-            id="smtp-password"
-            value={config.password}
-            onChange={(e) => setConfig(prev => ({ ...prev, password: e.target.value }))}
-            placeholder="Enter app password"
+            placeholder="resend or your-email@gmail.com"
           />
           <p className="text-xs text-muted-foreground">
-            For Gmail, use an App Password (not your regular password)
+            For Resend use "resend", for Gmail use your email address
           </p>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="smtp-from">From Address (Optional)</Label>
+          <Label htmlFor="smtp-password">SMTP Password / API Key</Label>
+          <PasswordInput
+            id="smtp-password"
+            value={config.password}
+            onChange={(e) => setConfig(prev => ({ ...prev, password: e.target.value }))}
+            placeholder="API key or app password"
+          />
+          <p className="text-xs text-muted-foreground">
+            For Resend use your API key, for Gmail use an App Password
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="smtp-from">From Address</Label>
           <Input
             id="smtp-from"
             type="text"
             value={config.from}
             onChange={(e) => setConfig(prev => ({ ...prev, from: e.target.value }))}
-            placeholder="OwnRSVP <your-email@gmail.com>"
+            placeholder="OwnRSVP <noreply@yourdomain.com>"
           />
           <p className="text-xs text-muted-foreground">
-            Format: Name &lt;email@example.com&gt; or just email@example.com
+            Format: Name &lt;email@yourdomain.com&gt; - must match your verified domain
           </p>
         </div>
       </div>

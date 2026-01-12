@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 const emailConfigSchema = z.object({
   host: z.string().min(1, 'SMTP host is required'),
   port: z.string().min(1, 'SMTP port is required'),
-  user: z.string().email('Invalid email address'),
+  user: z.string().min(1, 'SMTP username is required'),
   password: z.string().min(1, 'SMTP password is required'),
   from: z.string().optional(),
 });
