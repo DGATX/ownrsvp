@@ -43,17 +43,10 @@ export async function GET() {
       });
     }
 
-    // Mask password (show only last 4 characters)
-    const maskedPassword = config.password.length > 4
-      ? '*'.repeat(config.password.length - 4) + config.password.slice(-4)
-      : '****';
-
+    // Return actual password for admin (endpoint is already protected)
     return NextResponse.json({
       configured: true,
-      config: {
-        ...config,
-        password: maskedPassword,
-      },
+      config,
     });
   } catch (error) {
     logger.error('Get email config error', error);

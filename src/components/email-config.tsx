@@ -45,12 +45,6 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    // Immediately populate password from localStorage on mount
-    const storedPassword = localStorage.getItem('smtp_password');
-    if (storedPassword) {
-      setConfig(prev => ({ ...prev, password: storedPassword }));
-    }
-    // Then load full config from API
     loadConfig();
   }, []);
 
@@ -64,25 +58,15 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
   async function loadConfig() {
     setIsLoading(true);
     try {
-      // Always check localStorage first for the password - prioritize stored value
-      const storedPassword = localStorage.getItem('smtp_password');
-
       const response = await fetch('/api/admin/config/email');
       if (response.ok) {
         const data = await response.json();
         if (data.configured && data.config) {
-          // Always use stored password from localStorage if available
-          // The API always returns masked password, so localStorage is our source of truth
-          const password = storedPassword || '';
-
-          // If we have a stored password, use it; otherwise leave empty (user needs to enter it)
-          // Don't use the masked password from API (contains *)
-
           const newConfig = {
             host: data.config.host || 'smtp.gmail.com',
             port: data.config.port || '587',
             user: data.config.user || '',
-            password: password,
+            password: data.config.password || '',
             from: data.config.from || '',
           };
           setConfig(newConfig);
@@ -93,7 +77,7 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
             host: 'smtp.gmail.com',
             port: '587',
             user: '',
-            password: storedPassword || '',
+            password: '',
             from: '',
           };
           setConfig(emptyConfig);
@@ -103,12 +87,11 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
     } catch (error) {
       logger.error('Failed to load email config:', error);
       // Even if API fails, set originalConfig so save button can work
-      const storedPassword = localStorage.getItem('smtp_password');
       const emptyConfig = {
         host: 'smtp.gmail.com',
         port: '587',
         user: '',
-        password: storedPassword || '',
+        password: '',
         from: '',
       };
       setConfig(emptyConfig);
@@ -139,9 +122,6 @@ export function EmailConfig({ onConfigChange }: EmailConfigProps) {
       const data = await response.json();
 
       if (response.ok) {
-        // Store password in localStorage so it persists after refresh
-        localStorage.setItem('smtp_password', config.password);
-        
         toast({
           title: 'Configuration saved!',
           description: data.restartRequired
