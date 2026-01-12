@@ -133,6 +133,28 @@ export async function DELETE(request: Request, { params }: RouteParams) {
       );
     }
 
+    // Check if user exists
+    const userToDelete = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        invitation: true,
+      },
+    });
+
+    if (!userToDelete) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    // Delete the invitation first if it exists (to be safe)
+    if (userToDelete.invitation) {
+      await prisma.userInvitation.delete({
+        where: { id: userToDelete.invitation.id },
+      });
+    }
+
     // Delete user
     await prisma.user.delete({
       where: { id: userId },
@@ -141,8 +163,9 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     return NextResponse.json({ success: true });
   } catch (error) {
     logger.error('Delete user error', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to delete user' },
+      { error: `Failed to delete user: ${errorMessage}` },
       { status: 500 }
     );
   }
