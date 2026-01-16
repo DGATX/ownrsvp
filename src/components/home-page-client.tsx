@@ -47,9 +47,9 @@ function HomePageContent() {
   // Show loading while checking setup status
   if (isCheckingSetup) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/50 to-background dark:from-background dark:via-muted/10 dark:to-background">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-violet-600 mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
         </div>
       </div>
     );
@@ -99,7 +99,7 @@ function HomePageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background dark:from-background dark:via-muted/10 dark:to-background">
       <PublicNav />
 
       {/* Hero Section */}
@@ -108,9 +108,12 @@ function HomePageContent() {
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             {/* Left side - Hero content */}
             <div className="text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300 text-xs font-medium mb-4 animate-fade-in">
-                <CalendarHeart className="w-3 h-3" />
-                Self-hosted event management
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-medium mb-4 animate-fade-in">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                New: Design Studio Available
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 animate-slide-up">
                 Self-Hosted Event Management
@@ -121,7 +124,7 @@ function HomePageContent() {
                 Create beautiful event pages, send invitations, and manage RSVPs with advanced features like co-hosts,
                 broadcast updates, and automated reminders—all from your own server. No tracking, no ads, complete privacy.
               </p>
-              <p className="text-base font-medium text-violet-600 dark:text-violet-400 max-w-2xl mx-auto lg:mx-0 mb-6 animate-slide-up italic" style={{ animationDelay: '0.15s' }}>
+              <p className="text-base font-medium text-primary/80 dark:text-primary/60 max-w-2xl mx-auto lg:mx-0 mb-6 animate-slide-up italic" style={{ animationDelay: '0.15s' }}>
                 Because f*ck Evite, that&apos;s why.
               </p>
             </div>
@@ -153,7 +156,7 @@ function HomePageContent() {
                         <Label htmlFor="password" className="text-sm">Password</Label>
                         <Link
                           href="/forgot-password"
-                          className="text-xs text-primary hover:underline font-medium"
+                          className="text-primary hover:underline font-medium"
                         >
                           Forgot password?
                         </Link>
@@ -236,10 +239,10 @@ function HomePageContent() {
                 className="p-5 rounded-xl bg-white dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow animate-slide-up"
                 style={{ animationDelay: `${0.1 * index}s` }}
               >
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-100 to-indigo-100 dark:from-violet-900/50 dark:to-indigo-900/50 flex items-center justify-center mb-3">
-                  <feature.icon className="w-5 h-5 text-violet-600 dark:text-violet-400" />
+                <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center mb-3">
+                  <feature.icon className="w-5 h-5 text-primary" />
                 </div>
-                <h3 className="text-base font-semibold mb-1.5">{feature.title}</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground">{feature.description}</p>
               </div>
             ))}
@@ -251,7 +254,7 @@ function HomePageContent() {
       <footer className="py-8 px-4 border-t border-gray-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-md bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-lg">
+            <div className="w-5 h-5 rounded-md bg-primary flex items-center justify-center shadow-lg">
               <CalendarHeart className="w-3 h-3 text-white" />
             </div>
             <span className="font-semibold text-sm">OwnRSVP</span>

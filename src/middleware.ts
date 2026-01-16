@@ -9,7 +9,7 @@ export default auth(async (req) => {
     const { pathname } = req.nextUrl;
 
     // Public routes
-    const publicRoutes = ['/', '/login', '/register', '/events', '/rsvp', '/invite'];
+    const publicRoutes = ['/', '/login', '/register', '/events', '/rsvp', '/invite', '/design-preview'];
     const isPublicRoute = publicRoutes.some(
       (route) => pathname === route || pathname.startsWith(`${route}/`)
     );
@@ -18,7 +18,8 @@ export default auth(async (req) => {
     const isPublicApi =
       pathname.startsWith('/api/auth') ||
       pathname.startsWith('/api/rsvp') ||
-      pathname.startsWith('/api/events/public');
+      pathname.startsWith('/api/events/public') ||
+      pathname.startsWith('/api/design-preview');
 
     if (isPublicRoute || isPublicApi) {
       return NextResponse.next();

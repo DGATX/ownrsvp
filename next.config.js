@@ -9,7 +9,9 @@ const nextConfig = {
   // Ensure proper handling of forwarded headers
   async headers() {
     return [
+
       {
+        // Default security headers for all other paths
         source: '/:path*',
         headers: [
           {
