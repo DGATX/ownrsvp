@@ -286,6 +286,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
                     setFormData({ ...formData, additionalGuests: newGuests });
                   }}
                   disabled={isLoading}
+                  data-testid={`rsvp-remove-guest-${index}`}
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>

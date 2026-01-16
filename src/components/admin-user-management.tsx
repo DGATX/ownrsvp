@@ -443,6 +443,7 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
                       disabled={isLoading}
                       title="Edit User"
                       className="hover:bg-accent"
+                      data-testid={`edit-user-${user.email}`}
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
@@ -453,6 +454,7 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
                       disabled={isLoading}
                       title="Change Password"
                       className="hover:bg-accent"
+                      data-testid={`change-password-${user.email}`}
                     >
                       <Lock className="w-4 h-4" />
                     </Button>
@@ -463,6 +465,7 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
                       disabled={isLoading}
                       className="text-destructive hover:text-destructive hover:bg-destructive/10"
                       title="Delete User"
+                      data-testid={`delete-user-${user.email}`}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>

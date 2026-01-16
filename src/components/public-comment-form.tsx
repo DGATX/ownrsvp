@@ -65,6 +65,7 @@ export function PublicCommentForm({ eventId }: PublicCommentFormProps) {
         onChange={(e) => setName(e.target.value)}
         required
         disabled={isLoading}
+        data-testid="comment-name-input"
       />
       <Textarea
         placeholder="Write a message..."
@@ -73,8 +74,9 @@ export function PublicCommentForm({ eventId }: PublicCommentFormProps) {
         required
         rows={3}
         disabled={isLoading}
+        data-testid="comment-content-input"
       />
-      <Button type="submit" disabled={isLoading} className="gap-2">
+      <Button type="submit" disabled={isLoading} className="gap-2" data-testid="comment-submit-button">
         {isLoading ? (
           <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
