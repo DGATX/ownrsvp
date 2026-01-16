@@ -30,8 +30,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Install OpenSSL for Prisma
-RUN apk add --no-cache openssl
+# Install OpenSSL for Prisma and su-exec for dropping privileges
+RUN apk add --no-cache openssl su-exec
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
@@ -54,7 +54,7 @@ RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 # Set ownership
 RUN chown -R nextjs:nodejs /app
 
-USER nextjs
+# Note: Container starts as root, start.sh fixes permissions then drops to nextjs user
 
 EXPOSE 7787
 
