@@ -102,20 +102,24 @@ export function downloadIcalFile(event: CalendarEvent, filename: string = 'event
 
 // Helper functions
 
-function formatDateForGoogle(date: Date): string {
-  return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+function toDate(date: Date | string): Date {
+  return typeof date === 'string' ? new Date(date) : date;
 }
 
-function formatDateForOutlook(date: Date): string {
-  return date.toISOString();
+function formatDateForGoogle(date: Date | string): string {
+  return toDate(date).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 }
 
-function formatDateForIcal(date: Date): string {
-  return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+function formatDateForOutlook(date: Date | string): string {
+  return toDate(date).toISOString();
 }
 
-function addHours(date: Date, hours: number): Date {
-  const result = new Date(date);
+function formatDateForIcal(date: Date | string): string {
+  return toDate(date).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+}
+
+function addHours(date: Date | string, hours: number): Date {
+  const result = new Date(toDate(date));
   result.setHours(result.getHours() + hours);
   return result;
 }

@@ -253,9 +253,9 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                   {event.guests.map((guest: typeof event.guests[0], index: number) => {
                     const allGuests = [
                       guest.name || guest.email.split('@')[0],
-                      ...(guest.additionalGuests?.map((ag) => ag.name) || []),
+                      ...(guest.additionalGuests?.map((ag) => ag.name).filter((n): n is string => !!n) || []),
                     ];
-                    return allGuests.map((name, nameIndex) => (
+                    return allGuests.filter(Boolean).map((name, nameIndex) => (
                       <div
                         key={`${index}-${nameIndex}`}
                         className="flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/30 rounded-full"

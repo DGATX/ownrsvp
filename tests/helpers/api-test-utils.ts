@@ -1,4 +1,4 @@
-import { vi } from 'vitest'
+import { vi, expect } from 'vitest'
 import { NextRequest } from 'next/server'
 
 /**
@@ -32,7 +32,7 @@ export function createMockRequest(
     requestInit.body = JSON.stringify(body)
   }
 
-  return new NextRequest(urlObj, requestInit)
+  return new NextRequest(urlObj, requestInit as RequestInit & { signal?: AbortSignal })
 }
 
 /**
