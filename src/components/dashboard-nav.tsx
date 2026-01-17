@@ -94,7 +94,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="cursor-pointer text-destructive focus:text-destructive"
-                  onClick={() => signOut({ callbackUrl: '/login' })}
+                  onClick={() => signOut({ callbackUrl: `${window.location.origin}/login` })}
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   Sign out
