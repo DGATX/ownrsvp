@@ -108,13 +108,6 @@ function HomePageContent() {
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             {/* Left side - Hero content */}
             <div className="text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-medium mb-4 animate-fade-in">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                </span>
-                New: Design Studio Available
-              </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 animate-slide-up">
                 Self-Hosted Event Management
                 <br />
