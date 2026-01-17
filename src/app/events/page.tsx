@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
-import { formatDate } from '@/lib/utils';
+import { formatEventDateTimeShort } from '@/lib/timezone';
 import { PublicNav } from '@/components/public-nav';
 
 // Force dynamic rendering to avoid database queries at build time
@@ -79,7 +79,7 @@ export default async function PublicEventsPage() {
                       <div className="space-y-1 text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
-                          {formatDate(event.date)}
+                          {formatEventDateTimeShort(event.date, event.timezone)}
                         </div>
                         {event.location && (
                           <div className="flex items-center gap-2 line-clamp-1">

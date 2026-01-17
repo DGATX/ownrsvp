@@ -85,6 +85,7 @@ const updateEventSchema = z.object({
   }).optional(),
   endDate: z.string().optional().nullable().transform((val) => val && val.trim() !== '' ? new Date(val) : null),
   rsvpDeadline: z.string().optional().nullable().transform((val) => val && val.trim() !== '' ? new Date(val) : null),
+  timezone: z.string().optional(),
   coverImage: z.string().nullable().optional(),
   photoAlbumUrl: z.string().nullable().optional(),
   reminderSchedule: z.string().optional().nullable(),
@@ -164,7 +165,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       );
     }
 
-    const { notifyGuests, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, replyTo: rawReplyTo, ...updateData } = parsed.data;
+    const { notifyGuests, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, replyTo: rawReplyTo, timezone, ...updateData } = parsed.data;
 
     // Validate end date is not before start date
     const finalDate = updateData.date || existingEvent.date;
@@ -269,6 +270,10 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     // Only include reminderSchedule if it's explicitly provided
     if (reminderScheduleValue !== undefined) {
       updateFields.reminderSchedule = reminderScheduleValue;
+    }
+    // Only include timezone if it's explicitly provided
+    if (timezone !== undefined) {
+      updateFields.timezone = timezone || null;
     }
 
     const event = await prisma.event.update({

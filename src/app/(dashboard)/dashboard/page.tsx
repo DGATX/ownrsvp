@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Calendar, Users, Clock } from 'lucide-react';
-import { formatDate } from '@/lib/utils';
+import { formatEventDateTimeShort } from '@/lib/timezone';
 import { EventCardActions } from '@/components/event-card-actions';
 import { PastEventsBulkActions } from '@/components/past-events-bulk-actions';
 
@@ -162,7 +162,7 @@ export default async function DashboardPage() {
                             {event.title}
                           </CardTitle>
                           <CardDescription>
-                            {formatDate(event.date)}
+                            {formatEventDateTimeShort(event.date, event.timezone)}
                             {(isAdmin || event.isCoHost) && event.host && (
                               <span className="block text-xs mt-1">Host: {event.host.name || event.host.email}</span>
                             )}

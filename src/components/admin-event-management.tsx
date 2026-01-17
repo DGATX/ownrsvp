@@ -16,13 +16,14 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2, Trash2, Calendar, Users, CheckSquare, Square, ExternalLink } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
-import { formatDate } from '@/lib/utils';
+import { formatEventDateTimeShort } from '@/lib/timezone';
 import Link from 'next/link';
 
 interface Event {
   id: string;
   title: string;
   date: Date;
+  timezone?: string | null;
   host: {
     name: string | null;
     email: string;
@@ -250,7 +251,7 @@ export function AdminEventManagement({ events: initialEvents }: AdminEventManage
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-3 h-3" />
-                                {formatDate(event.date)}
+                                {formatEventDateTimeShort(event.date, event.timezone)}
                               </span>
                               <span className="flex items-center gap-1">
                                 <Users className="w-3 h-3" />

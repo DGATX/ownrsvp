@@ -76,6 +76,7 @@ model Event {
   date            DateTime
   endDate         DateTime?
   rsvpDeadline    DateTime?
+  timezone        String?   // IANA timezone (e.g., "America/Chicago"), null defaults to UTC
   coverImage      String?
   photoAlbumUrl   String?
   reminderSchedule String?  // JSON array: [{type: "day", value: 7}, {type: "hour", value: 2}]

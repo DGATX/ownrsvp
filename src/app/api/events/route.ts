@@ -23,6 +23,7 @@ const createEventSchema = z.object({
   }),
   endDate: z.string().optional().transform((val) => val && val.trim() !== '' ? new Date(val) : undefined),
   rsvpDeadline: z.string().optional().nullable().transform((val) => val ? new Date(val) : undefined),
+  timezone: z.string().optional(),
   coverImage: z.string().nullable().optional(),
   photoAlbumUrl: z.string().optional(),
   reminderSchedule: z.string().optional(),
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { title, description, location, date, endDate, rsvpDeadline, coverImage, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, replyTo, isPublic } = parsed.data;
+    const { title, description, location, date, endDate, rsvpDeadline, timezone, coverImage, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, replyTo, isPublic } = parsed.data;
 
     // Validate end date is not before start date
     if (endDate && endDate < date) {
@@ -125,6 +126,7 @@ export async function POST(request: Request) {
       date: date instanceof Date ? date : new Date(date),
       endDate: endDate ? (endDate instanceof Date ? endDate : new Date(endDate)) : null,
       rsvpDeadline: rsvpDeadline ? (rsvpDeadline instanceof Date ? rsvpDeadline : new Date(rsvpDeadline)) : null,
+      timezone: timezone ? String(timezone) : null,
       coverImage: coverImage ? String(coverImage) : null,
       photoAlbumUrl: (photoAlbumUrl && photoAlbumUrl.trim() !== '') ? String(photoAlbumUrl) : null,
       maxGuestsPerInvitee: maxGuestsPerInvitee !== undefined ? maxGuestsPerInvitee : null,

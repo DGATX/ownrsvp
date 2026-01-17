@@ -15,6 +15,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { ImageUpload } from '@/components/image-upload';
 import { ReminderManager } from '@/components/reminder-manager';
 import { Reminder, parseReminderSchedule, serializeReminderSchedule } from '@/lib/reminder-utils';
+import { TimezoneSelector } from '@/components/timezone-selector';
+import { getBrowserTimezone } from '@/lib/timezone';
 
 export default function EditEventPage() {
   const router = useRouter();
@@ -34,6 +36,7 @@ export default function EditEventPage() {
     endTime: '',
     rsvpDeadlineDate: '',
     rsvpDeadlineTime: '',
+    timezone: '',
     coverImage: null as string | null,
     photoAlbumUrl: '',
     replyTo: '',
@@ -67,6 +70,7 @@ export default function EditEventPage() {
           endTime: endDate ? endDate.toTimeString().slice(0, 5) : '',
           rsvpDeadlineDate: rsvpDeadline ? rsvpDeadline.toISOString().split('T')[0] : '',
           rsvpDeadlineTime: rsvpDeadline ? rsvpDeadline.toTimeString().slice(0, 5) : '',
+          timezone: event.timezone || getBrowserTimezone(),
           coverImage: event.coverImage || null,
           photoAlbumUrl: event.photoAlbumUrl || '',
           replyTo: event.replyTo || '',
@@ -158,6 +162,7 @@ export default function EditEventPage() {
           date: dateTime.toISOString(),
           endDate: endDateTime?.toISOString() || null,
           rsvpDeadline: rsvpDeadline?.toISOString() || null,
+          timezone: formData.timezone || getBrowserTimezone(),
           coverImage: coverImage || null,
           photoAlbumUrl: (photoAlbumUrl && photoAlbumUrl.trim() !== '') ? photoAlbumUrl : null,
           replyTo: (replyTo && replyTo.trim() !== '') ? replyTo : null,
@@ -383,6 +388,12 @@ export default function EditEventPage() {
                 />
               </div>
             </div>
+
+            <TimezoneSelector
+              value={formData.timezone}
+              onChange={(tz) => setFormData({ ...formData, timezone: tz })}
+              disabled={isLoading}
+            />
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">

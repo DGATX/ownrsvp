@@ -57,6 +57,7 @@ CREATE TABLE "Event" (
     "date" DATETIME NOT NULL,
     "endDate" DATETIME,
     "rsvpDeadline" DATETIME,
+    "timezone" TEXT,
     "coverImage" TEXT,
     "photoAlbumUrl" TEXT,
     "reminderSchedule" TEXT,

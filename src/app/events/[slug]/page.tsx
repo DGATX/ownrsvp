@@ -4,8 +4,8 @@ import { getAppUrl } from '@/lib/config';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Calendar, MapPin, Users, MessageSquare, Clock, Navigation } from 'lucide-react';
-import { formatDateTime } from '@/lib/utils';
-import { formatDistanceToNow, isPast, format } from 'date-fns';
+import { formatDistanceToNow, isPast } from 'date-fns';
+import { formatEventDateTime, formatEventDateTimeShort } from '@/lib/timezone';
 import { PublicRsvpForm } from '@/components/public-rsvp-form';
 import { PublicCommentForm } from '@/components/public-comment-form';
 import { PublicNav } from '@/components/public-nav';
@@ -107,7 +107,7 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
               <div className="space-y-3 text-base text-muted-foreground">
                 <div className="flex items-center justify-center gap-2">
                   <Calendar className="w-5 h-5 text-violet-600 dark:text-violet-400" />
-                  {formatDateTime(event.date)}
+                  {formatEventDateTime(event.date, event.timezone)}
                 </div>
                 {event.location && (
                   <div className="flex flex-col items-center gap-2">
@@ -140,9 +140,9 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                 {event.rsvpDeadline && (
                   <div className={`flex items-center justify-center gap-2 ${rsvpDeadlinePassed ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'}`}>
                     <Clock className="w-5 h-5" />
-                    {rsvpDeadlinePassed 
+                    {rsvpDeadlinePassed
                       ? 'RSVP deadline has passed'
-                      : `RSVP by ${format(new Date(event.rsvpDeadline), 'MMM d, yyyy h:mm a')}`
+                      : `RSVP by ${formatEventDateTimeShort(event.rsvpDeadline, event.timezone)}`
                     }
                   </div>
                 )}

@@ -29,6 +29,7 @@ export async function GET(request: Request, { params }: RouteParams) {
             id: true,
             title: true,
             date: true,
+            timezone: true,
             location: true,
             slug: true,
             rsvpDeadline: true,

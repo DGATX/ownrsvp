@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Calendar, MapPin, Clock, Link as LinkIcon, Edit, Navigation } from 'lucide-react';
-import { formatDateTime } from '@/lib/utils';
-import { format, isPast } from 'date-fns';
+import { isPast } from 'date-fns';
+import { formatEventDateTime, formatEventDateTimeShort } from '@/lib/timezone';
 import { EventPageClient } from '@/components/event-page-client';
 import { CopyButton } from '@/components/copy-button';
 import { AddToCalendar } from '@/components/add-to-calendar';
@@ -144,8 +144,8 @@ export default async function EventPage({ params }: EventPageProps) {
                   )}
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
-                    {formatDateTime(event.date)}
-                    {event.endDate && ` - ${formatDateTime(event.endDate)}`}
+                    {formatEventDateTime(event.date, event.timezone)}
+                    {event.endDate && ` - ${formatEventDateTime(event.endDate, event.timezone)}`}
                   </div>
                   {event.location && (
                     <div className="flex flex-col gap-2">
@@ -174,9 +174,9 @@ export default async function EventPage({ params }: EventPageProps) {
                   {event.rsvpDeadline && (
                     <div className={`flex items-center gap-2 ${rsvpDeadlinePassed ? 'text-red-600' : 'text-amber-600'}`}>
                       <Clock className="w-4 h-4" />
-                      {rsvpDeadlinePassed 
+                      {rsvpDeadlinePassed
                         ? 'RSVP deadline passed'
-                        : `RSVP deadline: ${format(new Date(event.rsvpDeadline), 'MMM d, yyyy h:mm a')}`
+                        : `RSVP deadline: ${formatEventDateTimeShort(event.rsvpDeadline, event.timezone)}`
                       }
                     </div>
                   )}

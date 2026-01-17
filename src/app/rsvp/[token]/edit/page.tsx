@@ -12,7 +12,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { validateGuestLimit } from '@/lib/rsvp-validation';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { formatDateTime } from '@/lib/utils';
+import { formatEventDateTime } from '@/lib/timezone';
 
 interface Guest {
   id: string;
@@ -27,6 +27,7 @@ interface Guest {
     id: string;
     title: string;
     date: Date;
+    timezone: string | null;
     location: string | null;
     slug: string;
     maxGuestsPerInvitee: number | null;
@@ -184,7 +185,7 @@ export default function EditRsvpPage() {
               <CardTitle className="text-2xl">{guest.event.title}</CardTitle>
               <div className="space-y-2 pt-2 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <span>{formatDateTime(guest.event.date)}</span>
+                  <span>{formatEventDateTime(guest.event.date, guest.event.timezone)}</span>
                 </div>
                 {guest.event.location && (
                   <div className="flex items-center gap-2">

@@ -17,13 +17,14 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Trash2, Users } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
-import { formatDate } from '@/lib/utils';
+import { formatEventDateTimeShort } from '@/lib/timezone';
 import { EventCardActions } from '@/components/event-card-actions';
 
 interface PastEvent {
   id: string;
   title: string;
   date: Date;
+  timezone?: string | null;
   coverImage?: string | null;
   host: {
     name: string | null;
@@ -227,7 +228,7 @@ export function PastEventsBulkActions({ events: initialEvents, isAdmin = false }
                 <CardHeader className={`pb-2 ${showCheckbox ? 'pl-12' : ''}`}>
                   <CardTitle className="text-lg line-clamp-1 pr-8">{event.title}</CardTitle>
                   <CardDescription>
-                    {formatDate(event.date)}
+                    {formatEventDateTimeShort(event.date, event.timezone)}
                     {(isAdmin || event.isCoHost) && event.host && (
                       <span className="block text-xs mt-1">Host: {event.host.name || event.host.email}</span>
                     )}

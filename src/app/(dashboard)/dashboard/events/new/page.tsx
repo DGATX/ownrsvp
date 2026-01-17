@@ -15,6 +15,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { ImageUpload } from '@/components/image-upload';
 import { ReminderManager } from '@/components/reminder-manager';
 import { Reminder, serializeReminderSchedule } from '@/lib/reminder-utils';
+import { TimezoneSelector } from '@/components/timezone-selector';
+import { getBrowserTimezone } from '@/lib/timezone';
 
 export default function NewEventPage() {
   const router = useRouter();
@@ -31,6 +33,7 @@ export default function NewEventPage() {
     endTime: '',
     rsvpDeadlineDate: '',
     rsvpDeadlineTime: '',
+    timezone: '',
     coverImage: null as string | null,
     photoAlbumUrl: '',
     replyTo: '',
@@ -108,6 +111,7 @@ export default function NewEventPage() {
         date: dateTime.toISOString(),
         endDate: endDateTime?.toISOString(),
         rsvpDeadline: rsvpDeadline?.toISOString(),
+        timezone: formData.timezone || getBrowserTimezone(),
         coverImage: formData.coverImage, // This comes from ImageUpload component state
       };
 
@@ -312,6 +316,12 @@ export default function NewEventPage() {
                 />
               </div>
             </div>
+
+            <TimezoneSelector
+              value={formData.timezone}
+              onChange={(tz) => setFormData({ ...formData, timezone: tz })}
+              disabled={isLoading}
+            />
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
