@@ -61,6 +61,7 @@ CREATE TABLE "Event" (
     "photoAlbumUrl" TEXT,
     "reminderSchedule" TEXT,
     "maxGuestsPerInvitee" INTEGER,
+    "replyTo" TEXT,
     "hostId" TEXT NOT NULL,
     "isPublic" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
