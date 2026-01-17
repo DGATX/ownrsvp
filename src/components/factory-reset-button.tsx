@@ -60,7 +60,8 @@ export function FactoryResetButton() {
 
       // Sign out and redirect to register page for fresh admin setup
       setTimeout(async () => {
-        await signOut({ callbackUrl: `${window.location.origin}/register` });
+        await signOut({ redirect: false });
+        window.location.href = '/register';
       }, 2000);
     } catch (error) {
       logger.error('Factory reset error:', error);
