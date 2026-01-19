@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { CalendarHeart, Calendar, LogOut, User, Shield, Palette } from 'lucide-react';
+import { CalendarHeart, Calendar, LogOut, User, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/theme-toggle';
 
@@ -31,7 +31,6 @@ export function DashboardNav({ user }: DashboardNavProps) {
 
   const navLinks = [
     { href: '/dashboard', label: 'Events', icon: Calendar },
-    { href: '/dashboard/themes', label: 'Themes', icon: Palette },
     ...(user.role === 'ADMIN' ? [{ href: '/dashboard/admin', label: 'Admin', icon: Shield }] : []),
   ];
 
