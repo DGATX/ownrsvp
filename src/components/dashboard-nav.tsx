@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { CalendarHeart, Calendar, LogOut, User, Shield } from 'lucide-react';
+import { CalendarHeart, Calendar, LogOut, User, Shield, Palette } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/theme-toggle';
 
@@ -31,6 +31,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
 
   const navLinks = [
     { href: '/dashboard', label: 'Events', icon: Calendar },
+    { href: '/dashboard/themes', label: 'Themes', icon: Palette },
     ...(user.role === 'ADMIN' ? [{ href: '/dashboard/admin', label: 'Admin', icon: Shield }] : []),
   ];
 
@@ -40,8 +41,8 @@ export function DashboardNav({ user }: DashboardNavProps) {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center gap-8">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-lg">
-                <CalendarHeart className="w-5 h-5 text-primary-foreground" />
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 via-violet-500 to-pink-500 flex items-center justify-center shadow-lg">
+                <CalendarHeart className="w-5 h-5 text-white" />
               </div>
               <span className="font-bold text-xl gradient-text">OwnRSVP</span>
             </Link>
@@ -69,7 +70,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                   <Avatar className="h-9 w-9">
                     <AvatarImage src={user.image || undefined} alt={user.name || ''} />
-                    <AvatarFallback className="bg-primary text-primary-foreground">
+                    <AvatarFallback className="bg-gradient-to-br from-cyan-500 via-violet-500 to-pink-500 text-white">
                       {user.name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>

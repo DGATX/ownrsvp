@@ -1,17 +1,19 @@
 import type { Metadata } from 'next';
-import { Bricolage_Grotesque, JetBrains_Mono } from 'next/font/google';
+import { Outfit, Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Providers } from '@/components/providers';
 
-const fontSans = Bricolage_Grotesque({
+const fontSans = Outfit({
   subsets: ['latin'],
   variable: '--font-geist-sans',
+  weight: ['400', '500', '600', '700'],
 });
 
-const fontMono = JetBrains_Mono({
+const fontMono = Inter({
   subsets: ['latin'],
   variable: '--font-geist-mono',
+  weight: ['400', '500', '600'],
 });
 
 export const metadata: Metadata = {

@@ -21,9 +21,9 @@ export default async function DashboardLayout({
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="min-h-screen aurora-bg aurora-animated">
       <DashboardNav user={{ ...session.user, role: userWithRole?.role || null }} />
-      <main className="pt-16">{children}</main>
+      <main className="relative z-10 pt-16">{children}</main>
     </div>
   );
 }

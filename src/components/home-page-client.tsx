@@ -47,7 +47,7 @@ function HomePageContent() {
   // Show loading while checking setup status
   if (isCheckingSetup) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/50 to-background dark:from-background dark:via-muted/10 dark:to-background">
+      <div className="min-h-screen flex items-center justify-center aurora-bg aurora-animated">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
         </div>
@@ -99,11 +99,11 @@ function HomePageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background dark:from-background dark:via-muted/10 dark:to-background">
+    <div className="min-h-screen aurora-bg aurora-animated">
       <PublicNav />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-12 px-4">
+      <section className="relative z-10 pt-24 pb-12 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             {/* Left side - Hero content */}
@@ -123,8 +123,8 @@ function HomePageContent() {
             </div>
 
             {/* Right side - Sign in form */}
-            <div className="animate-slide-up max-w-sm mx-auto lg:mx-0" style={{ animationDelay: '0.2s' }}>
-              <Card className="border-0 shadow-xl">
+            <div className="relative z-10 animate-slide-up max-w-sm mx-auto lg:mx-0" style={{ animationDelay: '0.2s' }}>
+              <Card className="border-0 shadow-xl glass card-glow">
                 <CardHeader className="text-center pb-3 pt-5 px-5">
                   <CardTitle className="text-xl">Sign in to manage your events</CardTitle>
                 </CardHeader>
@@ -186,7 +186,7 @@ function HomePageContent() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-12 px-4">
+      <section className="relative z-10 py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-bold mb-2">Powerful features for modern event management</h2>
@@ -229,10 +229,10 @@ function HomePageContent() {
             ].map((feature, index) => (
               <div
                 key={feature.title}
-                className="p-5 rounded-xl bg-white dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow animate-slide-up"
+                className="relative z-10 p-5 rounded-xl glass card-glow animate-slide-up"
                 style={{ animationDelay: `${0.1 * index}s` }}
               >
-                <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center mb-3">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 via-violet-500/20 to-pink-500/20 flex items-center justify-center mb-3">
                   <feature.icon className="w-5 h-5 text-primary" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">{feature.title}</h3>
@@ -244,10 +244,10 @@ function HomePageContent() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 border-t border-gray-200 dark:border-slate-800">
+      <footer className="relative z-10 py-8 px-4 border-t border-border/50">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-md bg-primary flex items-center justify-center shadow-lg">
+            <div className="w-5 h-5 rounded-md bg-gradient-to-br from-cyan-500 via-violet-500 to-pink-500 flex items-center justify-center shadow-lg">
               <CalendarHeart className="w-3 h-3 text-white" />
             </div>
             <span className="font-semibold text-sm">OwnRSVP</span>
@@ -264,9 +264,9 @@ function HomePageContent() {
 export function HomePageClient() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+      <div className="min-h-screen flex items-center justify-center aurora-bg aurora-animated">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-violet-600 mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
         </div>
       </div>
     }>

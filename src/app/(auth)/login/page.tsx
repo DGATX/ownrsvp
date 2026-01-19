@@ -68,18 +68,18 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950 p-4">
-      <div className="w-full max-w-md animate-slide-up">
+    <div className="min-h-screen flex items-center justify-center aurora-bg aurora-animated p-4">
+      <div className="relative z-10 w-full max-w-md animate-slide-up">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-violet-500 to-pink-500 flex items-center justify-center animate-glow">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <span className="font-bold text-2xl gradient-text">OwnRSVP</span>
           </Link>
         </div>
 
-        <Card className="border-0 shadow-xl">
+        <Card className="border-0 shadow-xl glass card-glow">
           <CardHeader className="text-center pb-4">
             <CardTitle className="text-2xl">Welcome back</CardTitle>
             <CardDescription>Sign in to manage your events</CardDescription>
