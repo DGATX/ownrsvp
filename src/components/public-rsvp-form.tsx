@@ -14,20 +14,30 @@ interface PublicRsvpFormProps {
   eventId: string;
   slug: string;
   maxGuestsPerInvitee?: number | null;
+  prefillData?: {
+    name: string | null;
+    email: string;
+    phone: string | null;
+    dietaryNotes: string | null;
+    token?: string;
+  } | null;
 }
 
-export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsvpFormProps) {
+export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee, prefillData }: PublicRsvpFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-  
+
+  // Check if email came from a token-based prefill (should be read-only)
+  const isEmailFromToken = Boolean(prefillData?.token && prefillData?.email);
+
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
+    name: prefillData?.name || '',
+    email: prefillData?.email || '',
+    phone: prefillData?.phone || '',
     additionalGuests: [] as string[], // Array of additional guest names
-    dietaryNotes: '',
+    dietaryNotes: prefillData?.dietaryNotes || '',
   });
 
   // Calculate guest limit validation
@@ -225,9 +235,16 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee }: PublicRsv
             value={formData.email}
             onChange={handleChange}
             required
-            disabled={isLoading}
+            disabled={isLoading || isEmailFromToken}
+            readOnly={isEmailFromToken}
+            className={isEmailFromToken ? 'bg-muted cursor-not-allowed' : ''}
             data-testid="rsvp-email-input"
           />
+          {isEmailFromToken && (
+            <p className="text-xs text-muted-foreground">
+              Email is linked to your invitation and cannot be changed
+            </p>
+          )}
         </div>
       </div>
 

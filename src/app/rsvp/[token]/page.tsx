@@ -21,7 +21,7 @@ export default async function RsvpTokenPage({ params }: RsvpTokenPageProps) {
     notFound();
   }
 
-  // Redirect to the public event page
-  redirect(`/events/${guest.event.slug}?email=${encodeURIComponent(guest.email)}`);
+  // Redirect to the public event page with token for prefilling guest data
+  redirect(`/events/${guest.event.slug}?token=${token}`);
 }
 

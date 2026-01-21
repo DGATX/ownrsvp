@@ -132,10 +132,17 @@ export async function POST(request: Request, { params }: RouteParams) {
         },
       });
 
-      // Get event details including host name
+      // Get event details including host name and cover image
       const eventWithHost = await prisma.event.findUnique({
         where: { id: eventId },
-        include: {
+        select: {
+          id: true,
+          title: true,
+          date: true,
+          location: true,
+          description: true,
+          coverImage: true,
+          replyTo: true,
           host: {
             select: { name: true },
           },
@@ -170,6 +177,7 @@ export async function POST(request: Request, { params }: RouteParams) {
                   date: eventWithHost.date,
                   location: eventWithHost.location,
                   description: eventWithHost.description,
+                  coverImage: eventWithHost.coverImage,
                 },
                 rsvpToken: guest.token,
                 hostName: eventWithHost.host.name,

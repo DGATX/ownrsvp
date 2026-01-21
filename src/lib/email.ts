@@ -73,6 +73,7 @@ interface EventDetails {
   date: Date;
   location?: string | null;
   description?: string | null;
+  coverImage?: string | null;
 }
 
 interface SendInvitationParams {
@@ -119,6 +120,17 @@ export async function sendInvitation({
                   <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">You're Invited!</h1>
                 </td>
               </tr>
+              ${event.coverImage ? `
+              <tr>
+                <td style="padding: 0;">
+                  <img
+                    src="${event.coverImage}"
+                    alt="${event.title}"
+                    style="width: 100%; max-height: 300px; object-fit: cover; display: block;"
+                  />
+                </td>
+              </tr>
+              ` : ''}
               <tr>
                 <td style="padding: 40px 30px;">
                   <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
@@ -137,15 +149,42 @@ export async function sendInvitation({
                     ${event.description ? `<p style="color: #4b5563; font-size: 14px; margin: 16px 0 0; line-height: 1.5;">${event.description}</p>` : ''}
                   </div>
 
-                  <div style="text-align: center;">
-                    <a href="${rsvpLink}" style="display: inline-block; background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 100%); color: #ffffff; text-decoration: none; padding: 16px 36px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(157, 78, 221, 0.4);">
-                      Respond to Invitation
+                  <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td align="center" style="padding: 8px;">
+                        <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=ATTENDING"
+                           style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                                  font-size: 16px; font-weight: 600;">
+                          Yes, I'll be there!
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="padding: 8px;">
+                        <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=MAYBE"
+                           style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                                  font-size: 16px; font-weight: 600;">
+                          Maybe
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="padding: 8px;">
+                        <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=NOT_ATTENDING"
+                           style="display: inline-block; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                                  font-size: 16px; font-weight: 600;">
+                          Can't make it
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                  <p style="color: #6b7280; font-size: 12px; text-align: center; margin: 16px 0 0;">
+                    <a href="${rsvpLink}" style="color: #9d4edd;">
+                      Need to add guests or dietary notes? Click here for full form
                     </a>
-                  </div>
-
-                  <p style="color: #9ca3af; font-size: 12px; text-align: center; margin: 30px 0 0; line-height: 1.5;">
-                    If the button doesn't work, copy and paste this link:<br>
-                    <a href="${rsvpLink}" style="color: #9d4edd;">${rsvpLink}</a>
                   </p>
                 </td>
               </tr>
@@ -215,6 +254,17 @@ export async function sendReminder({
                   <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Reminder: RSVP Needed</h1>
                 </td>
               </tr>
+              ${event.coverImage ? `
+              <tr>
+                <td style="padding: 0;">
+                  <img
+                    src="${event.coverImage}"
+                    alt="${event.title}"
+                    style="width: 100%; max-height: 300px; object-fit: cover; display: block;"
+                  />
+                </td>
+              </tr>
+              ` : ''}
               <tr>
                 <td style="padding: 40px 30px;">
                   <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
@@ -232,11 +282,43 @@ export async function sendReminder({
                     ${event.location ? `<p style="color: #4b5563; font-size: 14px; margin: 8px 0 0;"><strong style="color: #f5267e;">Where:</strong> ${event.location}</p>` : ''}
                   </div>
 
-                  <div style="text-align: center;">
-                    <a href="${rsvpLink}" style="display: inline-block; background: linear-gradient(135deg, #f5267e 0%, #9d4edd 100%); color: #ffffff; text-decoration: none; padding: 16px 36px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(245, 38, 126, 0.4);">
-                      Respond Now
+                  <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td align="center" style="padding: 8px;">
+                        <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=ATTENDING"
+                           style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                                  font-size: 16px; font-weight: 600;">
+                          Yes, I'll be there!
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="padding: 8px;">
+                        <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=MAYBE"
+                           style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                                  font-size: 16px; font-weight: 600;">
+                          Maybe
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="padding: 8px;">
+                        <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=NOT_ATTENDING"
+                           style="display: inline-block; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                                  font-size: 16px; font-weight: 600;">
+                          Can't make it
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                  <p style="color: #6b7280; font-size: 12px; text-align: center; margin: 16px 0 0;">
+                    <a href="${rsvpLink}" style="color: #9d4edd;">
+                      Need to add guests or dietary notes? Click here for full form
                     </a>
-                  </div>
+                  </p>
                 </td>
               </tr>
               <tr>

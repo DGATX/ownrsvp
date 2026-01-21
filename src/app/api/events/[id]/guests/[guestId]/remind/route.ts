@@ -19,6 +19,15 @@ export async function POST(request: Request, { params }: RouteParams) {
     // Verify event ownership and get event details
     const event = await prisma.event.findUnique({
       where: { id: eventId },
+      select: {
+        id: true,
+        hostId: true,
+        title: true,
+        date: true,
+        location: true,
+        coverImage: true,
+        replyTo: true,
+      },
     });
 
     if (!event || event.hostId !== session.user.id) {
@@ -51,6 +60,7 @@ export async function POST(request: Request, { params }: RouteParams) {
             title: event.title,
             date: event.date,
             location: event.location,
+            coverImage: event.coverImage,
           },
           rsvpToken: guest.token,
           replyTo: event.replyTo,

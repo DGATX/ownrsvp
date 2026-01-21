@@ -15,12 +15,12 @@ import { QRCode } from '@/components/qr-code';
 
 interface EventPageProps {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ email?: string }>;
+  searchParams: Promise<{ email?: string; token?: string; success?: string; error?: string }>;
 }
 
 export default async function PublicEventPage({ params, searchParams }: EventPageProps) {
   const { slug } = await params;
-  const { email } = await searchParams;
+  const { email, token } = await searchParams;
   
   const event = await prisma.event.findUnique({
     where: { slug },
@@ -51,10 +51,43 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
 
   const appUrl = await getAppUrl();
 
-  // Find guest by email if provided
+  // Find guest by token or email if provided
   let guestToken: string | null = null;
   let guestEmail: string | null = null;
-  if (email) {
+  let prefillData: {
+    name: string | null;
+    email: string;
+    phone: string | null;
+    dietaryNotes: string | null;
+    token: string;
+  } | null = null;
+
+  if (token) {
+    // Token-based lookup (from email links) - fetch full guest data for prefilling
+    const guest = await prisma.guest.findUnique({
+      where: { token },
+      select: {
+        token: true,
+        email: true,
+        name: true,
+        phone: true,
+        dietaryNotes: true,
+        eventId: true,
+      },
+    });
+    if (guest && guest.eventId === event.id) {
+      guestToken = guest.token;
+      guestEmail = guest.email;
+      prefillData = {
+        name: guest.name,
+        email: guest.email,
+        phone: guest.phone,
+        dietaryNotes: guest.dietaryNotes,
+        token: guest.token,
+      };
+    }
+  } else if (email) {
+    // Email-based lookup (legacy support)
     const guest = await prisma.guest.findUnique({
       where: {
         eventId_email: {
@@ -234,7 +267,7 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                   <p className="text-sm">Contact the host directly if you need to make changes.</p>
                 </div>
               ) : (
-                <PublicRsvpForm eventId={event.id} slug={slug} maxGuestsPerInvitee={event.maxGuestsPerInvitee} />
+                <PublicRsvpForm eventId={event.id} slug={slug} maxGuestsPerInvitee={event.maxGuestsPerInvitee} prefillData={prefillData} />
               )}
             </CardContent>
           </Card>

@@ -30,7 +30,14 @@ export async function POST(request: Request) {
           lte: maxDate,
         },
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        date: true,
+        location: true,
+        coverImage: true,
+        replyTo: true,
+        reminderSchedule: true,
         guests: {
           where: {
             status: 'PENDING',
@@ -77,6 +84,7 @@ export async function POST(request: Request) {
                 title: event.title,
                 date: event.date,
                 location: event.location,
+                coverImage: event.coverImage,
               },
               rsvpToken: guest.token,
               replyTo: event.replyTo,

@@ -34,7 +34,16 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     const event = await prisma.event.findUnique({
       where: { id: eventId },
-      include: { host: { select: { name: true } } },
+      select: {
+        id: true,
+        title: true,
+        date: true,
+        location: true,
+        description: true,
+        coverImage: true,
+        replyTo: true,
+        host: { select: { name: true } },
+      },
     });
 
     if (!event) {
@@ -87,6 +96,7 @@ export async function POST(request: Request, { params }: RouteParams) {
             date: event.date,
             location: event.location,
             description: event.description,
+            coverImage: event.coverImage,
           },
           rsvpToken: guest.token,
           hostName: event.host.name,
