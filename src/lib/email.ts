@@ -752,42 +752,42 @@ export async function sendEventChangeEmail({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Event Update: ${eventTitle}</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f5; padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f5f6fb 0%, #fff5e6 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(245, 158, 11, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); padding: 40px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">Event Updated</h1>
-                  <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0; font-size: 16px;">${eventTitle}</p>
+                <td style="background: linear-gradient(135deg, #f59e0b 0%, #9d4edd 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Event Updated</h1>
+                  <p style="color: rgba(255,255,255,0.9); margin: 12px 0 0; font-size: 16px; font-weight: 500;">${eventTitle}</p>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     ${guestName ? `Hi ${guestName},` : 'Hello,'}
                   </p>
-                  <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">
                     The event details have been updated. Here's what changed:
                   </p>
-                  
-                  <div style="background-color: #fef3c7; border-radius: 8px; padding: 24px; margin-bottom: 20px;">
-                    <ul style="color: #92400e; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.6;">
+
+                  <div style="background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(157,78,221,0.08) 100%); border-radius: 12px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.15);">
+                    <ul style="color: #4b5563; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
                       ${changesList}
                     </ul>
                   </div>
-                  
+
                   <div style="text-align: center;">
-                    <a href="${rsvpLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600;">
+                    <a href="${rsvpLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #9d4edd 100%); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(157, 78, 221, 0.3);">
                       View Event Details
                     </a>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td style="background-color: #f9fafb; padding: 20px 30px; text-align: center;">
-                  <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+                <td style="background: linear-gradient(135deg, rgba(245,158,11,0.05) 0%, rgba(157,78,221,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(157,78,221,0.1);">
+                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>
@@ -874,9 +874,9 @@ export async function sendRsvpChangeNotification({
   if (changeType === 'STATUS_CHANGED' && previousStatus) {
     const prevStatusLabel = statusLabels[previousStatus] || previousStatus;
     statusChangeInfo = `
-      <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 6px; margin: 20px 0;">
-        <p style="margin: 0; color: #92400e; font-size: 14px; font-weight: 600;">
-          Status Changed: ${prevStatusLabel} → ${currentStatusLabel}
+      <div style="background: linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(157,78,221,0.1) 100%); border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 0 12px 12px 0; margin: 20px 0;">
+        <p style="margin: 0; color: #0a0f2c; font-size: 14px; font-weight: 600;">
+          Status Changed: <span style="color: #9d4edd;">${prevStatusLabel}</span> → <span style="color: #9d4edd;">${currentStatusLabel}</span>
         </p>
       </div>
     `;
@@ -884,9 +884,9 @@ export async function sendRsvpChangeNotification({
 
   const additionalGuestsHtml = guest.additionalGuests && guest.additionalGuests.length > 0
     ? `
-      <div style="background-color: #f9fafb; padding: 16px; border-radius: 8px; margin: 20px 0;">
-        <p style="margin: 0 0 8px 0; color: #374151; font-size: 14px; font-weight: 600;">Additional Guests:</p>
-        <ul style="margin: 0; padding-left: 20px; color: #6b7280; font-size: 14px;">
+      <div style="background: linear-gradient(135deg, rgba(7,200,249,0.06) 0%, rgba(157,78,221,0.06) 100%); padding: 16px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(157,78,221,0.1);">
+        <p style="margin: 0 0 8px 0; color: #0a0f2c; font-size: 14px; font-weight: 600;">Additional Guests:</p>
+        <ul style="margin: 0; padding-left: 20px; color: #4b5563; font-size: 14px;">
           ${guest.additionalGuests.map(ag => `<li>${ag.name}</li>`).join('')}
         </ul>
       </div>
@@ -895,9 +895,9 @@ export async function sendRsvpChangeNotification({
 
   const dietaryNotesHtml = guest.dietaryNotes
     ? `
-      <div style="background-color: #f9fafb; padding: 16px; border-radius: 8px; margin: 20px 0;">
-        <p style="margin: 0 0 8px 0; color: #374151; font-size: 14px; font-weight: 600;">Dietary Notes:</p>
-        <p style="margin: 0; color: #6b7280; font-size: 14px;">${guest.dietaryNotes}</p>
+      <div style="background: linear-gradient(135deg, rgba(7,200,249,0.06) 0%, rgba(157,78,221,0.06) 100%); padding: 16px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(157,78,221,0.1);">
+        <p style="margin: 0 0 8px 0; color: #0a0f2c; font-size: 14px; font-weight: 600;">Dietary Notes:</p>
+        <p style="margin: 0; color: #4b5563; font-size: 14px;">${guest.dietaryNotes}</p>
       </div>
     `
     : '';
@@ -910,60 +910,60 @@ export async function sendRsvpChangeNotification({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${changeTypeLabels[changeType]}</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f5; padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f5f6fb 0%, #f5f6fb 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(157, 78, 221, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, ${changeTypeColors[changeType]} 0%, ${changeTypeColors[changeType]}dd 100%); padding: 40px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;">${changeTypeLabels[changeType]}</h1>
+                <td style="background: linear-gradient(135deg, ${changeTypeColors[changeType]} 0%, #9d4edd 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">${changeTypeLabels[changeType]}</h1>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     ${hostName ? `Hi ${hostName},` : 'Hello,'}
                   </p>
                   <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">
-                    ${changeType === 'NEW' 
+                    ${changeType === 'NEW'
                       ? `A guest has submitted an RSVP for your event.`
                       : changeType === 'STATUS_CHANGED'
                       ? `A guest has updated their RSVP status for your event.`
                       : `A guest has updated their RSVP details for your event.`
                     }
                   </p>
-                  
-                  <div style="background-color: #f9fafb; border-radius: 8px; padding: 24px; margin-bottom: 30px;">
-                    <h2 style="color: #111827; font-size: 22px; margin: 0 0 16px; font-weight: 600;">
+
+                  <div style="background: linear-gradient(135deg, rgba(7,200,249,0.08) 0%, rgba(157,78,221,0.08) 100%); border-radius: 12px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(157,78,221,0.15);">
+                    <h2 style="color: #0a0f2c; font-size: 22px; margin: 0 0 16px; font-weight: 700;">
                       ${event.title}
                     </h2>
-                    <p style="color: #6b7280; font-size: 14px; margin: 0 0 8px;"><strong>When:</strong> ${formatDateTime(event.date)}</p>
-                    ${event.location ? `<p style="color: #6b7280; font-size: 14px; margin: 0 0 8px;"><strong>Where:</strong> ${event.location}</p>` : ''}
+                    <p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">When:</strong> ${formatDateTime(event.date)}</p>
+                    ${event.location ? `<p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">Where:</strong> ${event.location}</p>` : ''}
                   </div>
 
-                  <div style="background-color: #ffffff; border: 2px solid #e5e7eb; border-radius: 8px; padding: 24px; margin-bottom: 30px;">
-                    <h3 style="color: #111827; font-size: 18px; margin: 0 0 16px; font-weight: 600;">Guest Information</h3>
-                    <p style="color: #374151; font-size: 16px; margin: 0 0 8px;"><strong>Name:</strong> ${guestName}</p>
-                    <p style="color: #374151; font-size: 16px; margin: 0 0 16px;"><strong>Email:</strong> ${guest.email}</p>
-                    <div style="display: inline-block; background-color: ${currentStatusColor}20; color: ${currentStatusColor}; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 600;">
+                  <div style="background-color: #ffffff; border: 2px solid rgba(157,78,221,0.15); border-radius: 12px; padding: 24px; margin-bottom: 30px;">
+                    <h3 style="color: #0a0f2c; font-size: 18px; margin: 0 0 16px; font-weight: 700;">Guest Information</h3>
+                    <p style="color: #374151; font-size: 16px; margin: 0 0 8px;"><strong style="color: #9d4edd;">Name:</strong> ${guestName}</p>
+                    <p style="color: #374151; font-size: 16px; margin: 0 0 16px;"><strong style="color: #9d4edd;">Email:</strong> ${guest.email}</p>
+                    <div style="display: inline-block; background-color: ${currentStatusColor}20; color: ${currentStatusColor}; padding: 6px 12px; border-radius: 12px; font-size: 14px; font-weight: 600;">
                       Status: ${currentStatusLabel}
                     </div>
                     ${statusChangeInfo}
                     ${additionalGuestsHtml}
                     ${dietaryNotesHtml}
                   </div>
-                  
+
                   <div style="text-align: center;">
-                    <a href="${eventUrl}" style="display: inline-block; background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600;">
+                    <a href="${eventUrl}" style="display: inline-block; background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 100%); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(157, 78, 221, 0.3);">
                       View Event & Guest List
                     </a>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td style="background-color: #f9fafb; padding: 20px 30px; text-align: center;">
-                  <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+                <td style="background: linear-gradient(135deg, rgba(7,200,249,0.05) 0%, rgba(157,78,221,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(157,78,221,0.1);">
+                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>
