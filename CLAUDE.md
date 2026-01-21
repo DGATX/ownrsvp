@@ -68,3 +68,79 @@ All API routes are in `src/app/api/`:
 - UI primitives in `src/components/ui/` (shadcn/ui style with Radix primitives)
 - Feature components directly in `src/components/`
 - Uses `class-variance-authority` for component variants
+
+## Aurora Borealis Theme
+
+All UI changes MUST adhere to the Aurora Borealis design system. This includes components, pages, and email templates.
+
+### Core Color Palette
+
+| Color | Hex | HSL | Usage |
+|-------|-----|-----|-------|
+| Cyan (Primary) | `#07c8f9` | `189 94% 43%` | Primary actions, links, focus rings |
+| Purple (Secondary) | `#9d4edd` | `258 90% 66%` | Secondary actions, accents, borders |
+| Pink (Accent) | `#f5267e` | `330 81% 60%` | Highlights, special emphasis |
+| Amber (CTA) | `#f59e0b` | `38 92% 50%` | Call-to-action buttons, warnings |
+| Dark Navy | `#0a0f2c` | `240 40% 10%` | Text in light mode, background in dark |
+| Light Background | `#f5f6fb` | `240 30% 97%` | Page background (light mode) |
+
+### Gradients
+
+Use these standard gradient patterns:
+```css
+/* Primary Aurora gradient (headers, hero sections) */
+background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 50%, #f5267e 100%);
+
+/* Cyan to Purple (buttons, cards) */
+background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 100%);
+
+/* Purple to Pink (accents) */
+background: linear-gradient(135deg, #9d4edd 0%, #f5267e 100%);
+
+/* Amber CTA button */
+background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+
+/* Subtle background tint */
+background: linear-gradient(180deg, #f5f6fb 0%, #fff5e6 100%);
+```
+
+### Design Tokens
+
+- **Border Radius**: `12px` (small), `16px` (cards/modals), `1rem` (default)
+- **Shadows**: Always use purple-tinted shadows
+  - Cards: `box-shadow: 0 4px 24px rgba(157, 78, 221, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);`
+  - Buttons: `box-shadow: 0 4px 14px rgba(157, 78, 221, 0.3);`
+- **Borders**: Use `rgba(157, 78, 221, 0.15)` for subtle borders
+
+### Email Template Guidelines
+
+For inline HTML email styles:
+- Body background: `#f5f6fb`
+- Outer table: gradient background
+- Card container: white with `border-radius: 16px` and purple-tinted shadow
+- Headers: Full-width aurora gradient (`#07c8f9` → `#9d4edd` → `#f5267e`)
+- Text colors: `#0a0f2c` (headings), `#374151` (body), `#4b5563` (secondary)
+- Accent text: `#9d4edd`
+- CTA buttons: Amber gradient with `border-radius: 12px`
+- Footer: Subtle gradient background, `#9d4edd` text
+
+### Tailwind Classes
+
+Use these custom classes from `globals.css`:
+- `.aurora-bg` - Adds subtle aurora radial gradients
+- `.aurora-animated` - Animated aurora background effect
+- `.gradient-text` - Animated gradient text
+- `.glass` - Glassmorphism card effect
+- `.glow-border` - Gradient border glow on hover
+- `.btn-aurora` - Primary aurora gradient button
+- `.card-glow` - Card hover glow effect
+- `.mesh-gradient` - Complex mesh gradient background
+
+### CSS Variables (for Tailwind)
+
+Access theme colors via CSS variables:
+```css
+--primary: 189 94% 43%;    /* Cyan */
+--secondary: 258 90% 66%;  /* Purple */
+--accent: 330 81% 60%;     /* Pink */
+```
