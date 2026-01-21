@@ -178,7 +178,11 @@ export async function POST(request: Request) {
         event: {
           title: 'Test Event - Email Configuration',
           date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          location: 'Test Location',
+          locationName: 'Test Venue',
+          streetAddress1: '123 Test Street',
+          city: 'Austin',
+          state: 'TX',
+          zipCode: '78701',
           description: 'This is a test email to verify your SMTP configuration is working correctly.',
         },
         rsvpToken: testToken,

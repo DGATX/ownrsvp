@@ -12,6 +12,7 @@ import { PublicNav } from '@/components/public-nav';
 import { AddToCalendar } from '@/components/add-to-calendar';
 import { ManageRsvp } from '@/components/manage-rsvp';
 import { QRCode } from '@/components/qr-code';
+import { formatAddressOneLine, formatAddressMultiLine, formatAddressForMaps, hasAddress } from '@/lib/address-utils';
 
 interface EventPageProps {
   params: Promise<{ slug: string }>;
@@ -142,28 +143,30 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                   <Calendar className="w-5 h-5 text-violet-600 dark:text-violet-400" />
                   {formatEventDateTime(event.date, event.timezone)}
                 </div>
-                {event.location && (
+                {hasAddress(event) && (
                   <div className="flex flex-col items-center gap-2">
                     <div className="flex items-center justify-center gap-2">
-                      <MapPin className="w-5 h-5 text-violet-600 dark:text-violet-400" />
+                      <MapPin className="w-5 h-5 text-violet-600 dark:text-violet-400 flex-shrink-0" />
                       <a
-                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddressForMaps(event))}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:underline text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300"
+                        className="hover:underline text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 text-center whitespace-pre-line"
                       >
-                        {event.location}
+                        {formatAddressMultiLine(event)}
                       </a>
                     </div>
-                    <a
-                      href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(event.location)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
-                    >
-                      <Navigation className="w-4 h-4" />
-                      Get Directions
-                    </a>
+                    {formatAddressForMaps(event) && (
+                      <a
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(formatAddressForMaps(event))}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                      >
+                        <Navigation className="w-4 h-4" />
+                        Get Directions
+                      </a>
+                    )}
                   </div>
                 )}
                 <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400">
@@ -190,7 +193,7 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                 <AddToCalendar
                   title={event.title}
                   description={event.description || ''}
-                  location={event.location}
+                  location={formatAddressOneLine(event)}
                   startDate={event.date}
                   endDate={event.endDate}
                   url={`${appUrl}/events/${event.slug}`}

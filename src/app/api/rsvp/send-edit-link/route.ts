@@ -67,7 +67,12 @@ export async function POST(request: Request) {
           select: {
             title: true,
             date: true,
-            location: true,
+            locationName: true,
+            streetAddress1: true,
+            streetAddress2: true,
+            city: true,
+            state: true,
+            zipCode: true,
           },
         },
       },
@@ -134,7 +139,7 @@ export async function POST(request: Request) {
                       <p style="color: #6b7280; font-size: 14px; margin: 0 0 8px;">
                         <strong>Date:</strong> ${new Date(guest.event.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                       </p>
-                      ${guest.event.location ? `<p style="color: #6b7280; font-size: 14px; margin: 0;"><strong>Location:</strong> ${guest.event.location}</p>` : ''}
+                      ${(guest.event.locationName || guest.event.streetAddress1) ? `<p style="color: #6b7280; font-size: 14px; margin: 0;"><strong>Location:</strong> ${[guest.event.locationName, guest.event.streetAddress1, guest.event.streetAddress2, guest.event.city, [guest.event.state, guest.event.zipCode].filter(Boolean).join(' ')].filter(Boolean).join(', ')}</p>` : ''}
                     </div>
                     
                     <div style="text-align: center; margin-top: 30px;">

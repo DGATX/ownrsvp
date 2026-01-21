@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { format } from 'date-fns';
 import { parseReminderSchedule, serializeReminderSchedule, validateReminders } from '@/lib/reminder-utils';
 import { logger } from '@/lib/logger';
+import { formatAddressOneLine, AddressFields } from '@/lib/address-utils';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -72,7 +73,13 @@ export async function GET(request: Request, { params }: RouteParams) {
 const updateEventSchema = z.object({
   title: z.string().min(1, 'Title is required').optional(),
   description: z.string().nullable().optional(),
-  location: z.string().nullable().optional(),
+  // Structured address fields
+  locationName: z.string().nullable().optional(),
+  streetAddress1: z.string().nullable().optional(),
+  streetAddress2: z.string().nullable().optional(),
+  city: z.string().nullable().optional(),
+  state: z.string().nullable().optional(),
+  zipCode: z.string().nullable().optional(),
   date: z.string().transform((val) => {
     const date = new Date(val);
     if (isNaN(date.getTime())) {
@@ -97,8 +104,8 @@ const updateEventSchema = z.object({
 
 // Helper to detect significant changes
 function detectChanges(
-  existing: { title: string; date: Date; location: string | null },
-  updated: { title?: string; date?: Date; location?: string | null }
+  existing: { title: string; date: Date } & AddressFields,
+  updated: { title?: string; date?: Date } & Partial<AddressFields>
 ): { field: string; oldValue: string; newValue: string }[] {
   const changes: { field: string; oldValue: string; newValue: string }[] = [];
 
@@ -122,12 +129,31 @@ function detectChanges(
     }
   }
 
-  if (updated.location !== undefined && updated.location !== existing.location) {
-    changes.push({
-      field: 'Location',
-      oldValue: existing.location || '(No location)',
-      newValue: updated.location || '(No location)',
-    });
+  // Check for location changes (any of the address fields)
+  const addressFieldsToCheck: (keyof AddressFields)[] = ['locationName', 'streetAddress1', 'streetAddress2', 'city', 'state', 'zipCode'];
+  const hasAddressChange = addressFieldsToCheck.some(field =>
+    updated[field] !== undefined && updated[field] !== existing[field]
+  );
+
+  if (hasAddressChange) {
+    const existingAddress = formatAddressOneLine(existing);
+    const newAddressFields: AddressFields = {
+      locationName: updated.locationName !== undefined ? updated.locationName : existing.locationName,
+      streetAddress1: updated.streetAddress1 !== undefined ? updated.streetAddress1 : existing.streetAddress1,
+      streetAddress2: updated.streetAddress2 !== undefined ? updated.streetAddress2 : existing.streetAddress2,
+      city: updated.city !== undefined ? updated.city : existing.city,
+      state: updated.state !== undefined ? updated.state : existing.state,
+      zipCode: updated.zipCode !== undefined ? updated.zipCode : existing.zipCode,
+    };
+    const newAddress = formatAddressOneLine(newAddressFields);
+
+    if (existingAddress !== newAddress) {
+      changes.push({
+        field: 'Location',
+        oldValue: existingAddress || '(No location)',
+        newValue: newAddress || '(No location)',
+      });
+    }
   }
 
   return changes;
@@ -244,8 +270,24 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     if (updateData.description !== undefined) {
       updateFields.description = updateData.description || null;
     }
-    if (updateData.location !== undefined) {
-      updateFields.location = updateData.location || null;
+    // Structured address fields
+    if (updateData.locationName !== undefined) {
+      updateFields.locationName = updateData.locationName || null;
+    }
+    if (updateData.streetAddress1 !== undefined) {
+      updateFields.streetAddress1 = updateData.streetAddress1 || null;
+    }
+    if (updateData.streetAddress2 !== undefined) {
+      updateFields.streetAddress2 = updateData.streetAddress2 || null;
+    }
+    if (updateData.city !== undefined) {
+      updateFields.city = updateData.city || null;
+    }
+    if (updateData.state !== undefined) {
+      updateFields.state = updateData.state || null;
+    }
+    if (updateData.zipCode !== undefined) {
+      updateFields.zipCode = updateData.zipCode || null;
     }
     if (updateData.endDate !== undefined) {
       updateFields.endDate = updateData.endDate || null;

@@ -4,6 +4,7 @@ import { validateSmtpConfig, isEmailConfigured } from './env-validation';
 import { getEmailConfig, getAppUrl } from './config';
 import { prisma } from './prisma';
 import { logger } from './logger';
+import { formatAddressForEmail, hasAddress, AddressFields } from './address-utils';
 
 // Helper to get "from" address
 async function getFromAddress(): Promise<string> {
@@ -68,10 +69,9 @@ async function createTransporter() {
 
 export { isEmailConfigured };
 
-interface EventDetails {
+interface EventDetails extends AddressFields {
   title: string;
   date: Date;
-  location?: string | null;
   description?: string | null;
   coverImage?: string | null;
 }
@@ -145,7 +145,7 @@ export async function sendInvitation({
                     <p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;">
                       <strong style="color: #9d4edd;">When:</strong> ${formatDateTime(event.date)}
                     </p>
-                    ${event.location ? `<p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">Where:</strong> ${event.location}</p>` : ''}
+                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
                     ${event.description ? `<p style="color: #4b5563; font-size: 14px; margin: 16px 0 0; line-height: 1.5;">${event.description}</p>` : ''}
                   </div>
 
@@ -279,7 +279,7 @@ export async function sendReminder({
                     <p style="color: #4b5563; font-size: 14px; margin: 0;">
                       <strong style="color: #f5267e;">When:</strong> ${formatDateTime(event.date)}
                     </p>
-                    ${event.location ? `<p style="color: #4b5563; font-size: 14px; margin: 8px 0 0;"><strong style="color: #f5267e;">Where:</strong> ${event.location}</p>` : ''}
+                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 8px 0 0;"><strong style="color: #f5267e;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
                   </div>
 
                   <table width="100%" cellpadding="0" cellspacing="0">
@@ -414,7 +414,7 @@ export async function sendConfirmation({
                     <p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;">
                       <strong style="color: #07c8f9;">When:</strong> ${formatDateTime(event.date)}
                     </p>
-                    ${event.location ? `<p style="color: #4b5563; font-size: 14px; margin: 0;"><strong style="color: #07c8f9;">Where:</strong> ${event.location}</p>` : ''}
+                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 0;"><strong style="color: #07c8f9;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
                   </div>
                   ` : ''}
 
@@ -939,7 +939,7 @@ export async function sendRsvpChangeNotification({
                       ${event.title}
                     </h2>
                     <p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">When:</strong> ${formatDateTime(event.date)}</p>
-                    ${event.location ? `<p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">Where:</strong> ${event.location}</p>` : ''}
+                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
                   </div>
 
                   <div style="background-color: #ffffff; border: 2px solid rgba(157,78,221,0.15); border-radius: 12px; padding: 24px; margin-bottom: 30px;">

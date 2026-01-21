@@ -11,7 +11,13 @@ import { nonEmptyString, optionalString, dateStringSchema, optionalUuidSchema } 
 export const eventSchema = z.object({
   title: nonEmptyString,
   date: dateStringSchema,
-  location: optionalString,
+  // Structured address fields
+  locationName: optionalString,
+  streetAddress1: optionalString,
+  streetAddress2: optionalString,
+  city: optionalString,
+  state: optionalString,
+  zipCode: optionalString,
   description: optionalString,
   image: z.string().url('Invalid image URL').optional().nullable(),
   isPublic: z.boolean().default(false),

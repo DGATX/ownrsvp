@@ -10,7 +10,13 @@ import { logger } from '@/lib/logger';
 const createEventSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
-  location: z.string().optional(),
+  // Structured address fields
+  locationName: z.string().nullable().optional(),
+  streetAddress1: z.string().nullable().optional(),
+  streetAddress2: z.string().nullable().optional(),
+  city: z.string().nullable().optional(),
+  state: z.string().nullable().optional(),
+  zipCode: z.string().nullable().optional(),
   date: z.string().transform((val) => {
     const date = new Date(val);
     if (isNaN(date.getTime())) {
@@ -51,7 +57,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { title, description, location, date, endDate, rsvpDeadline, timezone, coverImage, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, replyTo, isPublic } = parsed.data;
+    const { title, description, locationName, streetAddress1, streetAddress2, city, state, zipCode, date, endDate, rsvpDeadline, timezone, coverImage, photoAlbumUrl: rawPhotoAlbumUrl, reminderSchedule, maxGuestsPerInvitee, replyTo, isPublic } = parsed.data;
 
     // Validate end date is not before start date
     if (endDate && endDate < date) {
@@ -122,7 +128,12 @@ export async function POST(request: Request) {
       title: String(title),
       slug: String(slug),
       description: description ? String(description) : null,
-      location: location ? String(location) : null,
+      locationName: locationName ? String(locationName) : null,
+      streetAddress1: streetAddress1 ? String(streetAddress1) : null,
+      streetAddress2: streetAddress2 ? String(streetAddress2) : null,
+      city: city ? String(city) : null,
+      state: state ? String(state) : null,
+      zipCode: zipCode ? String(zipCode) : null,
       date: date instanceof Date ? date : new Date(date),
       endDate: endDate ? (endDate instanceof Date ? endDate : new Date(endDate)) : null,
       rsvpDeadline: rsvpDeadline ? (rsvpDeadline instanceof Date ? rsvpDeadline : new Date(rsvpDeadline)) : null,

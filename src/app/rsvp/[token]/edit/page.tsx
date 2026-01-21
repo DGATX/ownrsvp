@@ -13,6 +13,7 @@ import { validateGuestLimit } from '@/lib/rsvp-validation';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { formatEventDateTime } from '@/lib/timezone';
+import { formatAddressMultiLine, hasAddress, AddressFields } from '@/lib/address-utils';
 
 interface Guest {
   id: string;
@@ -28,10 +29,9 @@ interface Guest {
     title: string;
     date: Date;
     timezone: string | null;
-    location: string | null;
     slug: string;
     maxGuestsPerInvitee: number | null;
-  };
+  } & AddressFields;
 }
 
 export default function EditRsvpPage() {
@@ -187,9 +187,9 @@ export default function EditRsvpPage() {
                 <div className="flex items-center gap-2">
                   <span>{formatEventDateTime(guest.event.date, guest.event.timezone)}</span>
                 </div>
-                {guest.event.location && (
+                {hasAddress(guest.event) && (
                   <div className="flex items-center gap-2">
-                    <span>{guest.event.location}</span>
+                    <span className="whitespace-pre-line">{formatAddressMultiLine(guest.event)}</span>
                   </div>
                 )}
               </div>

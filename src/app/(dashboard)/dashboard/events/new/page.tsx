@@ -26,7 +26,12 @@ export default function NewEventPage() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    location: '',
+    locationName: '',
+    streetAddress1: '',
+    streetAddress2: '',
+    city: '',
+    state: '',
+    zipCode: '',
     date: '',
     time: '12:00',
     endDate: '',
@@ -100,14 +105,24 @@ export default function NewEventPage() {
 
       const title = formDataObj.get('title') as string;
       const description = formDataObj.get('description') as string;
-      const location = formDataObj.get('location') as string;
+      const locationName = formDataObj.get('locationName') as string;
+      const streetAddress1 = formDataObj.get('streetAddress1') as string;
+      const streetAddress2 = formDataObj.get('streetAddress2') as string;
+      const city = formDataObj.get('city') as string;
+      const state = formDataObj.get('state') as string;
+      const zipCode = formDataObj.get('zipCode') as string;
       const photoAlbumUrl = formDataObj.get('photoAlbumUrl') as string;
       const replyTo = formDataObj.get('replyTo') as string;
 
       const payload: Record<string, any> = {
         title,
         description,
-        location,
+        locationName: locationName || null,
+        streetAddress1: streetAddress1 || null,
+        streetAddress2: streetAddress2 || null,
+        city: city || null,
+        state: state || null,
+        zipCode: zipCode || null,
         date: dateTime.toISOString(),
         endDate: endDateTime?.toISOString(),
         rsvpDeadline: rsvpDeadline?.toISOString(),
@@ -218,17 +233,85 @@ export default function NewEventPage() {
               disabled={isLoading}
             />
 
-            <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
-              <Input
-                id="location"
-                name="location"
-                placeholder="123 Main St, or Virtual (Zoom link)"
-                value={formData.location}
-                onChange={handleChange}
-                disabled={isLoading}
-                data-testid="event-location-input"
-              />
+            {/* Location Section */}
+            <div className="space-y-4">
+              <Label className="text-base font-medium">Location</Label>
+              <div className="space-y-3 pl-0">
+                <div className="space-y-2">
+                  <Label htmlFor="locationName" className="text-sm">Location Name</Label>
+                  <Input
+                    id="locationName"
+                    name="locationName"
+                    placeholder="Grand Ballroom, Zoom Meeting, etc."
+                    value={formData.locationName}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    data-testid="event-location-name-input"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="streetAddress1" className="text-sm">Street Address</Label>
+                  <Input
+                    id="streetAddress1"
+                    name="streetAddress1"
+                    placeholder="123 Main St"
+                    value={formData.streetAddress1}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    data-testid="event-street-address-1-input"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="streetAddress2" className="text-sm">Street Address Line 2</Label>
+                  <Input
+                    id="streetAddress2"
+                    name="streetAddress2"
+                    placeholder="Apt, Suite, Floor (optional)"
+                    value={formData.streetAddress2}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    data-testid="event-street-address-2-input"
+                  />
+                </div>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="city" className="text-sm">City</Label>
+                    <Input
+                      id="city"
+                      name="city"
+                      placeholder="Austin"
+                      value={formData.city}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                      data-testid="event-city-input"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state" className="text-sm">State</Label>
+                    <Input
+                      id="state"
+                      name="state"
+                      placeholder="TX"
+                      value={formData.state}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                      data-testid="event-state-input"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="zipCode" className="text-sm">Zip Code</Label>
+                    <Input
+                      id="zipCode"
+                      name="zipCode"
+                      placeholder="78701"
+                      value={formData.zipCode}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                      data-testid="event-zip-code-input"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="space-y-2">

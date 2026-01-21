@@ -29,7 +29,12 @@ export default function EditEventPage() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    location: '',
+    locationName: '',
+    streetAddress1: '',
+    streetAddress2: '',
+    city: '',
+    state: '',
+    zipCode: '',
     date: '',
     time: '',
     endDate: '',
@@ -63,7 +68,12 @@ export default function EditEventPage() {
         setFormData({
           title: event.title,
           description: event.description || '',
-          location: event.location || '',
+          locationName: event.locationName || '',
+          streetAddress1: event.streetAddress1 || '',
+          streetAddress2: event.streetAddress2 || '',
+          city: event.city || '',
+          state: event.state || '',
+          zipCode: event.zipCode || '',
           date: date.toISOString().split('T')[0],
           time: date.toTimeString().slice(0, 5),
           endDate: endDate ? endDate.toISOString().split('T')[0] : '',
@@ -108,7 +118,12 @@ export default function EditEventPage() {
 
       const title = formDataObj.get('title') as string;
       const description = formDataObj.get('description') as string;
-      const location = formDataObj.get('location') as string;
+      const locationName = formDataObj.get('locationName') as string;
+      const streetAddress1 = formDataObj.get('streetAddress1') as string;
+      const streetAddress2 = formDataObj.get('streetAddress2') as string;
+      const city = formDataObj.get('city') as string;
+      const state = formDataObj.get('state') as string;
+      const zipCode = formDataObj.get('zipCode') as string;
       const date = formDataObj.get('date') as string;
       const time = formDataObj.get('time') as string;
       const endDate = formDataObj.get('endDate') as string;
@@ -158,7 +173,12 @@ export default function EditEventPage() {
         body: JSON.stringify({
           title,
           description: description || null,
-          location: location || null,
+          locationName: locationName || null,
+          streetAddress1: streetAddress1 || null,
+          streetAddress2: streetAddress2 || null,
+          city: city || null,
+          state: state || null,
+          zipCode: zipCode || null,
           date: dateTime.toISOString(),
           endDate: endDateTime?.toISOString() || null,
           rsvpDeadline: rsvpDeadline?.toISOString() || null,
@@ -291,16 +311,85 @@ export default function EditEventPage() {
               disabled={isLoading}
             />
 
-            <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
-              <Input
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                disabled={isLoading}
-                data-testid="event-location-input"
-              />
+            {/* Location Section */}
+            <div className="space-y-4">
+              <Label className="text-base font-medium">Location</Label>
+              <div className="space-y-3 pl-0">
+                <div className="space-y-2">
+                  <Label htmlFor="locationName" className="text-sm">Location Name</Label>
+                  <Input
+                    id="locationName"
+                    name="locationName"
+                    placeholder="Grand Ballroom, Zoom Meeting, etc."
+                    value={formData.locationName}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    data-testid="event-location-name-input"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="streetAddress1" className="text-sm">Street Address</Label>
+                  <Input
+                    id="streetAddress1"
+                    name="streetAddress1"
+                    placeholder="123 Main St"
+                    value={formData.streetAddress1}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    data-testid="event-street-address-1-input"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="streetAddress2" className="text-sm">Street Address Line 2</Label>
+                  <Input
+                    id="streetAddress2"
+                    name="streetAddress2"
+                    placeholder="Apt, Suite, Floor (optional)"
+                    value={formData.streetAddress2}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    data-testid="event-street-address-2-input"
+                  />
+                </div>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="city" className="text-sm">City</Label>
+                    <Input
+                      id="city"
+                      name="city"
+                      placeholder="Austin"
+                      value={formData.city}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                      data-testid="event-city-input"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state" className="text-sm">State</Label>
+                    <Input
+                      id="state"
+                      name="state"
+                      placeholder="TX"
+                      value={formData.state}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                      data-testid="event-state-input"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="zipCode" className="text-sm">Zip Code</Label>
+                    <Input
+                      id="zipCode"
+                      name="zipCode"
+                      placeholder="78701"
+                      value={formData.zipCode}
+                      onChange={handleChange}
+                      disabled={isLoading}
+                      data-testid="event-zip-code-input"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="space-y-2">

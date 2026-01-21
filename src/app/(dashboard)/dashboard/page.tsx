@@ -9,6 +9,7 @@ import { Plus, Calendar, Users, Clock } from 'lucide-react';
 import { formatEventDateTimeShort } from '@/lib/timezone';
 import { EventCardActions } from '@/components/event-card-actions';
 import { PastEventsBulkActions } from '@/components/past-events-bulk-actions';
+import { formatAddressOneLine, hasAddress } from '@/lib/address-utils';
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -172,9 +173,9 @@ export default async function DashboardPage() {
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
-                          {event.location && (
+                          {hasAddress(event) && (
                             <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
-                              {event.location}
+                              {formatAddressOneLine(event)}
                             </p>
                           )}
                           <div className="flex items-center gap-4 text-sm">

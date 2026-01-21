@@ -141,7 +141,12 @@ export async function POST(request: Request) {
           event: {
             title: event.title,
             date: event.date,
-            location: event.location,
+            locationName: event.locationName,
+            streetAddress1: event.streetAddress1,
+            streetAddress2: event.streetAddress2,
+            city: event.city,
+            state: event.state,
+            zipCode: event.zipCode,
           },
           status,
           rsvpToken: guest.token,
@@ -168,7 +173,12 @@ export async function POST(request: Request) {
             event: {
               title: event.title,
               date: event.date,
-              location: event.location,
+              locationName: event.locationName,
+              streetAddress1: event.streetAddress1,
+              streetAddress2: event.streetAddress2,
+              city: event.city,
+              state: event.state,
+              zipCode: event.zipCode,
               description: event.description,
             },
             guest: {

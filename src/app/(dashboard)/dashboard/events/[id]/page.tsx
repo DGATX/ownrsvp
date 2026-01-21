@@ -17,6 +17,7 @@ import { DeleteEventButton } from '@/components/delete-event-button';
 import { ManageCoHosts } from '@/components/manage-cohosts';
 import { QRCode } from '@/components/qr-code';
 import { ReminderSection } from '@/components/reminder-section';
+import { formatAddressOneLine, formatAddressMultiLine, formatAddressForMaps, hasAddress } from '@/lib/address-utils';
 
 interface EventPageProps {
   params: Promise<{ id: string }>;
@@ -147,28 +148,32 @@ export default async function EventPage({ params }: EventPageProps) {
                     {formatEventDateTime(event.date, event.timezone)}
                     {event.endDate && ` - ${formatEventDateTime(event.endDate, event.timezone)}`}
                   </div>
-                  {event.location && (
+                  {hasAddress(event) && (
                     <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
+                      <div className="flex items-start gap-2">
+                        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <div className="flex flex-col">
+                          <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddressForMaps(event))}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:underline text-primary whitespace-pre-line"
+                          >
+                            {formatAddressMultiLine(event)}
+                          </a>
+                        </div>
+                      </div>
+                      {formatAddressForMaps(event) && (
                         <a
-                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                          href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(formatAddressForMaps(event))}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="hover:underline text-primary"
+                          className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors w-fit"
                         >
-                          {event.location}
+                          <Navigation className="w-4 h-4" />
+                          Get Directions
                         </a>
-                      </div>
-                      <a
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(event.location)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors w-fit"
-                      >
-                        <Navigation className="w-4 h-4" />
-                        Get Directions
-                      </a>
+                      )}
                     </div>
                   )}
                   {event.rsvpDeadline && (
@@ -185,7 +190,7 @@ export default async function EventPage({ params }: EventPageProps) {
               <AddToCalendar
                 title={event.title}
                 description={event.description || ''}
-                location={event.location}
+                location={formatAddressOneLine(event)}
                 startDate={event.date}
                 endDate={event.endDate}
                 url={publicUrl}

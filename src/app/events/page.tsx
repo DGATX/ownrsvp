@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
 import { formatEventDateTimeShort } from '@/lib/timezone';
 import { PublicNav } from '@/components/public-nav';
+import { formatAddressOneLine, hasAddress } from '@/lib/address-utils';
 
 // Force dynamic rendering to avoid database queries at build time
 export const dynamic = 'force-dynamic';
@@ -81,10 +82,10 @@ export default async function PublicEventsPage() {
                           <Calendar className="w-4 h-4" />
                           {formatEventDateTimeShort(event.date, event.timezone)}
                         </div>
-                        {event.location && (
+                        {hasAddress(event) && (
                           <div className="flex items-center gap-2 line-clamp-1">
                             <MapPin className="w-4 h-4 shrink-0" />
-                            <span className="truncate">{event.location}</span>
+                            <span className="truncate">{formatAddressOneLine(event)}</span>
                           </div>
                         )}
                       </div>

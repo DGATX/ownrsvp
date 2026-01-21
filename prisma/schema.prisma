@@ -72,7 +72,12 @@ model Event {
   slug            String    @unique
   title           String
   description     String?
-  location        String?
+  locationName    String?   // Name of venue (e.g., "Grand Ballroom")
+  streetAddress1  String?   // Street address line 1
+  streetAddress2  String?   // Street address line 2 (apt, suite, etc.)
+  city            String?
+  state           String?
+  zipCode         String?
   date            DateTime
   endDate         DateTime?
   rsvpDeadline    DateTime?
