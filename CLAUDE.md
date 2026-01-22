@@ -28,6 +28,20 @@ docker compose logs app  # View application logs
 docker buildx build --platform linux/amd64,linux/arm64 -t dgatx/ownrsvp:latest --push .
 ```
 
+## Docker Multi-Platform Requirements
+
+**CRITICAL:** All Docker images MUST be built for multiple platforms to ensure compatibility across Windows, Mac (Intel and Apple Silicon), and Linux systems.
+
+When building Docker images, ALWAYS use the `--platform` flag with `docker buildx`:
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t dgatx/ownrsvp:latest --push .
+```
+
+- `linux/amd64` - Supports Windows, Linux, and Intel Macs
+- `linux/arm64` - Supports Apple Silicon Macs (M1/M2/M3) and ARM-based Linux systems
+
+Never build single-platform images. This ensures users on any operating system can run the OwnRSVP Docker container without compatibility issues.
+
 ## Architecture
 
 ### Authentication Flow
