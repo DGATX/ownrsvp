@@ -14,11 +14,11 @@ npm run dev              # Start development server (localhost:3000)
 npm run build            # Build for production (runs prisma generate first)
 npm run lint             # Run ESLint
 
-# Database
-npm run db:push          # Push schema changes to database (no migrations)
-npm run db:migrate       # Create and apply migrations
+# Database (IMPORTANT: Always use migrations!)
+npm run db:migrate       # Create and apply migrations (USE THIS for schema changes)
 npm run db:studio        # Open Prisma Studio GUI
 npm run db:seed          # Seed database with demo data
+# npm run db:push        # DO NOT USE - breaks existing user databases
 
 # Docker
 docker compose up -d     # Start production stack
@@ -69,6 +69,46 @@ Never build single-platform images. This ensures users on any operating system c
 - Uses SQLite for both development (`file:./dev.db`) and Docker (`/app/data/ownrsvp.db`)
 - Path alias: `@/*` maps to `./src/*`
 - Key models: User, Event, Guest, AdditionalGuest, Comment, EventCoHost, AppConfig
+
+## Database Migration Workflow (CRITICAL)
+
+**NEVER use `prisma db push` for schema changes.** This command updates your local dev database directly without creating migration files, which breaks existing user databases when they upgrade.
+
+### When Modifying `schema.prisma`:
+
+1. **Make your schema changes** in `prisma/schema.prisma`
+
+2. **Create a migration** (this generates SQL and applies it to dev.db):
+   ```bash
+   npx prisma migrate dev --name descriptive_name
+   # Example: npx prisma migrate dev --name add_address_fields
+   ```
+
+3. **Review the generated migration** in `prisma/migrations/[timestamp]_[name]/migration.sql`
+
+4. **Test the migration** by resetting and re-applying:
+   ```bash
+   # Optional: test migration from scratch
+   rm prisma/dev.db
+   npx prisma migrate dev
+   ```
+
+5. **Commit both** the schema.prisma AND the new migration folder
+
+### Why This Matters
+
+- Docker images include the `prisma/migrations/` folder
+- On container start, `prisma migrate deploy` runs pending migrations
+- If schema changes aren't in a migration file, existing user databases won't be updated
+- This causes "column does not exist" errors for users upgrading from older versions
+
+### Migration File Naming
+
+Use descriptive names that explain the change:
+- `add_address_fields` - Adding new columns
+- `add_user_preferences` - New feature columns
+- `rename_location_to_venue` - Column renames
+- `add_guest_dietary_index` - Adding indexes
 
 ### API Route Patterns
 All API routes are in `src/app/api/`:
