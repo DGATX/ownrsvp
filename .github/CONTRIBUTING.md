@@ -25,18 +25,20 @@ See [README.md](../README.md) for complete setup instructions.
 # Install dependencies
 npm install
 
-# Set up database (using Docker)
-docker run --name rsvp-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=rsvp_db -p 5432:5432 -d postgres:16-alpine
-
 # Set up environment
 cp .env.example .env
 # Edit .env with your settings
 
-# Run database migrations
-npm run db:push
+# Run database migrations (creates SQLite database)
+npm run db:migrate
 
 # Start development server
 npm run dev
+```
+
+Alternatively, use the development Docker Compose setup:
+```bash
+docker compose -f docker-compose.dev.yml up
 ```
 
 ## Making Changes

@@ -59,11 +59,7 @@ export function PerGuestLimitEditor({
       if (useGlobal) {
         valueToSave = null; // Use global limit
       } else if (unlimitedGuests) {
-        valueToSave = null; // Unlimited (but different from useGlobal - we'll handle this differently)
-        // Actually, for unlimited per-guest, we could use a special value or just null
-        // For now, null means "use global", so we need a different approach
-        // Let's use a very large number or handle it differently
-        // Actually, let's just set it to null and the validation will check global
+        // null with !useGlobal signals unlimited for this specific guest
         valueToSave = null;
       } else {
         valueToSave = maxGuests || null;

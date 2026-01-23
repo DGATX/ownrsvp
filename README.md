@@ -120,7 +120,7 @@ cd ownrsvp
 npm install
 
 # Setup database
-npm run db:push
+npm run db:migrate
 
 # Run
 npm run dev

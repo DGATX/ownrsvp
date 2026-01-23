@@ -38,8 +38,8 @@ We aim to respond to security reports within 48 hours and will keep you updated 
 
 When deploying OwnRSVP:
 
-1. **Change default passwords**: Always change `POSTGRES_PASSWORD` from the default
-2. **Use strong secrets**: Generate strong `AUTH_SECRET` and `CRON_SECRET` values
+1. **Use strong secrets**: Generate strong `AUTH_SECRET` and `CRON_SECRET` values
+2. **Protect database file**: Ensure the SQLite database file (`/app/data/ownrsvp.db`) has proper file permissions
 3. **Enable HTTPS**: Use SSL/TLS certificates in production
 4. **Keep updated**: Regularly update Docker images and dependencies
 5. **Review access**: Limit admin access to trusted users only

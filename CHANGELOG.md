@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release of OwnRSVP
 - Event creation and management
 - Email invitations with HTML templates
-- SMS notifications (Twilio support)
 - RSVP tracking (Attending, Maybe, Not Attending)
 - Guest management with plus-ones
 - Dietary restrictions tracking
@@ -54,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Technical
 - Next.js 14 with App Router
-- PostgreSQL database with Prisma ORM
+- SQLite database with Prisma ORM
 - TypeScript throughout
 - Tailwind CSS for styling
 - Responsive design
