@@ -146,7 +146,7 @@ export function AppUrlConfig({ onConfigChange }: AppUrlConfigProps) {
         <p className="text-xs text-muted-foreground">
           The public URL where your OwnRSVP instance is accessible. Used for invitation links, RSVP links, and password reset emails.
           {source === 'environment' && !hasChanges && (
-            <span className="block mt-1 text-amber-600 dark:text-amber-400">
+            <span className="block mt-1 text-accent">
               Currently using environment variable. Save to override.
             </span>
           )}

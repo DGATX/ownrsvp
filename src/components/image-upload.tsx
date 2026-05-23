@@ -147,7 +147,7 @@ export function ImageUpload({
 
       {preview ? (
         <div className="relative group">
-          <div className="relative w-full h-64 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-700">
+          <div className="relative w-full h-64 rounded-[3px] overflow-hidden border-2 border-dashed border-border bg-muted">
             <img
               src={preview}
               alt="Event preview"
@@ -174,10 +174,10 @@ export function ImageUpload({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           className={cn(
-            'relative w-full h-64 rounded-lg border-2 border-dashed transition-colors cursor-pointer',
+            'relative w-full h-64 rounded-[3px] border-2 border-dashed transition-colors cursor-pointer',
             isDragging
-              ? 'border-violet-500 bg-violet-50 dark:bg-violet-950/20'
-              : 'border-gray-300 dark:border-gray-700 hover:border-violet-400 dark:hover:border-violet-600',
+              ? 'border-primary bg-primary/[0.06]'
+              : 'border-border hover:border-primary/60',
             disabled && 'opacity-50 cursor-not-allowed'
           )}
           onClick={() => !disabled && !isCompressing && fileInputRef.current?.click()}
@@ -191,11 +191,11 @@ export function ImageUpload({
             className="hidden"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-4">
-            <div className="w-16 h-16 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
-              <ImageIcon className="w-8 h-8 text-violet-600 dark:text-violet-400" />
+            <div className="w-16 h-16 rounded-[3px] bg-primary/10 flex items-center justify-center">
+              <ImageIcon className="w-8 h-8 text-primary" />
             </div>
             <div className="text-center">
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <p className="text-sm font-medium text-foreground">
                 Click to upload or drag and drop
               </p>
               <p className="text-xs text-muted-foreground mt-1">

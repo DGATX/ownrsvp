@@ -116,42 +116,47 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
   const rsvpDeadlinePassed = event.rsvpDeadline ? isPast(new Date(event.rsvpDeadline)) : false;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="min-h-screen aurora-bg">
       <PublicNav />
 
       <div className="pt-24 pb-16 px-4">
         <div className="max-w-3xl mx-auto space-y-8">
-          {/* Event Header */}
-          <Card className="border-0 shadow-xl overflow-hidden animate-slide-up">
-                  {event.coverImage && (
-                    <div className="w-full h-[512px] md:h-[640px] overflow-hidden">
-                      <img
-                        src={event.coverImage}
-                        alt={event.title}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                  )}
-            <div className="h-3 bg-gradient-to-r from-violet-600 to-indigo-600" />
-            <CardHeader className="text-center pb-2">
-              <p className="text-sm text-muted-foreground mb-2">
-                You&apos;re invited to
-              </p>
-              <CardTitle className="text-3xl md:text-4xl mb-4">{event.title}</CardTitle>
-              <div className="space-y-3 text-base text-muted-foreground">
-                <div className="flex items-center justify-center gap-2">
-                  <Calendar className="w-5 h-5 text-violet-600 dark:text-violet-400" />
-                  {formatEventDateTime(event.date, event.timezone)}
+          {/* Event Header — the invitation */}
+          <Card className="border border-border overflow-hidden animate-slide-up">
+            {event.coverImage && (
+              <div className="w-full max-h-[520px] overflow-hidden bg-foreground/[0.04] flex items-center justify-center border-b border-border">
+                <img
+                  src={event.coverImage}
+                  alt={event.title}
+                  className="w-full max-h-[520px] object-contain"
+                />
+              </div>
+            )}
+            <div className="h-1.5 bg-primary" />
+            <CardHeader className="text-center pb-2 pt-8">
+              <p className="label-mono mb-4">— You&apos;re invited to —</p>
+              <CardTitle className="text-4xl md:text-5xl mb-5 leading-[1.05]">{event.title}</CardTitle>
+
+              <hr className="ink-rule-double w-24 mx-auto mb-6" />
+
+              <div className="space-y-4 text-base text-muted-foreground">
+                <div>
+                  <p className="label-mono mb-1">When</p>
+                  <p className="flex items-center justify-center gap-2 text-foreground font-medium">
+                    <Calendar className="w-4 h-4 text-primary" />
+                    {formatEventDateTime(event.date, event.timezone)}
+                  </p>
                 </div>
                 {hasAddress(event) && (
                   <div className="flex flex-col items-center gap-2">
+                    <p className="label-mono mb-1">Where</p>
                     <div className="flex items-center justify-center gap-2">
-                      <MapPin className="w-5 h-5 text-violet-600 dark:text-violet-400 flex-shrink-0" />
+                      <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddressForMaps(event))}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:underline text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 text-center whitespace-pre-line"
+                        className="text-foreground font-medium hover:text-primary hover:underline text-center whitespace-pre-line"
                       >
                         {formatAddressMultiLine(event)}
                       </a>
@@ -161,7 +166,7 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                         href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(formatAddressForMaps(event))}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-[3px] border border-foreground/25 bg-transparent hover:bg-foreground hover:text-background transition-colors"
                       >
                         <Navigation className="w-4 h-4" />
                         Get Directions
@@ -169,27 +174,30 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                     )}
                   </div>
                 )}
-                <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400">
-                  <Users className="w-5 h-5" />
-                  {attendingCount} {attendingCount === 1 ? 'person' : 'people'} attending
-                </div>
                 {event.rsvpDeadline && (
-                  <div className={`flex items-center justify-center gap-2 ${rsvpDeadlinePassed ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'}`}>
-                    <Clock className="w-5 h-5" />
-                    {rsvpDeadlinePassed
-                      ? 'RSVP deadline has passed'
-                      : `RSVP by ${formatEventDateTimeShort(event.rsvpDeadline, event.timezone)}`
-                    }
+                  <div>
+                    <p className="label-mono mb-1">Respond by</p>
+                    <p className={`flex items-center justify-center gap-2 font-medium ${rsvpDeadlinePassed ? 'text-destructive' : 'text-accent'}`}>
+                      <Clock className="w-4 h-4" />
+                      {rsvpDeadlinePassed
+                        ? 'RSVP deadline has passed'
+                        : formatEventDateTimeShort(event.rsvpDeadline, event.timezone)
+                      }
+                    </p>
                   </div>
                 )}
                 {event.maxGuestsPerInvitee !== null && (
-                  <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                    <Users className="w-5 h-5" />
-                    Each invitee can bring up to {event.maxGuestsPerInvitee - 1} additional guest{event.maxGuestsPerInvitee - 1 !== 1 ? 's' : ''} (total of {event.maxGuestsPerInvitee} including themselves)
-                  </div>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                    Each invitee may bring up to {event.maxGuestsPerInvitee - 1} additional guest{event.maxGuestsPerInvitee - 1 !== 1 ? 's' : ''} ({event.maxGuestsPerInvitee} total, including themselves).
+                  </p>
                 )}
               </div>
-              <div className="flex justify-center mt-4">
+
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+                <span className="stamp stamp-skew text-primary border-primary animate-stamp">
+                  <Users className="w-3.5 h-3.5" />
+                  {attendingCount} {attendingCount === 1 ? 'guest' : 'guests'} attending
+                </span>
                 <AddToCalendar
                   title={event.title}
                   description={event.description || ''}
@@ -201,20 +209,21 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
               </div>
             </CardHeader>
             {event.description && (
-              <CardContent className="pt-4">
-                <div className="bg-muted/50 rounded-xl p-4">
-                  <p className="text-muted-foreground whitespace-pre-wrap">{event.description}</p>
+              <CardContent className="pt-6">
+                <div className="border-l-2 border-primary pl-5 py-1">
+                  <p className="text-foreground/80 whitespace-pre-wrap leading-relaxed">{event.description}</p>
                 </div>
               </CardContent>
             )}
-            <CardContent className="pt-2 text-center text-sm text-muted-foreground">
-              Hosted by {event.host.name || 'Anonymous'}
+            <CardContent className="pt-4 pb-8 text-center">
+              <p className="label-mono">Hosted by</p>
+              <p className="font-display text-lg text-foreground mt-1">{event.host.name || 'Anonymous'}</p>
             </CardContent>
           </Card>
 
           {/* Photo Album */}
           {event.photoAlbumUrl && (
-            <Card className="border-0 shadow-xl animate-slide-up" style={{ animationDelay: '0.05s' }}>
+            <Card className="border border-border animate-slide-up" style={{ animationDelay: '0.05s' }}>
               <CardHeader>
                 <CardTitle className="text-xl">Event Photos</CardTitle>
                 <CardDescription>
@@ -223,7 +232,7 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 p-2 bg-card border border-border rounded-[3px]">
                     <QRCode value={event.photoAlbumUrl} size={180} />
                   </div>
                   <div className="flex-1 text-center sm:text-left">
@@ -231,7 +240,7 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                       href={event.photoAlbumUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 hover:underline break-all text-lg font-medium"
+                      className="text-primary hover:underline break-all text-lg font-medium"
                     >
                       {event.photoAlbumUrl}
                     </a>
@@ -252,7 +261,7 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
           />
 
           {/* RSVP Form */}
-          <Card className="border-0 shadow-xl animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <Card className="border border-border animate-slide-up perf-top" style={{ animationDelay: '0.1s' }}>
             <CardHeader>
               <CardTitle className="text-xl">RSVP</CardTitle>
               <CardDescription>
@@ -277,10 +286,10 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
 
           {/* Who's Coming */}
           {event.guests.length > 0 && (
-            <Card className="border-0 shadow-xl animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <Card className="border border-border animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <CardHeader>
                 <CardTitle className="text-xl flex items-center gap-2">
-                  <Users className="w-5 h-5" />
+                  <Users className="w-5 h-5 text-primary" />
                   Who&apos;s Coming
                 </CardTitle>
               </CardHeader>
@@ -294,14 +303,14 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                     return allGuests.filter(Boolean).map((name, nameIndex) => (
                       <div
                         key={`${index}-${nameIndex}`}
-                        className="flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/30 rounded-full"
+                        className="flex items-center gap-2 pl-1 pr-3 py-1 bg-muted border border-border rounded-[3px]"
                       >
                         <Avatar className="w-6 h-6">
-                          <AvatarFallback className="bg-green-200 dark:bg-green-800 text-green-700 dark:text-green-300 text-xs">
+                          <AvatarFallback className="bg-primary/15 text-primary text-xs font-semibold">
                             {name.charAt(0).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="text-sm text-green-700 dark:text-green-300">
+                        <span className="text-sm text-foreground">
                           {name}
                         </span>
                       </div>
@@ -313,10 +322,10 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
           )}
 
           {/* Guest Wall */}
-          <Card className="border-0 shadow-xl animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <Card className="border border-border animate-slide-up" style={{ animationDelay: '0.3s' }}>
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
-                <MessageSquare className="w-5 h-5" />
+                <MessageSquare className="w-5 h-5 text-primary" />
                 Guest Wall
               </CardTitle>
               <CardDescription>
@@ -334,7 +343,7 @@ export default async function PublicEventPage({ params, searchParams }: EventPag
                   {event.comments.map((comment: typeof event.comments[0]) => (
                     <div key={comment.id} className="flex gap-3 pb-4 border-b last:border-0 last:pb-0">
                       <Avatar className="w-10 h-10 shrink-0">
-                        <AvatarFallback className="bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300 text-sm font-medium">
+                        <AvatarFallback className="bg-accent/15 text-accent text-sm font-semibold">
                           {comment.authorName.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>

@@ -49,11 +49,11 @@ export default function ForgotPasswordPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+      <div className="min-h-screen flex items-center justify-center p-4 aurora-bg">
         <Card className="w-full max-w-md border-0 shadow-2xl">
           <CardHeader className="text-center space-y-4">
-            <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-              <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+            <div className="mx-auto w-16 h-16 bg-primary/10 rounded-[3px] flex items-center justify-center">
+              <CheckCircle className="w-8 h-8 text-primary" />
             </div>
             <CardTitle className="text-2xl">Check Your Email</CardTitle>
             <CardDescription className="text-base">
@@ -85,11 +85,11 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="min-h-screen flex items-center justify-center p-4 aurora-bg">
       <Card className="w-full max-w-md border-0 shadow-2xl">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-violet-100 dark:bg-violet-900/30 rounded-full flex items-center justify-center">
-            <Mail className="w-8 h-8 text-violet-600 dark:text-violet-400" />
+          <div className="mx-auto w-16 h-16 bg-accent/15 rounded-[3px] flex items-center justify-center">
+            <Mail className="w-8 h-8 text-accent" />
           </div>
           <CardTitle className="text-2xl">Forgot Password?</CardTitle>
           <CardDescription className="text-base">

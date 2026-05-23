@@ -16,7 +16,7 @@ export function CopyButton({ text }: { text: string }) {
   return (
     <Button variant="outline" size="icon" onClick={handleCopy}>
       {copied ? (
-        <Check className="w-4 h-4 text-green-600" />
+        <Check className="w-4 h-4 text-primary" />
       ) : (
         <Copy className="w-4 h-4" />
       )}

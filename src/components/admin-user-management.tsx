@@ -412,11 +412,11 @@ export function AdminUserManagement({ users: initialUsers }: AdminUserManagement
                   className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
                 >
                   <div className="flex items-center gap-4 flex-1 min-w-0">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center flex-shrink-0 shadow-md">
+                    <div className="w-12 h-12 rounded-[3px] bg-primary flex items-center justify-center flex-shrink-0 shadow-[0_1px_0_hsl(var(--foreground)/0.15)]">
                       {user.role === 'ADMIN' ? (
-                        <Shield className="w-6 h-6 text-white" />
+                        <Shield className="w-6 h-6 text-primary-foreground" />
                       ) : (
-                        <User className="w-6 h-6 text-white" />
+                        <User className="w-6 h-6 text-primary-foreground" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">

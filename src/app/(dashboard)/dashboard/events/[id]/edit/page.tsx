@@ -258,7 +258,7 @@ export default function EditEventPage() {
   if (isFetching) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -568,7 +568,7 @@ export default function EditEventPage() {
             </div>
 
             {/* Notify Guests */}
-            <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+            <div className="bg-accent/[0.07] border-l-2 border-l-accent rounded-[3px] p-4">
               <div className="flex items-start gap-3">
                 <Checkbox
                   id="notifyGuests"

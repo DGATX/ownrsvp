@@ -82,7 +82,7 @@ export function FactoryResetButton() {
     <>
       <Button
         onClick={() => setIsFirstDialogOpen(true)}
-        className="gap-2 bg-orange-600 hover:bg-orange-700 text-white"
+        className="gap-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground"
       >
         <RotateCcw className="w-4 h-4" />
         Factory Reset
@@ -116,20 +116,20 @@ export function FactoryResetButton() {
               </ul>
             </div>
 
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4 rounded-md">
-              <p className="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-1">
+            <div className="bg-accent/[0.08] border-l-2 border-l-accent p-4 rounded-[3px]">
+              <p className="text-sm font-semibold text-foreground mb-1">
                 After reset:
               </p>
-              <p className="text-sm text-blue-800 dark:text-blue-300">
+              <p className="text-sm text-muted-foreground">
                 You will be redirected to create a new admin account, just like a fresh installation.
               </p>
             </div>
 
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4 rounded-md">
-              <p className="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-1">
+            <div className="bg-destructive/[0.08] border-l-2 border-l-destructive p-4 rounded-[3px]">
+              <p className="text-sm font-semibold text-destructive mb-1">
                 Warning:
               </p>
-              <p className="text-sm text-amber-800 dark:text-amber-300">
+              <p className="text-sm text-muted-foreground">
                 This action cannot be undone. All data will be permanently deleted.
               </p>
             </div>

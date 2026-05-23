@@ -2,52 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================================================================
+   The Printed Invitation — Letterpress Editorial design system
+   Ink on warm paper. One confident vermilion, an ochre accent, crisp rules.
+   ========================================================================= */
+
 @layer base {
   :root {
-    /* Aurora Borealis Theme - Light Mode (subtle version) */
-    --background: 240 30% 97%;
-    --foreground: 240 40% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 40% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 40% 10%;
-    --primary: 189 94% 43%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 258 90% 66%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 240 20% 94%;
-    --muted-foreground: 240 10% 45%;
-    --accent: 330 81% 60%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 258 30% 85%;
-    --input: 258 30% 85%;
-    --ring: 189 94% 43%;
-    --radius: 1rem;
+    /* Light mode — Paper */
+    --background: 38 44% 92%;
+    --foreground: 28 18% 12%;
+    --card: 40 46% 96%;
+    --card-foreground: 28 18% 12%;
+    --popover: 40 46% 96%;
+    --popover-foreground: 28 18% 12%;
+    --primary: 10 80% 47%;          /* vermilion — stamp ink */
+    --primary-foreground: 40 46% 96%;
+    --secondary: 28 16% 18%;        /* deep ink */
+    --secondary-foreground: 40 46% 96%;
+    --muted: 38 30% 86%;
+    --muted-foreground: 30 12% 38%;
+    --accent: 36 74% 42%;           /* ochre / gold */
+    --accent-foreground: 40 46% 96%;
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 40 46% 96%;
+    --border: 34 22% 74%;
+    --input: 34 22% 74%;
+    --ring: 10 80% 47%;
+    --radius: 0.25rem;
   }
 
   .dark {
-    /* Aurora Borealis Theme - Dark Mode (full effect) */
-    --background: 240 40% 10%;
-    --foreground: 0 0% 100%;
-    --card: 240 40% 13%;
-    --card-foreground: 0 0% 100%;
-    --popover: 240 40% 13%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 189 94% 43%;
-    --primary-foreground: 240 40% 10%;
-    --secondary: 258 90% 66%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 240 30% 18%;
-    --muted-foreground: 240 20% 70%;
-    --accent: 330 81% 60%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 60% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 258 40% 30%;
-    --input: 258 40% 25%;
-    --ring: 189 94% 43%;
+    /* Dark mode — Ink */
+    --background: 32 22% 7%;
+    --foreground: 38 40% 90%;
+    --card: 30 20% 10%;
+    --card-foreground: 38 40% 90%;
+    --popover: 30 20% 10%;
+    --popover-foreground: 38 40% 90%;
+    --primary: 12 88% 58%;
+    --primary-foreground: 32 22% 7%;
+    --secondary: 30 14% 20%;
+    --secondary-foreground: 38 40% 90%;
+    --muted: 30 14% 16%;
+    --muted-foreground: 36 16% 64%;
+    --accent: 38 78% 56%;
+    --accent-foreground: 32 22% 7%;
+    --destructive: 2 70% 52%;
+    --destructive-foreground: 38 40% 90%;
+    --border: 32 16% 22%;
+    --input: 32 16% 22%;
+    --ring: 12 88% 58%;
   }
 }
 
@@ -57,226 +62,200 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "ss01" 1, "liga" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Headlines are set in the editorial display serif. */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+    letter-spacing: -0.01em;
+  }
+
+  /* Paper grain — faint desaturated tooth layered over the whole page.
+     Sits on top with pointer-events:none so it never blocks interaction. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .dark body::after {
+    mix-blend-mode: screen;
+    opacity: 0.05;
   }
 }
 
-/* Aurora Background Effect */
-.aurora-bg {
+/* ----- Typography helpers ------------------------------------------------ */
+
+/* Uppercase tracked monospace label — printed-program / ticket metadata. */
+.label-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Big editorial headline. */
+.headline {
+  @apply font-display;
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+/* Display serif emphasis (replaces old rainbow .gradient-text). */
+.gradient-text {
+  @apply font-display;
+  color: hsl(var(--primary));
+  font-style: italic;
+}
+
+/* ----- Surfaces ---------------------------------------------------------- */
+
+/* Paper background with faint warmth — replaces .aurora-bg / .mesh-gradient. */
+.aurora-bg,
+.mesh-gradient {
   position: relative;
-  overflow: hidden;
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(ellipse at 12% -10%, hsl(var(--accent) / 0.10) 0%, transparent 45%),
+    radial-gradient(ellipse at 100% 0%, hsl(var(--primary) / 0.07) 0%, transparent 40%);
+}
+.dark .aurora-bg,
+.dark .mesh-gradient {
+  background-image:
+    radial-gradient(ellipse at 12% -10%, hsl(var(--accent) / 0.10) 0%, transparent 45%),
+    radial-gradient(ellipse at 100% 0%, hsl(var(--primary) / 0.10) 0%, transparent 40%);
+}
+/* The old animated aurora is intentionally static now. */
+.aurora-animated::before { content: none; }
+
+/* Frosted paper bar — used by the fixed nav (replaces glassmorphism). */
+.glass {
+  background: hsl(var(--background) / 0.82);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
-.aurora-bg::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(ellipse at 30% 20%, hsl(189 94% 43% / 0.15) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 80%, hsl(330 81% 60% / 0.12) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 50%, hsl(258 90% 66% / 0.1) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
+/* ----- Letterpress motifs ------------------------------------------------ */
+
+/* Hairline rule. */
+.ink-rule {
+  border: none;
+  border-top: 1px solid hsl(var(--border));
 }
 
-.dark .aurora-bg::before {
-  background: radial-gradient(ellipse at 30% 20%, hsl(189 94% 43% / 0.25) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 80%, hsl(330 81% 60% / 0.2) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 50%, hsl(258 90% 66% / 0.15) 0%, transparent 60%);
+/* Double rule — editorial divider. */
+.ink-rule-double {
+  border: none;
+  border-top: 3px double hsl(var(--foreground) / 0.55);
 }
 
-/* Animated Aurora Background */
-@keyframes aurora-shift {
-  0%, 100% {
-    transform: translate(0%, 0%) rotate(0deg);
-  }
-  25% {
-    transform: translate(5%, 5%) rotate(1deg);
-  }
-  50% {
-    transform: translate(-5%, 10%) rotate(-1deg);
-  }
-  75% {
-    transform: translate(-10%, -5%) rotate(2deg);
-  }
+/* Rubber-stamp badge: outlined, mono, slightly askew. */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.28em 0.6em;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  line-height: 1;
+}
+.stamp-skew { transform: rotate(-3deg); }
+
+/* Ticket perforation — dashed edge for tear-off RSVP sections. */
+.perf-top {
+  border-top: 2px dashed hsl(var(--border));
 }
 
-.aurora-animated::before {
-  animation: aurora-shift 20s ease-in-out infinite;
+/* Decorative paper card — crisp corners, hairline border, soft ink shadow. */
+.card-paper {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 1px 0 hsl(var(--foreground) / 0.04), 0 12px 30px -18px hsl(var(--foreground) / 0.30);
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Hover lift (replaces neon .card-glow). */
+.card-glow {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card-glow:hover {
+  transform: translateY(-2px);
+  border-color: hsl(var(--primary) / 0.5);
+  box-shadow: 0 14px 34px -18px hsl(var(--foreground) / 0.40);
 }
 
-::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-  border-radius: 4px;
+/* Ink hairline frame on hover (replaces gradient .glow-border). */
+.glow-border {
+  transition: border-color 0.25s ease;
+}
+.glow-border:hover {
+  border-color: hsl(var(--primary) / 0.6);
 }
 
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary) / 0.3);
-  border-radius: 4px;
+/* Solid vermilion button (legacy .btn-aurora alias). */
+.btn-aurora {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  transition: background 0.2s ease, transform 0.1s ease;
 }
+.btn-aurora:hover { background: hsl(var(--primary) / 0.88); }
+.btn-aurora:active { transform: translateY(1px); }
 
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.5);
-}
+/* ----- Animations -------------------------------------------------------- */
 
-/* Animation utilities */
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 20px hsl(189 94% 43% / 0.3),
-                0 0 40px hsl(258 90% 66% / 0.2);
-  }
-  50% {
-    box-shadow: 0 0 30px hsl(189 94% 43% / 0.5),
-                0 0 60px hsl(258 90% 66% / 0.3);
-  }
+@keyframes stamp-in {
+  0% { opacity: 0; transform: scale(1.4) rotate(-3deg); }
+  60% { opacity: 1; transform: scale(0.96) rotate(-3deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-3deg); }
 }
 
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+.animate-fade-in { animation: fade-in 0.4s ease-out both; }
+.animate-slide-up { animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-stamp { animation: stamp-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out;
-}
+/* ----- Chrome ------------------------------------------------------------ */
 
-.animate-slide-up {
-  animation: slide-up 0.4s ease-out;
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: hsl(var(--muted)); }
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--foreground) / 0.25);
+  border: 2px solid hsl(var(--muted));
+  border-radius: 0;
 }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.6); }
 
-.animate-glow {
-  animation: glow-pulse 3s ease-in-out infinite;
-}
-
-/* Gradient text - Aurora style */
-.gradient-text {
-  @apply bg-clip-text text-transparent;
-  background-image: linear-gradient(135deg, hsl(189 94% 43%), hsl(258 90% 66%), hsl(330 81% 60%));
-  background-size: 200% 200%;
-  animation: gradient-shift 5s ease infinite;
-}
-
-/* Glass effect - Aurora style */
-.glass {
-  @apply backdrop-blur-xl;
-  background: hsl(0 0% 100% / 0.8);
-  border: 1px solid hsl(258 90% 66% / 0.2);
-}
-
-.dark .glass {
-  background: hsl(240 40% 13% / 0.8);
-  border: 1px solid hsl(258 90% 66% / 0.3);
-  box-shadow: 0 0 30px hsl(258 90% 66% / 0.1);
-}
-
-/* Glowing border effect */
-.glow-border {
-  position: relative;
-}
-
-.glow-border::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, hsl(189 94% 43%), hsl(258 90% 66%), hsl(330 81% 60%));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
-}
-
-.glow-border:hover::before {
-  opacity: 1;
-}
-
-/* Gradient button */
-.btn-aurora {
-  background: linear-gradient(135deg, hsl(189 94% 43%), hsl(258 90% 66%));
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.btn-aurora:hover {
-  background: linear-gradient(135deg, hsl(189 94% 48%), hsl(258 90% 71%));
-  box-shadow: 0 0 20px hsl(189 94% 43% / 0.4),
-              0 0 40px hsl(258 90% 66% / 0.3);
-}
-
-/* Card hover glow */
-.card-glow {
-  transition: all 0.3s ease;
-}
-
-.card-glow:hover {
-  box-shadow: 0 0 30px hsl(258 90% 66% / 0.15);
-}
-
-.dark .card-glow:hover {
-  box-shadow: 0 0 40px hsl(258 90% 66% / 0.25),
-              0 0 60px hsl(189 94% 43% / 0.15);
-}
-
-/* Mesh gradient background for special sections */
-.mesh-gradient {
-  background:
-    radial-gradient(at 40% 20%, hsl(189 94% 43% / 0.3) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, hsl(258 90% 66% / 0.25) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, hsl(330 81% 60% / 0.2) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, hsl(189 94% 43% / 0.2) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsl(258 90% 66% / 0.25) 0px, transparent 50%),
-    radial-gradient(at 80% 100%, hsl(330 81% 60% / 0.2) 0px, transparent 50%),
-    hsl(var(--background));
-}
-
-/* Input focus glow */
 input:focus,
 textarea:focus,
 select:focus {
-  box-shadow: 0 0 0 2px hsl(var(--background)),
-              0 0 0 4px hsl(189 94% 43% / 0.3);
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring) / 0.45);
 }
 
-/* Selection color */
 ::selection {
-  background: hsl(258 90% 66% / 0.3);
-  color: hsl(var(--foreground));
+  background: hsl(var(--primary) / 0.85);
+  color: hsl(var(--primary-foreground));
 }

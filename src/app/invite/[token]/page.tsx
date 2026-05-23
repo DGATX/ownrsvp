@@ -147,10 +147,10 @@ export default function InviteAcceptancePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+      <div className="min-h-screen aurora-bg">
         <PublicNav />
         <div className="flex items-center justify-center min-h-screen pt-16">
-          <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
       </div>
     );
@@ -158,7 +158,7 @@ export default function InviteAcceptancePage() {
 
   if (!isValid || alreadyAccepted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+      <div className="min-h-screen aurora-bg">
         <PublicNav />
         <div className="pt-24 pb-16 px-4">
           <div className="max-w-md mx-auto">
@@ -166,9 +166,9 @@ export default function InviteAcceptancePage() {
               <CardHeader className="text-center">
                 <div className="flex justify-center mb-4">
                   {alreadyAccepted ? (
-                    <CheckCircle2 className="w-16 h-16 text-green-600" />
+                    <CheckCircle2 className="w-16 h-16 text-primary" />
                   ) : (
-                    <AlertCircle className="w-16 h-16 text-red-600" />
+                    <AlertCircle className="w-16 h-16 text-destructive" />
                   )}
                 </div>
                 <CardTitle className="text-2xl">
@@ -200,15 +200,15 @@ export default function InviteAcceptancePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="min-h-screen aurora-bg">
       <PublicNav />
       <div className="pt-24 pb-16 px-4">
         <div className="max-w-md mx-auto">
           <Card className="border-0 shadow-xl">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
-                  <Sparkles className="w-8 h-8 text-white" />
+                <div className="w-16 h-16 rounded-[3px] bg-primary flex items-center justify-center shadow-[0_1px_0_hsl(var(--foreground)/0.15)]">
+                  <Sparkles className="w-8 h-8 text-primary-foreground" />
                 </div>
               </div>
               <CardTitle className="text-2xl">Accept Invitation</CardTitle>

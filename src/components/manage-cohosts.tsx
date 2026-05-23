@@ -191,9 +191,9 @@ export function ManageCoHosts({ eventId, coHosts: initialCoHosts, isHost }: Mana
                         Co-hosts can manage guests and send invitations. Viewers can only see the guest list.
                       </p>
                     </div>
-                    <div className="rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 p-3">
-                      <p className="text-xs text-blue-900 dark:text-blue-200">
-                        <strong>Note:</strong> Co-hosts must already be registered users in the system. If someone needs an account, please contact an administrator to add them.
+                    <div className="rounded-[3px] bg-accent/[0.08] border-l-2 border-l-accent p-3">
+                      <p className="text-xs text-muted-foreground">
+                        <strong className="text-foreground">Note:</strong> Co-hosts must already be registered users in the system. If someone needs an account, please contact an administrator to add them.
                       </p>
                     </div>
                   </div>
@@ -237,7 +237,7 @@ export function ManageCoHosts({ eventId, coHosts: initialCoHosts, isHost }: Mana
               >
                 <div className="flex items-center gap-3">
                   <Avatar className="w-10 h-10">
-                    <AvatarFallback className="bg-violet-100 text-violet-700">
+                    <AvatarFallback className="bg-primary/15 text-primary font-semibold">
                       {(coHost.user.name || coHost.user.email).charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>

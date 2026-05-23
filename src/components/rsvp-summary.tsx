@@ -47,46 +47,46 @@ export function RsvpSummary({ stats, selectedFilter, onFilterChange }: RsvpSumma
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         <button
           onClick={() => handleCardClick('ATTENDING')}
           className={cn(
-            'w-full flex justify-between items-center p-3 rounded-lg bg-green-50 hover:bg-green-100 transition-colors cursor-pointer',
-            selectedFilter === 'ATTENDING' && 'ring-2 ring-green-500 bg-green-100'
+            'w-full flex justify-between items-center p-3 rounded-[3px] border-l-2 border-l-primary border-y border-r border-border bg-primary/[0.06] hover:bg-primary/[0.12] transition-colors cursor-pointer',
+            selectedFilter === 'ATTENDING' && 'ring-2 ring-primary bg-primary/[0.12]'
           )}
         >
-          <span className="text-green-700 font-medium">Attending</span>
-          <span className="text-2xl font-bold text-green-700">{stats.attending}</span>
+          <span className="label-mono text-primary">Attending</span>
+          <span className="text-2xl font-display font-semibold text-primary">{stats.attending}</span>
         </button>
         <button
           onClick={() => handleCardClick('MAYBE')}
           className={cn(
-            'w-full flex justify-between items-center p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition-colors cursor-pointer',
-            selectedFilter === 'MAYBE' && 'ring-2 ring-amber-500 bg-amber-100'
+            'w-full flex justify-between items-center p-3 rounded-[3px] border-l-2 border-l-accent border-y border-r border-border bg-accent/[0.06] hover:bg-accent/[0.12] transition-colors cursor-pointer',
+            selectedFilter === 'MAYBE' && 'ring-2 ring-accent bg-accent/[0.12]'
           )}
         >
-          <span className="text-amber-700 font-medium">Maybe</span>
-          <span className="text-2xl font-bold text-amber-700">{stats.maybe}</span>
+          <span className="label-mono text-accent">Maybe</span>
+          <span className="text-2xl font-display font-semibold text-accent">{stats.maybe}</span>
         </button>
         <button
           onClick={() => handleCardClick('NOT_ATTENDING')}
           className={cn(
-            'w-full flex justify-between items-center p-3 rounded-lg bg-red-50 hover:bg-red-100 transition-colors cursor-pointer',
-            selectedFilter === 'NOT_ATTENDING' && 'ring-2 ring-red-500 bg-red-100'
+            'w-full flex justify-between items-center p-3 rounded-[3px] border-l-2 border-l-foreground/40 border-y border-r border-border bg-foreground/[0.04] hover:bg-foreground/[0.08] transition-colors cursor-pointer',
+            selectedFilter === 'NOT_ATTENDING' && 'ring-2 ring-foreground/50 bg-foreground/[0.08]'
           )}
         >
-          <span className="text-red-700 font-medium">Not Attending</span>
-          <span className="text-2xl font-bold text-red-700">{stats.notAttending}</span>
+          <span className="label-mono text-foreground">Not Attending</span>
+          <span className="text-2xl font-display font-semibold text-foreground">{stats.notAttending}</span>
         </button>
         <button
           onClick={() => handleCardClick('PENDING')}
           className={cn(
-            'w-full flex justify-between items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer',
-            selectedFilter === 'PENDING' && 'ring-2 ring-gray-500 bg-gray-100'
+            'w-full flex justify-between items-center p-3 rounded-[3px] border-l-2 border-l-border border-y border-r border-border bg-muted/40 hover:bg-muted/70 transition-colors cursor-pointer',
+            selectedFilter === 'PENDING' && 'ring-2 ring-muted-foreground/40 bg-muted/70'
           )}
         >
-          <span className="text-gray-700 font-medium">Pending</span>
-          <span className="text-2xl font-bold text-gray-700">{stats.pending}</span>
+          <span className="label-mono text-muted-foreground">Pending</span>
+          <span className="text-2xl font-display font-semibold text-muted-foreground">{stats.pending}</span>
         </button>
       </CardContent>
     </Card>

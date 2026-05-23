@@ -40,7 +40,7 @@ export function EventComments({ comments }: EventCommentsProps) {
       {comments.map((comment) => (
         <div key={comment.id} className="flex gap-3 pb-4 border-b last:border-0 last:pb-0">
           <Avatar className="h-10 w-10 shrink-0">
-            <AvatarFallback className="bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300 text-sm font-medium">
+            <AvatarFallback className="bg-accent/15 text-accent text-sm font-semibold">
               {comment.authorName.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>

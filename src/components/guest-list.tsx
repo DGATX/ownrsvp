@@ -57,11 +57,15 @@ interface GuestListProps {
 }
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  PENDING: { label: 'Pending', className: 'bg-gray-100 text-gray-700' },
-  ATTENDING: { label: 'Attending', className: 'bg-green-100 text-green-700' },
-  NOT_ATTENDING: { label: 'Not Attending', className: 'bg-red-100 text-red-700' },
-  MAYBE: { label: 'Maybe', className: 'bg-amber-100 text-amber-700' },
+  PENDING: { label: 'Pending', className: 'bg-muted text-muted-foreground' },
+  ATTENDING: { label: 'Attending', className: 'bg-primary/15 text-primary' },
+  NOT_ATTENDING: { label: 'Not Attending', className: 'bg-foreground/10 text-foreground' },
+  MAYBE: { label: 'Maybe', className: 'bg-accent/15 text-accent' },
 };
+
+function getStatusConfig(status: string) {
+  return statusConfig[status] ?? { label: status, className: 'bg-muted text-muted-foreground' };
+}
 
 export function GuestList({ guests, eventId, filterStatus, globalMaxGuests, appUrl }: GuestListProps) {
   // Filter guests by status if filter is provided
@@ -392,7 +396,7 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests, appU
               )}
               {!bulkSelectMode && <div className="w-4 shrink-0" />}
               <Avatar className="h-10 w-10">
-                <AvatarFallback className="bg-violet-100 text-violet-700">
+                <AvatarFallback className="bg-primary/15 text-primary font-semibold">
                   {(guest.name || guest.email).charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
@@ -443,8 +447,8 @@ export function GuestList({ guests, eventId, filterStatus, globalMaxGuests, appU
               </div>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <Badge className={cn('shrink-0 w-[110px] justify-center text-center', statusConfig[guest.status].className)} variant="secondary">
-                {statusConfig[guest.status].label}
+              <Badge className={cn('shrink-0 w-[110px] justify-center text-center', getStatusConfig(guest.status).className)} variant="secondary">
+                {getStatusConfig(guest.status).label}
               </Badge>
               <div className="flex gap-1">
                 {/* Send Invitation / Resend Link button - available for all guests */}

@@ -200,8 +200,8 @@ export function PastEventsBulkActions({ events: initialEvents, isAdmin = false }
           return (
             <Card 
               key={event.id} 
-              className={`h-full opacity-75 hover:opacity-100 hover:shadow-lg transition-all overflow-hidden flex flex-col relative ${
-                isSelected ? 'ring-2 ring-violet-500' : ''
+              className={`h-full opacity-75 hover:opacity-100 card-glow transition-all overflow-hidden flex flex-col relative ${
+                isSelected ? 'ring-2 ring-primary' : ''
               }`}
             >
               {showCheckbox && (

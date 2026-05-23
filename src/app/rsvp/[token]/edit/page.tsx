@@ -160,8 +160,8 @@ export default function EditRsvpPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+      <div className="min-h-screen aurora-bg flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -171,7 +171,7 @@ export default function EditRsvpPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="min-h-screen aurora-bg">
       <div className="pt-24 pb-16 px-4">
         <div className="max-w-3xl mx-auto space-y-8">
           <Link href={`/events/${guest.event.slug}`} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground">
@@ -212,19 +212,19 @@ export default function EditRsvpPage() {
                     type="button"
                     onClick={() => setSelectedStatus('ATTENDING')}
                     className={cn(
-                      'p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2',
+                      'p-4 rounded-[3px] border-2 transition-all flex flex-col items-center gap-2',
                       selectedStatus === 'ATTENDING'
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-gray-200 hover:border-green-300'
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border hover:border-primary/50'
                     )}
                   >
                     <div className={cn(
-                      'w-10 h-10 rounded-full flex items-center justify-center',
-                      selectedStatus === 'ATTENDING' ? 'bg-green-500' : 'bg-gray-100'
+                      'w-10 h-10 rounded-[3px] flex items-center justify-center transition-colors',
+                      selectedStatus === 'ATTENDING' ? 'bg-primary' : 'bg-muted'
                     )}>
-                      <Check className={cn('w-5 h-5', selectedStatus === 'ATTENDING' ? 'text-white' : 'text-gray-400')} />
+                      <Check className={cn('w-5 h-5', selectedStatus === 'ATTENDING' ? 'text-primary-foreground' : 'text-muted-foreground')} />
                     </div>
-                    <span className={cn('font-medium', selectedStatus === 'ATTENDING' ? 'text-green-700' : 'text-gray-600')}>
+                    <span className={cn('font-medium', selectedStatus === 'ATTENDING' ? 'text-primary' : 'text-muted-foreground')}>
                       Attending
                     </span>
                   </button>
@@ -232,19 +232,19 @@ export default function EditRsvpPage() {
                     type="button"
                     onClick={() => setSelectedStatus('MAYBE')}
                     className={cn(
-                      'p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2',
+                      'p-4 rounded-[3px] border-2 transition-all flex flex-col items-center gap-2',
                       selectedStatus === 'MAYBE'
-                        ? 'border-amber-500 bg-amber-50'
-                        : 'border-gray-200 hover:border-amber-300'
+                        ? 'border-accent bg-accent/10'
+                        : 'border-border hover:border-accent/50'
                     )}
                   >
                     <div className={cn(
-                      'w-10 h-10 rounded-full flex items-center justify-center',
-                      selectedStatus === 'MAYBE' ? 'bg-amber-500' : 'bg-gray-100'
+                      'w-10 h-10 rounded-[3px] flex items-center justify-center transition-colors',
+                      selectedStatus === 'MAYBE' ? 'bg-accent' : 'bg-muted'
                     )}>
-                      <HelpCircle className={cn('w-5 h-5', selectedStatus === 'MAYBE' ? 'text-white' : 'text-gray-400')} />
+                      <HelpCircle className={cn('w-5 h-5', selectedStatus === 'MAYBE' ? 'text-accent-foreground' : 'text-muted-foreground')} />
                     </div>
-                    <span className={cn('font-medium', selectedStatus === 'MAYBE' ? 'text-amber-700' : 'text-gray-600')}>
+                    <span className={cn('font-medium', selectedStatus === 'MAYBE' ? 'text-accent' : 'text-muted-foreground')}>
                       Maybe
                     </span>
                   </button>
@@ -252,19 +252,19 @@ export default function EditRsvpPage() {
                     type="button"
                     onClick={() => setSelectedStatus('NOT_ATTENDING')}
                     className={cn(
-                      'p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2',
+                      'p-4 rounded-[3px] border-2 transition-all flex flex-col items-center gap-2',
                       selectedStatus === 'NOT_ATTENDING'
-                        ? 'border-red-500 bg-red-50'
-                        : 'border-gray-200 hover:border-red-300'
+                        ? 'border-foreground bg-foreground/5'
+                        : 'border-border hover:border-foreground/40'
                     )}
                   >
                     <div className={cn(
-                      'w-10 h-10 rounded-full flex items-center justify-center',
-                      selectedStatus === 'NOT_ATTENDING' ? 'bg-red-500' : 'bg-gray-100'
+                      'w-10 h-10 rounded-[3px] flex items-center justify-center transition-colors',
+                      selectedStatus === 'NOT_ATTENDING' ? 'bg-foreground' : 'bg-muted'
                     )}>
-                      <X className={cn('w-5 h-5', selectedStatus === 'NOT_ATTENDING' ? 'text-white' : 'text-gray-400')} />
+                      <X className={cn('w-5 h-5', selectedStatus === 'NOT_ATTENDING' ? 'text-background' : 'text-muted-foreground')} />
                     </div>
-                    <span className={cn('font-medium', selectedStatus === 'NOT_ATTENDING' ? 'text-red-700' : 'text-gray-600')}>
+                    <span className={cn('font-medium', selectedStatus === 'NOT_ATTENDING' ? 'text-foreground' : 'text-muted-foreground')}>
                       Can&apos;t Go
                     </span>
                   </button>
@@ -393,7 +393,7 @@ export default function EditRsvpPage() {
                           : guest?.event.maxGuestsPerInvitee;
                         return effectiveLimit !== null && effectiveLimit !== undefined;
                       })() && (
-                        <p className="text-xs text-amber-600 dark:text-amber-400">
+                        <p className="text-xs text-accent">
                           You&apos;ve reached the maximum number of guests allowed ({(() => {
                             const effectiveLimit = guest?.maxGuests !== null && guest?.maxGuests !== undefined 
                               ? guest.maxGuests 

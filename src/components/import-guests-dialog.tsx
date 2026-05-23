@@ -246,12 +246,12 @@ export function ImportGuestsDialog({ open, onOpenChange, eventId }: ImportGuests
           {parsedGuests.length > 0 && (
             <div className="space-y-2">
               <div className="flex items-center gap-4 text-sm">
-                <span className="flex items-center gap-1 text-green-600">
+                <span className="flex items-center gap-1 text-primary">
                   <CheckCircle className="w-4 h-4" />
                   {validCount} valid
                 </span>
                 {invalidCount > 0 && (
-                  <span className="flex items-center gap-1 text-red-600">
+                  <span className="flex items-center gap-1 text-destructive">
                     <XCircle className="w-4 h-4" />
                     {invalidCount} invalid
                   </span>
@@ -270,12 +270,12 @@ export function ImportGuestsDialog({ open, onOpenChange, eventId }: ImportGuests
                   </TableHeader>
                   <TableBody>
                     {parsedGuests.slice(0, 50).map((guest, idx) => (
-                      <TableRow key={idx} className={!guest.valid ? 'bg-red-50 dark:bg-red-900/20' : ''}>
+                      <TableRow key={idx} className={!guest.valid ? 'bg-destructive/10' : ''}>
                         <TableCell>
                           {guest.valid ? (
-                            <CheckCircle className="w-4 h-4 text-green-600" />
+                            <CheckCircle className="w-4 h-4 text-primary" />
                           ) : (
-                            <span title={guest.error}><AlertCircle className="w-4 h-4 text-red-600" /></span>
+                            <span title={guest.error}><AlertCircle className="w-4 h-4 text-destructive" /></span>
                           )}
                         </TableCell>
                         <TableCell className="text-sm">{guest.name || '-'}</TableCell>
@@ -300,17 +300,17 @@ export function ImportGuestsDialog({ open, onOpenChange, eventId }: ImportGuests
               <h4 className="font-medium">Import Results</h4>
               <ul className="text-sm space-y-1">
                 <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <CheckCircle className="w-4 h-4 text-primary" />
                   {importResults.imported} guests imported
                 </li>
                 {importResults.skipped > 0 && (
                   <li className="flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-amber-600" />
+                    <AlertCircle className="w-4 h-4 text-accent" />
                     {importResults.skipped} duplicates skipped
                   </li>
                 )}
                 {importResults.errors.length > 0 && (
-                  <li className="flex items-center gap-2 text-red-600">
+                  <li className="flex items-center gap-2 text-destructive">
                     <XCircle className="w-4 h-4" />
                     {importResults.errors.length} errors
                   </li>

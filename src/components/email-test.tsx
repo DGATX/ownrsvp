@@ -130,35 +130,35 @@ export function EmailTest() {
             </CardDescription>
           </div>
           {configStatus?.configured ? (
-            <CheckCircle2 className="w-5 h-5 text-green-600" />
+            <CheckCircle2 className="w-5 h-5 text-primary" />
           ) : (
-            <XCircle className="w-5 h-5 text-red-600" />
+            <XCircle className="w-5 h-5 text-destructive" />
           )}
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         {!configStatus?.configured ? (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20 p-4">
+          <div className="rounded-[3px] border-l-2 border-l-accent bg-accent/[0.08] p-4">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-accent mt-0.5" />
               <div className="flex-1">
-                <h3 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">
+                <h3 className="font-semibold text-foreground mb-1">
                   SMTP Not Configured
                 </h3>
-                <p className="text-sm text-amber-800 dark:text-amber-200 mb-2">
-                  Please configure SMTP environment variables in your <code className="text-xs bg-amber-100 dark:bg-amber-900/50 px-1 py-0.5 rounded">.env</code> file:
+                <p className="text-sm text-muted-foreground mb-2">
+                  Please configure SMTP environment variables in your <code className="text-xs font-mono bg-muted px-1 py-0.5 rounded-[2px]">.env</code> file:
                 </p>
-                <ul className="text-sm text-amber-800 dark:text-amber-200 list-disc list-inside space-y-1">
+                <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
                   {configStatus?.missing.map((varName) => (
                     <li key={varName}>
-                      <code className="text-xs bg-amber-100 dark:bg-amber-900/50 px-1 py-0.5 rounded">{varName}</code>
+                      <code className="text-xs font-mono bg-muted px-1 py-0.5 rounded-[2px]">{varName}</code>
                     </li>
                   ))}
                 </ul>
                 {configStatus?.warnings && configStatus.warnings.length > 0 && (
                   <div className="mt-3">
-                    <p className="text-sm font-medium text-amber-800 dark:text-amber-200 mb-1">Warnings:</p>
-                    <ul className="text-sm text-amber-700 dark:text-amber-300 list-disc list-inside">
+                    <p className="text-sm font-medium text-foreground mb-1">Warnings:</p>
+                    <ul className="text-sm text-muted-foreground list-disc list-inside">
                       {configStatus.warnings.map((warning, i) => (
                         <li key={i}>{warning}</li>
                       ))}
@@ -170,14 +170,14 @@ export function EmailTest() {
           </div>
         ) : (
           <>
-            <div className="rounded-lg border border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20 p-4">
+            <div className="rounded-[3px] border-l-2 border-l-primary bg-primary/[0.06] p-4">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 text-primary mt-0.5" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-green-900 dark:text-green-100 mb-1">
+                  <h3 className="font-semibold text-foreground mb-1">
                     SMTP Configured
                   </h3>
-                  <div className="text-sm text-green-800 dark:text-green-200 space-y-1">
+                  <div className="text-sm text-muted-foreground space-y-1">
                     <p><strong>Host:</strong> {configStatus.config?.host}</p>
                     <p><strong>Port:</strong> {configStatus.config?.port}</p>
                     <p><strong>User:</strong> {configStatus.config?.user}</p>
@@ -185,8 +185,8 @@ export function EmailTest() {
                   </div>
                   {configStatus.warnings && configStatus.warnings.length > 0 && (
                     <div className="mt-3">
-                      <p className="text-sm font-medium text-green-800 dark:text-green-200 mb-1">Note:</p>
-                      <ul className="text-sm text-green-700 dark:text-green-300 list-disc list-inside">
+                      <p className="text-sm font-medium text-foreground mb-1">Note:</p>
+                      <ul className="text-sm text-muted-foreground list-disc list-inside">
                         {configStatus.warnings.map((warning, i) => (
                           <li key={i}>{warning}</li>
                         ))}

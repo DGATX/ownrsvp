@@ -109,17 +109,17 @@ export default async function EventPage({ params }: EventPageProps) {
 
       <div className="space-y-6">
         {/* Event Header */}
-        <Card className="border-0 shadow-xl overflow-hidden">
+        <Card className="border border-border overflow-hidden">
           {event.coverImage && (
-            <div className="w-full h-[512px] md:h-[640px] overflow-hidden">
+            <div className="w-full max-h-[480px] overflow-hidden bg-foreground/[0.04] flex items-center justify-center border-b border-border">
               <img
                 src={event.coverImage}
                 alt={event.title}
-                className="w-full h-full object-contain"
+                className="w-full max-h-[480px] object-contain"
               />
             </div>
           )}
-          <div className="h-2 bg-gradient-to-r from-violet-600 to-indigo-600" />
+          <div className="h-2 bg-primary" />
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="flex-1">
@@ -139,7 +139,7 @@ export default async function EventPage({ params }: EventPageProps) {
                 </div>
                 <div className="space-y-2 pt-2 text-sm text-muted-foreground">
                   {(isAdmin || !isHost) && (
-                    <div className="text-xs font-medium text-violet-600 dark:text-violet-400 mb-2">
+                    <div className="label-mono text-primary mb-2">
                       Host: {event.host.name || event.host.email}
                     </div>
                   )}
@@ -177,7 +177,7 @@ export default async function EventPage({ params }: EventPageProps) {
                     </div>
                   )}
                   {event.rsvpDeadline && (
-                    <div className={`flex items-center gap-2 ${rsvpDeadlinePassed ? 'text-red-600' : 'text-amber-600'}`}>
+                    <div className={`flex items-center gap-2 ${rsvpDeadlinePassed ? 'text-destructive' : 'text-accent'}`}>
                       <Clock className="w-4 h-4" />
                       {rsvpDeadlinePassed
                         ? 'RSVP deadline passed'

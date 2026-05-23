@@ -68,21 +68,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center aurora-bg aurora-animated p-4">
+    <div className="min-h-screen flex items-center justify-center aurora-bg p-4">
       <div className="relative z-10 w-full max-w-md animate-slide-up">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-violet-500 to-pink-500 flex items-center justify-center animate-glow">
-              <Sparkles className="w-6 h-6 text-white" />
+          <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
+            <div className="w-10 h-10 rounded-[3px] bg-primary flex items-center justify-center shadow-[0_1px_0_hsl(var(--foreground)/0.15)] transition-transform group-hover:-rotate-6">
+              <Sparkles className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="font-bold text-2xl gradient-text">OwnRSVP</span>
+            <span className="font-display font-semibold text-2xl tracking-tight">OwnRSVP</span>
           </Link>
         </div>
 
-        <Card className="border-0 shadow-xl glass card-glow">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-2xl">Welcome back</CardTitle>
-            <CardDescription>Sign in to manage your events</CardDescription>
+        <Card className="card-glow">
+          <div className="h-1.5 bg-primary rounded-t-[3px]" />
+          <CardHeader className="text-center pb-4 pt-6">
+            <p className="label-mono mb-2">Welcome back</p>
+            <CardTitle className="text-2xl">Sign in to your events</CardTitle>
+            <CardDescription>Manage invitations, guests, and RSVPs</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">

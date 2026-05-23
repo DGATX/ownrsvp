@@ -99,34 +99,37 @@ function HomePageContent() {
   }
 
   return (
-    <div className="min-h-screen aurora-bg aurora-animated">
+    <div className="min-h-screen aurora-bg">
       <PublicNav />
 
       {/* Hero Section */}
-      <section className="relative z-10 pt-24 pb-12 px-4">
+      <section className="relative z-10 pt-28 pb-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
             {/* Left side - Hero content */}
             <div className="text-center lg:text-left">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 animate-slide-up">
-                Self-Hosted Event Management
+              <p className="label-mono mb-5 animate-slide-up">Open-source · Self-hosted · No tracking</p>
+              <h1 className="headline text-5xl md:text-6xl lg:text-7xl mb-6 animate-slide-up">
+                Event invitations,
                 <br />
-                <span className="gradient-text">That Puts You in Control</span>
+                <span className="gradient-text">on your own terms.</span>
               </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto lg:mx-0 mb-4 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                Create beautiful event pages, send invitations, and manage RSVPs with advanced features like co-hosts,
-                broadcast updates, and automated reminders—all from your own server. No tracking, no ads, complete privacy.
+              <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-5 animate-slide-up leading-relaxed" style={{ animationDelay: '0.1s' }}>
+                Beautiful event pages, invitations, co-hosts, broadcast updates, and automated
+                reminders—running entirely on your own server. No tracking, no ads, complete privacy.
               </p>
-              <p className="text-base font-medium text-primary/80 dark:text-primary/60 max-w-2xl mx-auto lg:mx-0 mb-6 animate-slide-up italic" style={{ animationDelay: '0.15s' }}>
+              <p className="font-display italic text-xl text-primary max-w-xl mx-auto lg:mx-0 animate-slide-up" style={{ animationDelay: '0.15s' }}>
                 Because f*ck Evite, that&apos;s why.
               </p>
             </div>
 
             {/* Right side - Sign in form */}
-            <div className="relative z-10 animate-slide-up max-w-sm mx-auto lg:mx-0" style={{ animationDelay: '0.2s' }}>
-              <Card className="border-0 shadow-xl glass card-glow">
-                <CardHeader className="text-center pb-3 pt-5 px-5">
-                  <CardTitle className="text-xl">Sign in to manage your events</CardTitle>
+            <div className="relative z-10 animate-slide-up max-w-sm w-full mx-auto lg:mx-0 lg:justify-self-end" style={{ animationDelay: '0.2s' }}>
+              <Card className="card-glow">
+                <div className="h-1.5 bg-primary rounded-t-[3px]" />
+                <CardHeader className="text-center pb-3 pt-6 px-6">
+                  <p className="label-mono mb-2">Hosts only</p>
+                  <CardTitle className="text-2xl">Sign in to manage your events</CardTitle>
                 </CardHeader>
                 <form onSubmit={handleSubmit}>
                   <CardContent className="space-y-3 px-5">
@@ -185,16 +188,15 @@ function HomePageContent() {
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="relative z-10 py-12 px-4">
+      {/* Features — printed index */}
+      <section className="relative z-10 py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold mb-2">Powerful features for modern event management</h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to create, manage, and host successful events—with complete control over your data.
-            </p>
+          <div className="flex items-end justify-between gap-4 mb-2">
+            <h2 className="headline text-3xl md:text-4xl max-w-2xl">Everything you need to gather people</h2>
+            <span className="label-mono hidden md:block whitespace-nowrap">Contents</span>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <hr className="ink-rule-double mb-10" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-border border border-border rounded-[3px] overflow-hidden">
             {[
               {
                 icon: Calendar,
@@ -229,14 +231,15 @@ function HomePageContent() {
             ].map((feature, index) => (
               <div
                 key={feature.title}
-                className="relative z-10 p-5 rounded-xl glass card-glow animate-slide-up"
-                style={{ animationDelay: `${0.1 * index}s` }}
+                className="group relative bg-card p-6 transition-colors hover:bg-muted/50 animate-slide-up"
+                style={{ animationDelay: `${0.06 * index}s` }}
               >
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 via-violet-500/20 to-pink-500/20 flex items-center justify-center mb-3">
-                  <feature.icon className="w-5 h-5 text-primary" />
+                <div className="flex items-center justify-between mb-4">
+                  <span className="label-mono text-primary">{String(index + 1).padStart(2, '0')}</span>
+                  <feature.icon className="w-5 h-5 text-primary opacity-80 transition-transform group-hover:scale-110" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-2 leading-tight">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -244,17 +247,15 @@ function HomePageContent() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-8 px-4 border-t border-border/50">
+      <footer className="relative z-10 py-10 px-4 border-t border-border">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-md bg-gradient-to-br from-cyan-500 via-violet-500 to-pink-500 flex items-center justify-center shadow-lg">
-              <CalendarHeart className="w-3 h-3 text-white" />
+            <div className="w-6 h-6 rounded-[3px] bg-primary flex items-center justify-center">
+              <CalendarHeart className="w-3.5 h-3.5 text-primary-foreground" />
             </div>
-            <span className="font-semibold text-sm">OwnRSVP</span>
+            <span className="font-display font-semibold text-base">OwnRSVP</span>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Self-hosted event management. Open source.
-          </p>
+          <p className="label-mono">Self-hosted · Open source</p>
         </div>
       </footer>
     </div>

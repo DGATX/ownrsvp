@@ -160,11 +160,11 @@ export function RestartServerButton() {
             </div>
 
             {restartMethod?.type === 'graceful' && (
-              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-3 rounded-md text-sm">
-                <p className="text-amber-800 dark:text-amber-200 font-medium mb-1">
+              <div className="bg-accent/[0.08] border-l-2 border-l-accent p-3 rounded-[3px] text-sm">
+                <p className="text-foreground font-medium mb-1">
                   Note:
                 </p>
-                <p className="text-amber-700 dark:text-amber-300">
+                <p className="text-muted-foreground">
                   Automatic restart is not available in this environment. The server will shut down gracefully, and you&apos;ll need to restart it manually.
                 </p>
               </div>

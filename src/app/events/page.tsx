@@ -33,16 +33,18 @@ export default async function PublicEventsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="min-h-screen aurora-bg">
       <PublicNav />
 
-      <div className="pt-24 pb-16 px-4">
+      <div className="pt-28 pb-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">Upcoming Events</h1>
+          <div className="mb-10">
+            <p className="label-mono mb-3">The programme</p>
+            <h1 className="headline text-4xl md:text-5xl mb-2">Upcoming Events</h1>
             <p className="text-lg text-muted-foreground">
-              Browse public events and RSVP
+              Browse public events and RSVP.
             </p>
+            <hr className="ink-rule-double mt-6" />
           </div>
 
           {events.length === 0 ? (
@@ -62,19 +64,19 @@ export default async function PublicEventsPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {events.map((event: typeof events[0]) => (
                 <Link key={event.id} href={`/events/${event.slug}`}>
-                  <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer group overflow-hidden">
+                  <Card className="h-full card-glow cursor-pointer group overflow-hidden">
                     {event.coverImage && (
-                      <div className="w-full h-48 overflow-hidden">
+                      <div className="w-full h-48 overflow-hidden bg-muted">
                         <img
                           src={event.coverImage}
                           alt={event.title}
-                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
                     )}
-                    <div className="h-1 bg-gradient-to-r from-violet-600 to-indigo-600" />
+                    <div className="h-1 bg-primary" />
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-lg group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">
+                      <CardTitle className="text-lg group-hover:text-primary transition-colors line-clamp-2">
                         {event.title}
                       </CardTitle>
                       <div className="space-y-1 text-sm text-muted-foreground">
@@ -92,7 +94,7 @@ export default async function PublicEventsPage() {
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                        <div className="flex items-center gap-2 text-sm font-medium text-primary">
                           <Users className="w-4 h-4" />
                           {event.guests.reduce((sum: number, guest) => sum + 1 + (guest.additionalGuests?.length || 0), 0)} attending
                         </div>

@@ -113,7 +113,11 @@ We'll have:
 Dress code: Semi-formal / Cocktail attire
 
 Please RSVP by January 20th so we can finalize catering numbers.`,
-      location: 'The Grand Ballroom, 123 Party Street, Austin, TX 78701',
+      locationName: 'The Grand Ballroom',
+      streetAddress1: '123 Party Street',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78701',
       date: futureDate(14, 19), // 7 PM, 2 weeks from now
       endDate: futureDate(14, 23), // 11 PM
       rsvpDeadline: futureDate(7),
@@ -143,7 +147,11 @@ Dinner and dancing to follow. Please indicate any dietary restrictions when you 
 We kindly request no children under 12 at the reception.
 
 Gift registry available at our wedding website.`,
-      location: 'The Vineyard Estate, 456 Wine Country Road, Napa, CA 94558',
+      locationName: 'The Vineyard Estate',
+      streetAddress1: '456 Wine Country Road',
+      city: 'Napa',
+      state: 'CA',
+      zipCode: '94558',
       date: futureDate(60, 16), // 4 PM, 2 months from now
       endDate: futureDate(60, 23), // 11 PM
       rsvpDeadline: futureDate(45),
@@ -174,7 +182,11 @@ Agenda:
 - 8:30 PM: Networking
 
 Pizza and drinks provided. Bring your business cards!`,
-      location: 'Capital Factory, 701 Brazos St, Austin, TX 78701',
+      locationName: 'Capital Factory',
+      streetAddress1: '701 Brazos St',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78701',
       date: futureDate(21, 18), // 6 PM, 3 weeks from now
       endDate: futureDate(21, 21), // 9 PM
       rsvpDeadline: futureDate(19),
@@ -199,7 +211,11 @@ Please come prepared to discuss:
 - Your favorite moments
 
 Snacks and wine will be provided. Feel free to bring something to share!`,
-      location: "Emily's House, 789 Reading Lane, Austin, TX 78704",
+      locationName: "Emily's House",
+      streetAddress1: '789 Reading Lane',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78704',
       date: futureDate(28, 19), // 7 PM, 4 weeks from now
       endDate: futureDate(28, 22), // 10 PM
       rsvpDeadline: futureDate(25),
@@ -225,7 +241,11 @@ Activities:
 - Kids activities in the backyard
 
 BYOB but we'll have some beer and sodas available.`,
-      location: "James's Ranch, 1234 Country Road, Dripping Springs, TX 78620",
+      locationName: "James's Ranch",
+      streetAddress1: '1234 Country Road',
+      city: 'Dripping Springs',
+      state: 'TX',
+      zipCode: '78620',
       date: futureDate(45, 14), // 2 PM, 6 weeks from now
       endDate: futureDate(45, 22), // 10 PM
       maxGuestsPerInvitee: 5,
@@ -241,7 +261,10 @@ BYOB but we'll have some beer and sodas available.`,
       slug: 'new-years-eve-2025',
       title: "New Year's Eve Party 2025",
       description: 'Ring in 2026 with style! Champagne toast at midnight.',
-      location: 'Downtown Austin Rooftop, 500 Congress Ave, Austin, TX',
+      locationName: 'Downtown Austin Rooftop',
+      streetAddress1: '500 Congress Ave',
+      city: 'Austin',
+      state: 'TX',
       date: pastDate(16), // About 2 weeks ago
       endDate: pastDate(15), // Ended the next day (past midnight)
       rsvpDeadline: pastDate(20),
@@ -257,7 +280,10 @@ BYOB but we'll have some beer and sodas available.`,
       slug: 'lunch-meetup-today',
       title: 'Team Lunch Meetup',
       description: 'Quick team lunch to discuss Q1 plans. See you there!',
-      location: "Terry Black's BBQ, 1003 Barton Springs Rd, Austin, TX",
+      locationName: "Terry Black's BBQ",
+      streetAddress1: '1003 Barton Springs Rd',
+      city: 'Austin',
+      state: 'TX',
       date: futureDate(0, 2), // 2 hours from now
       endDate: futureDate(0, 4), // 4 hours from now
       hostId: regularUsers[1].id, // Mike
@@ -328,14 +354,14 @@ BYOB but we'll have some beer and sodas available.`,
     { name: 'Stephanie Perez', email: 'stephanie.perez@email.com', phone: '+15551234030' },
   ];
 
-  const statuses = ['PENDING', 'ACCEPTED', 'DECLINED', 'MAYBE'];
+  const statuses = ['PENDING', 'ATTENDING', 'NOT_ATTENDING', 'MAYBE'];
   const dietaryOptions = [null, 'Vegetarian', 'Vegan', 'Gluten-free', 'Nut allergy', 'Kosher', 'Halal'];
 
   // Birthday party guests (20 guests)
   const birthdayGuests = [];
   for (let i = 0; i < 20; i++) {
     const guest = guestData[i];
-    const status = i < 12 ? 'ACCEPTED' : i < 15 ? 'PENDING' : i < 18 ? 'MAYBE' : 'DECLINED';
+    const status = i < 12 ? 'ATTENDING' : i < 15 ? 'PENDING' : i < 18 ? 'MAYBE' : 'NOT_ATTENDING';
     const createdGuest = await prisma.guest.create({
       data: {
         eventId: birthdayParty.id,
@@ -360,7 +386,7 @@ BYOB but we'll have some beer and sodas available.`,
   for (let i = 0; i < 30; i++) {
     const guest = guestData[i % guestData.length];
     const email = i < guestData.length ? guest.email : `guest${i}@wedding.com`;
-    const status = i < 18 ? 'ACCEPTED' : i < 22 ? 'PENDING' : i < 26 ? 'MAYBE' : 'DECLINED';
+    const status = i < 18 ? 'ATTENDING' : i < 22 ? 'PENDING' : i < 26 ? 'MAYBE' : 'NOT_ATTENDING';
     const createdGuest = await prisma.guest.create({
       data: {
         eventId: wedding.id,
@@ -383,7 +409,7 @@ BYOB but we'll have some beer and sodas available.`,
   const techGuests = [];
   for (let i = 0; i < 15; i++) {
     const guest = guestData[i];
-    const status = i < 10 ? 'ACCEPTED' : i < 12 ? 'PENDING' : 'MAYBE';
+    const status = i < 10 ? 'ATTENDING' : i < 12 ? 'PENDING' : 'MAYBE';
     const createdGuest = await prisma.guest.create({
       data: {
         eventId: techMeetup.id,
@@ -403,7 +429,7 @@ BYOB but we'll have some beer and sodas available.`,
   const bookGuests = [];
   for (let i = 0; i < 8; i++) {
     const guest = guestData[i];
-    const status = i < 6 ? 'ACCEPTED' : 'MAYBE';
+    const status = i < 6 ? 'ATTENDING' : 'MAYBE';
     const createdGuest = await prisma.guest.create({
       data: {
         eventId: bookClub.id,
@@ -424,7 +450,7 @@ BYOB but we'll have some beer and sodas available.`,
   for (let i = 0; i < 25; i++) {
     const guest = guestData[i % guestData.length];
     const email = i < guestData.length ? guest.email : `bbq.guest${i}@example.com`;
-    const status = i < 15 ? 'ACCEPTED' : i < 20 ? 'PENDING' : 'MAYBE';
+    const status = i < 15 ? 'ATTENDING' : i < 20 ? 'PENDING' : 'MAYBE';
     const createdGuest = await prisma.guest.create({
       data: {
         eventId: bbq.id,
@@ -447,7 +473,7 @@ BYOB but we'll have some beer and sodas available.`,
   const pastGuests = [];
   for (let i = 0; i < 12; i++) {
     const guest = guestData[i];
-    const status = i < 9 ? 'ACCEPTED' : 'DECLINED';
+    const status = i < 9 ? 'ATTENDING' : 'NOT_ATTENDING';
     const createdGuest = await prisma.guest.create({
       data: {
         eventId: pastEvent.id,
@@ -472,7 +498,7 @@ BYOB but we'll have some beer and sodas available.`,
         eventId: todayEvent.id,
         email: guest.email,
         name: guest.name,
-        status: 'ACCEPTED',
+        status: 'ATTENDING',
         notifyByEmail: true,
         token: nanoid(21),
         respondedAt: pastDate(1),
@@ -494,7 +520,7 @@ BYOB but we'll have some beer and sodas available.`,
   let plusOneCount = 0;
   for (let i = 0; i < 8; i++) {
     const guest = birthdayGuests[i];
-    if (guest.status === 'ACCEPTED') {
+    if (guest.status === 'ATTENDING') {
       await prisma.additionalGuest.create({
         data: {
           guestId: guest.id,
@@ -510,7 +536,7 @@ BYOB but we'll have some beer and sodas available.`,
   plusOneCount = 0;
   for (let i = 0; i < 18; i++) {
     const guest = weddingGuests[i];
-    if (guest.status === 'ACCEPTED') {
+    if (guest.status === 'ATTENDING') {
       await prisma.additionalGuest.create({
         data: {
           guestId: guest.id,
@@ -537,7 +563,7 @@ BYOB but we'll have some beer and sodas available.`,
   plusOneCount = 0;
   for (let i = 0; i < 10; i++) {
     const guest = bbqGuests[i];
-    if (guest.status === 'ACCEPTED') {
+    if (guest.status === 'ATTENDING') {
       await prisma.additionalGuest.create({
         data: {
           guestId: guest.id,

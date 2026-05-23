@@ -107,10 +107,10 @@ function ResetPasswordContent() {
 
   if (isValidating) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+      <div className="min-h-screen flex items-center justify-center p-4 aurora-bg">
         <Card className="w-full max-w-md border-0 shadow-2xl">
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
             <p className="mt-4 text-muted-foreground">Validating reset link...</p>
           </CardContent>
         </Card>
@@ -120,11 +120,11 @@ function ResetPasswordContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+      <div className="min-h-screen flex items-center justify-center p-4 aurora-bg">
         <Card className="w-full max-w-md border-0 shadow-2xl">
           <CardHeader className="text-center space-y-4">
-            <div className="mx-auto w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
-              <XCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
+            <div className="mx-auto w-16 h-16 bg-destructive/10 rounded-[3px] flex items-center justify-center">
+              <XCircle className="w-8 h-8 text-destructive" />
             </div>
             <CardTitle className="text-2xl">Invalid Link</CardTitle>
             <CardDescription className="text-base">{error}</CardDescription>
@@ -148,11 +148,11 @@ function ResetPasswordContent() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+      <div className="min-h-screen flex items-center justify-center p-4 aurora-bg">
         <Card className="w-full max-w-md border-0 shadow-2xl">
           <CardHeader className="text-center space-y-4">
-            <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-              <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+            <div className="mx-auto w-16 h-16 bg-primary/10 rounded-[3px] flex items-center justify-center">
+              <CheckCircle className="w-8 h-8 text-primary" />
             </div>
             <CardTitle className="text-2xl">Password Reset!</CardTitle>
             <CardDescription className="text-base">
@@ -170,11 +170,11 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="min-h-screen flex items-center justify-center p-4 aurora-bg">
       <Card className="w-full max-w-md border-0 shadow-2xl">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-violet-100 dark:bg-violet-900/30 rounded-full flex items-center justify-center">
-            <Lock className="w-8 h-8 text-violet-600 dark:text-violet-400" />
+          <div className="mx-auto w-16 h-16 bg-accent/15 rounded-[3px] flex items-center justify-center">
+            <Lock className="w-8 h-8 text-accent" />
           </div>
           <CardTitle className="text-2xl">Reset Your Password</CardTitle>
           <CardDescription className="text-base">
@@ -232,10 +232,10 @@ export default function ResetPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+        <div className="min-h-screen flex items-center justify-center p-4 aurora-bg">
           <Card className="w-full max-w-md border-0 shadow-2xl">
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
               <p className="mt-4 text-muted-foreground">Loading...</p>
             </CardContent>
           </Card>

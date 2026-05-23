@@ -100,7 +100,7 @@ export default function RegisterPage() {
 
   if (isCheckingStatus) {
     return (
-      <div className="min-h-screen flex items-center justify-center aurora-bg aurora-animated">
+      <div className="min-h-screen flex items-center justify-center aurora-bg">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
@@ -108,18 +108,18 @@ export default function RegisterPage() {
 
   if (!registrationEnabled) {
     return (
-      <div className="min-h-screen flex items-center justify-center aurora-bg aurora-animated p-4">
+      <div className="min-h-screen flex items-center justify-center aurora-bg p-4">
         <div className="relative z-10 w-full max-w-md">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-violet-500 to-pink-500 flex items-center justify-center animate-glow">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 rounded-[3px] bg-primary flex items-center justify-center shadow-[0_1px_0_hsl(var(--foreground)/0.15)]">
+                <Sparkles className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="font-bold text-2xl gradient-text">OwnRSVP</span>
+              <span className="font-display font-semibold text-2xl tracking-tight">OwnRSVP</span>
             </Link>
           </div>
 
-          <Card className="border-0 shadow-xl glass card-glow">
+          <Card className="card-glow">
             <CardHeader className="text-center">
               <CardTitle>Registration Closed</CardTitle>
               <CardDescription>
@@ -139,18 +139,18 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center aurora-bg aurora-animated p-4">
+    <div className="min-h-screen flex items-center justify-center aurora-bg p-4">
       <div className="relative z-10 w-full max-w-md animate-slide-up">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-violet-500 to-pink-500 flex items-center justify-center animate-glow">
-              <Sparkles className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-[3px] bg-primary flex items-center justify-center shadow-[0_1px_0_hsl(var(--foreground)/0.15)]">
+              <Sparkles className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="font-bold text-2xl gradient-text">OwnRSVP</span>
+            <span className="font-display font-semibold text-2xl tracking-tight">OwnRSVP</span>
           </Link>
         </div>
 
-        <Card className="border-0 shadow-xl glass card-glow">
+        <Card className="card-glow">
           <CardHeader className="text-center pb-4">
             <div className="flex justify-center mb-2">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">

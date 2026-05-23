@@ -56,7 +56,7 @@ export function ManageRsvp({ eventId, guestEmail, rsvpToken }: ManageRsvpProps) 
   // If guest has a token, show direct edit button
   if (rsvpToken) {
     return (
-      <Card className="border-2 border-violet-200 dark:border-violet-800">
+      <Card className="border-2 border-primary/30">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <Mail className="w-5 h-5" />

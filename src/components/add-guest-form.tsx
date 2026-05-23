@@ -137,7 +137,7 @@ export function AddGuestForm({ eventId }: AddGuestFormProps) {
                 id="sendInvite"
                 checked={sendInvite}
                 onChange={(e) => setSendInvite(e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300"
+                className="h-4 w-4 rounded-[2px] border-input accent-primary"
                 disabled={isLoading}
               />
               <Label htmlFor="sendInvite" className="text-sm font-normal">

@@ -110,14 +110,14 @@ export async function sendInvitation({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>You're Invited!</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f5f6fb 0%, #f5f6fb 100%); padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4ede0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f4ede0 0%, #f4ede0 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(157, 78, 221, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 24px rgba(214,55,28, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 50%, #f5267e 100%); padding: 48px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">You're Invited!</h1>
+                <td style="background: linear-gradient(135deg, #d6371c 0%, #d6371c 50%, #d6371c 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: -0.5px; color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">You're Invited!</h1>
                 </td>
               </tr>
               ${event.coverImage ? `
@@ -133,19 +133,19 @@ export async function sendInvitation({
               ` : ''}
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #1c1813; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     ${guestName ? `Hi ${guestName},` : 'Hello,'}
                   </p>
                   <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">
                     ${hostName || 'Someone'} has invited you to:
                   </p>
 
-                  <div style="background: linear-gradient(135deg, rgba(7,200,249,0.08) 0%, rgba(157,78,221,0.08) 100%); border-radius: 12px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(157,78,221,0.15);">
-                    <h2 style="color: #0a0f2c; font-size: 22px; margin: 0 0 16px; font-weight: 700;">${event.title}</h2>
+                  <div style="background: linear-gradient(135deg, rgba(214,55,28,0.08) 0%, rgba(214,55,28,0.08) 100%); border-radius: 3px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(214,55,28,0.15);">
+                    <h2 style="font-family: Georgia, 'Times New Roman', serif; color: #1c1813; font-size: 22px; margin: 0 0 16px; font-weight: 700;">${event.title}</h2>
                     <p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;">
-                      <strong style="color: #9d4edd;">When:</strong> ${formatDateTime(event.date)}
+                      <strong style="color: #d6371c;">When:</strong> ${formatDateTime(event.date)}
                     </p>
-                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
+                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #d6371c;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
                     ${event.description ? `<p style="color: #4b5563; font-size: 14px; margin: 16px 0 0; line-height: 1.5;">${event.description}</p>` : ''}
                   </div>
 
@@ -153,8 +153,8 @@ export async function sendInvitation({
                     <tr>
                       <td align="center" style="padding: 8px;">
                         <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=ATTENDING"
-                           style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                           style="display: inline-block; background: linear-gradient(135deg, #d6371c 0%, #b22e16 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 3px;
                                   font-size: 16px; font-weight: 600;">
                           Yes, I'll be there!
                         </a>
@@ -163,8 +163,8 @@ export async function sendInvitation({
                     <tr>
                       <td align="center" style="padding: 8px;">
                         <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=MAYBE"
-                           style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                           style="display: inline-block; background: linear-gradient(135deg, #bd811c 0%, #97640f 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 3px;
                                   font-size: 16px; font-weight: 600;">
                           Maybe
                         </a>
@@ -173,8 +173,8 @@ export async function sendInvitation({
                     <tr>
                       <td align="center" style="padding: 8px;">
                         <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=NOT_ATTENDING"
-                           style="display: inline-block; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                           style="display: inline-block; background: linear-gradient(135deg, #2f2a22 0%, #1f1b15 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 3px;
                                   font-size: 16px; font-weight: 600;">
                           Can't make it
                         </a>
@@ -182,15 +182,15 @@ export async function sendInvitation({
                     </tr>
                   </table>
                   <p style="color: #6b7280; font-size: 12px; text-align: center; margin: 16px 0 0;">
-                    <a href="${rsvpLink}" style="color: #9d4edd;">
+                    <a href="${rsvpLink}" style="color: #d6371c;">
                       Need to add guests or dietary notes? Click here for full form
                     </a>
                   </p>
                 </td>
               </tr>
               <tr>
-                <td style="background: linear-gradient(135deg, rgba(7,200,249,0.05) 0%, rgba(157,78,221,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(157,78,221,0.1);">
-                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
+                <td style="background: linear-gradient(135deg, rgba(214,55,28,0.05) 0%, rgba(214,55,28,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(214,55,28,0.1);">
+                  <p style="color: #d6371c; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>
@@ -244,14 +244,14 @@ export async function sendReminder({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Reminder: RSVP Needed</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f5f6fb 0%, #fce7f3 100%); padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4ede0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f4ede0 0%, #f4ede0 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(245, 38, 126, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 24px rgba(214,55,28, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, #f5267e 0%, #9d4edd 100%); padding: 48px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Reminder: RSVP Needed</h1>
+                <td style="background: linear-gradient(135deg, #d6371c 0%, #d6371c 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: -0.5px; color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Reminder: RSVP Needed</h1>
                 </td>
               </tr>
               ${event.coverImage ? `
@@ -267,27 +267,27 @@ export async function sendReminder({
               ` : ''}
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #1c1813; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     ${guestName ? `Hi ${guestName},` : 'Hello,'}
                   </p>
                   <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">
                     This is a friendly reminder that you haven't responded to the invitation for:
                   </p>
 
-                  <div style="background: linear-gradient(135deg, rgba(245,38,126,0.08) 0%, rgba(157,78,221,0.08) 100%); border-radius: 12px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,38,126,0.15);">
-                    <h2 style="color: #0a0f2c; font-size: 22px; margin: 0 0 16px; font-weight: 700;">${event.title}</h2>
+                  <div style="background: linear-gradient(135deg, rgba(214,55,28,0.08) 0%, rgba(214,55,28,0.08) 100%); border-radius: 3px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(214,55,28,0.15);">
+                    <h2 style="font-family: Georgia, 'Times New Roman', serif; color: #1c1813; font-size: 22px; margin: 0 0 16px; font-weight: 700;">${event.title}</h2>
                     <p style="color: #4b5563; font-size: 14px; margin: 0;">
-                      <strong style="color: #f5267e;">When:</strong> ${formatDateTime(event.date)}
+                      <strong style="color: #d6371c;">When:</strong> ${formatDateTime(event.date)}
                     </p>
-                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 8px 0 0;"><strong style="color: #f5267e;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
+                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 8px 0 0;"><strong style="color: #d6371c;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
                   </div>
 
                   <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                       <td align="center" style="padding: 8px;">
                         <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=ATTENDING"
-                           style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                           style="display: inline-block; background: linear-gradient(135deg, #d6371c 0%, #b22e16 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 3px;
                                   font-size: 16px; font-weight: 600;">
                           Yes, I'll be there!
                         </a>
@@ -296,8 +296,8 @@ export async function sendReminder({
                     <tr>
                       <td align="center" style="padding: 8px;">
                         <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=MAYBE"
-                           style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                           style="display: inline-block; background: linear-gradient(135deg, #bd811c 0%, #97640f 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 3px;
                                   font-size: 16px; font-weight: 600;">
                           Maybe
                         </a>
@@ -306,8 +306,8 @@ export async function sendReminder({
                     <tr>
                       <td align="center" style="padding: 8px;">
                         <a href="${appUrl}/api/rsvp/${rsvpToken}/quick?status=NOT_ATTENDING"
-                           style="display: inline-block; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px;
+                           style="display: inline-block; background: linear-gradient(135deg, #2f2a22 0%, #1f1b15 100%);
+                                  color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 3px;
                                   font-size: 16px; font-weight: 600;">
                           Can't make it
                         </a>
@@ -315,15 +315,15 @@ export async function sendReminder({
                     </tr>
                   </table>
                   <p style="color: #6b7280; font-size: 12px; text-align: center; margin: 16px 0 0;">
-                    <a href="${rsvpLink}" style="color: #9d4edd;">
+                    <a href="${rsvpLink}" style="color: #d6371c;">
                       Need to add guests or dietary notes? Click here for full form
                     </a>
                   </p>
                 </td>
               </tr>
               <tr>
-                <td style="background: linear-gradient(135deg, rgba(245,38,126,0.05) 0%, rgba(157,78,221,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(245,38,126,0.1);">
-                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
+                <td style="background: linear-gradient(135deg, rgba(214,55,28,0.05) 0%, rgba(214,55,28,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(214,55,28,0.1);">
+                  <p style="color: #d6371c; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>
@@ -385,43 +385,43 @@ export async function sendConfirmation({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>RSVP Confirmation</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #e8fbff 0%, #f5f6fb 100%); padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4ede0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f4ede0 0%, #f4ede0 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(7, 200, 249, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 24px rgba(214,55,28, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 100%); padding: 48px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">RSVP Confirmed</h1>
+                <td style="background: linear-gradient(135deg, #d6371c 0%, #d6371c 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: -0.5px; color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">RSVP Confirmed</h1>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #1c1813; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     ${guestName ? `Hi ${guestName},` : 'Hello,'}
                   </p>
                   <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">
-                    Your response for <strong style="color: #9d4edd;">${event.title}</strong> has been recorded.
+                    Your response for <strong style="color: #d6371c;">${event.title}</strong> has been recorded.
                   </p>
 
-                  <p style="color: #0a0f2c; font-size: 18px; line-height: 1.6; margin: 0 0 30px; text-align: center; font-weight: 600;">
+                  <p style="color: #1c1813; font-size: 18px; line-height: 1.6; margin: 0 0 30px; text-align: center; font-weight: 600;">
                     ${statusMessages[status]}
                   </p>
 
                   ${status === 'ATTENDING' ? `
-                  <div style="background: linear-gradient(135deg, rgba(7,200,249,0.08) 0%, rgba(157,78,221,0.08) 100%); border-radius: 12px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(7,200,249,0.15);">
-                    <h3 style="color: #0a0f2c; font-size: 16px; margin: 0 0 12px; font-weight: 700;">Event Details</h3>
+                  <div style="background: linear-gradient(135deg, rgba(214,55,28,0.08) 0%, rgba(214,55,28,0.08) 100%); border-radius: 3px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(214,55,28,0.15);">
+                    <h3 style="color: #1c1813; font-size: 16px; margin: 0 0 12px; font-weight: 700;">Event Details</h3>
                     <p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;">
-                      <strong style="color: #07c8f9;">When:</strong> ${formatDateTime(event.date)}
+                      <strong style="color: #d6371c;">When:</strong> ${formatDateTime(event.date)}
                     </p>
-                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 0;"><strong style="color: #07c8f9;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
+                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 0;"><strong style="color: #d6371c;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
                   </div>
                   ` : ''}
 
                   ${rsvpToken ? `
-                  <div style="text-align: center; margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(157,78,221,0.15);">
+                  <div style="text-align: center; margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(214,55,28,0.15);">
                     <a href="${appUrl}/rsvp/${rsvpToken}/edit"
-                       style="display: inline-block; background: linear-gradient(135deg, #9d4edd 0%, #f5267e 100%); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 14px; box-shadow: 0 4px 14px rgba(157, 78, 221, 0.3);">
+                       style="display: inline-block; background: linear-gradient(135deg, #d6371c 0%, #d6371c 100%); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 3px; font-weight: 600; font-size: 14px; box-shadow: 0 4px 14px rgba(214,55,28, 0.3);">
                       Edit Your RSVP
                     </a>
                     <p style="color: #6b7280; font-size: 12px; margin: 12px 0 0;">
@@ -432,8 +432,8 @@ export async function sendConfirmation({
                 </td>
               </tr>
               <tr>
-                <td style="background: linear-gradient(135deg, rgba(7,200,249,0.05) 0%, rgba(157,78,221,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(157,78,221,0.1);">
-                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
+                <td style="background: linear-gradient(135deg, rgba(214,55,28,0.05) 0%, rgba(214,55,28,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(214,55,28,0.1);">
+                  <p style="color: #d6371c; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>
@@ -474,19 +474,19 @@ export async function sendPasswordResetEmail(
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Reset Your Password</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f5f6fb 0%, #f5f6fb 100%); padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4ede0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f4ede0 0%, #f4ede0 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(157, 78, 221, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 24px rgba(214,55,28, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, #9d4edd 0%, #f5267e 100%); padding: 48px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Reset Your Password</h1>
+                <td style="background: linear-gradient(135deg, #d6371c 0%, #d6371c 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: -0.5px; color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Reset Your Password</h1>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #1c1813; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     Hi ${userName},
                   </p>
                   <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">
@@ -494,26 +494,26 @@ export async function sendPasswordResetEmail(
                   </p>
 
                   <div style="text-align: center; margin: 30px 0;">
-                    <a href="${resetUrl}" style="display: inline-block; background: linear-gradient(135deg, #9d4edd 0%, #f5267e 100%); color: #ffffff; text-decoration: none; padding: 16px 36px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(157, 78, 221, 0.4);">
+                    <a href="${resetUrl}" style="display: inline-block; background: linear-gradient(135deg, #d6371c 0%, #d6371c 100%); color: #ffffff; text-decoration: none; padding: 16px 36px; border-radius: 3px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(214,55,28, 0.4);">
                       Reset Password
                     </a>
                   </div>
 
-                  <div style="background: linear-gradient(135deg, rgba(157,78,221,0.08) 0%, rgba(245,38,126,0.08) 100%); border-radius: 12px; padding: 16px 20px; margin: 20px 0; border: 1px solid rgba(157,78,221,0.15);">
+                  <div style="background: linear-gradient(135deg, rgba(214,55,28,0.08) 0%, rgba(214,55,28,0.08) 100%); border-radius: 3px; padding: 16px 20px; margin: 20px 0; border: 1px solid rgba(214,55,28,0.15);">
                     <p style="color: #4b5563; font-size: 14px; line-height: 1.6; margin: 0;">
-                      This link will expire in <strong style="color: #9d4edd;">1 hour</strong>. If you didn't request a password reset, you can safely ignore this email.
+                      This link will expire in <strong style="color: #d6371c;">1 hour</strong>. If you didn't request a password reset, you can safely ignore this email.
                     </p>
                   </div>
 
                   <p style="color: #9ca3af; font-size: 12px; text-align: center; margin: 30px 0 0; line-height: 1.5;">
                     If the button doesn't work, copy and paste this link:<br>
-                    <a href="${resetUrl}" style="color: #9d4edd;">${resetUrl}</a>
+                    <a href="${resetUrl}" style="color: #d6371c;">${resetUrl}</a>
                   </p>
                 </td>
               </tr>
               <tr>
-                <td style="background: linear-gradient(135deg, rgba(157,78,221,0.05) 0%, rgba(245,38,126,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(157,78,221,0.1);">
-                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
+                <td style="background: linear-gradient(135deg, rgba(214,55,28,0.05) 0%, rgba(214,55,28,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(214,55,28,0.1);">
+                  <p style="color: #d6371c; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>
@@ -565,32 +565,32 @@ export async function sendBroadcastEmail({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${subject}</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f5f6fb 0%, #f5f6fb 100%); padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4ede0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f4ede0 0%, #f4ede0 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(157, 78, 221, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 24px rgba(214,55,28, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 50%, #f5267e 100%); padding: 48px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">${eventTitle}</h1>
+                <td style="background: linear-gradient(135deg, #d6371c 0%, #d6371c 50%, #d6371c 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: -0.5px; color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">${eventTitle}</h1>
                   <p style="color: rgba(255,255,255,0.9); margin: 12px 0 0; font-size: 16px; font-weight: 500;">Update from the host</p>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #1c1813; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     ${guestName ? `Hi ${guestName},` : 'Hello,'}
                   </p>
 
-                  <div style="background: linear-gradient(135deg, rgba(7,200,249,0.08) 0%, rgba(157,78,221,0.08) 100%); border-radius: 12px; padding: 24px; margin-bottom: 20px; border: 1px solid rgba(157,78,221,0.15);">
-                    <h2 style="color: #0a0f2c; font-size: 18px; margin: 0 0 16px; font-weight: 700;">${subject}</h2>
+                  <div style="background: linear-gradient(135deg, rgba(214,55,28,0.08) 0%, rgba(214,55,28,0.08) 100%); border-radius: 3px; padding: 24px; margin-bottom: 20px; border: 1px solid rgba(214,55,28,0.15);">
+                    <h2 style="font-family: Georgia, 'Times New Roman', serif; color: #1c1813; font-size: 18px; margin: 0 0 16px; font-weight: 700;">${subject}</h2>
                     <p style="color: #4b5563; font-size: 14px; margin: 0; line-height: 1.6; white-space: pre-wrap;">${message}</p>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td style="background: linear-gradient(135deg, rgba(7,200,249,0.05) 0%, rgba(157,78,221,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(157,78,221,0.1);">
-                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
+                <td style="background: linear-gradient(135deg, rgba(214,55,28,0.05) 0%, rgba(214,55,28,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(214,55,28,0.1);">
+                  <p style="color: #d6371c; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>
@@ -639,33 +639,33 @@ export async function sendUserInvitationEmail({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>You've Been Invited to OwnRSVP</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f5f6fb 0%, #f5f6fb 100%); padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4ede0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f4ede0 0%, #f4ede0 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(157, 78, 221, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 24px rgba(214,55,28, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 50%, #f5267e 100%); padding: 48px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">You've Been Invited!</h1>
+                <td style="background: linear-gradient(135deg, #d6371c 0%, #d6371c 50%, #d6371c 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: -0.5px; color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">You've Been Invited!</h1>
                   <p style="color: rgba(255,255,255,0.9); margin: 12px 0 0; font-size: 16px; font-weight: 500;">Join OwnRSVP</p>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #1c1813; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     Hello,
                   </p>
                   <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     ${invitedByName ? `${invitedByName} has` : 'You have been'} invited to join OwnRSVP, a self-hosted event management platform.
                   </p>
 
-                  <div style="background: linear-gradient(135deg, rgba(7,200,249,0.08) 0%, rgba(157,78,221,0.08) 100%); border-radius: 12px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(157,78,221,0.15);">
-                    <p style="color: #0a0f2c; font-size: 14px; margin: 0 0 12px; font-weight: 700;">Your Account Details:</p>
+                  <div style="background: linear-gradient(135deg, rgba(214,55,28,0.08) 0%, rgba(214,55,28,0.08) 100%); border-radius: 3px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(214,55,28,0.15);">
+                    <p style="color: #1c1813; font-size: 14px; margin: 0 0 12px; font-weight: 700;">Your Account Details:</p>
                     <p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;">
-                      <strong style="color: #9d4edd;">Email:</strong> ${to}
+                      <strong style="color: #d6371c;">Email:</strong> ${to}
                     </p>
                     <p style="color: #4b5563; font-size: 14px; margin: 0;">
-                      <strong style="color: #9d4edd;">Role:</strong> ${role === 'ADMIN' ? 'Administrator' : 'User'}
+                      <strong style="color: #d6371c;">Role:</strong> ${role === 'ADMIN' ? 'Administrator' : 'User'}
                     </p>
                   </div>
 
@@ -674,26 +674,26 @@ export async function sendUserInvitationEmail({
                   </p>
 
                   <div style="text-align: center; margin: 30px 0;">
-                    <a href="${invitationUrl}" style="display: inline-block; background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 100%); color: #ffffff; text-decoration: none; padding: 16px 36px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(157, 78, 221, 0.4);">
+                    <a href="${invitationUrl}" style="display: inline-block; background: linear-gradient(135deg, #d6371c 0%, #d6371c 100%); color: #ffffff; text-decoration: none; padding: 16px 36px; border-radius: 3px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(214,55,28, 0.4);">
                       Accept Invitation
                     </a>
                   </div>
 
-                  <div style="background: linear-gradient(135deg, rgba(157,78,221,0.08) 0%, rgba(245,38,126,0.08) 100%); border-radius: 12px; padding: 16px 20px; margin: 20px 0; border: 1px solid rgba(157,78,221,0.15);">
+                  <div style="background: linear-gradient(135deg, rgba(214,55,28,0.08) 0%, rgba(214,55,28,0.08) 100%); border-radius: 3px; padding: 16px 20px; margin: 20px 0; border: 1px solid rgba(214,55,28,0.15);">
                     <p style="color: #4b5563; font-size: 14px; line-height: 1.6; margin: 0;">
-                      This invitation link will expire in <strong style="color: #9d4edd;">7 days</strong>. If you didn't expect this invitation, you can safely ignore this email.
+                      This invitation link will expire in <strong style="color: #d6371c;">7 days</strong>. If you didn't expect this invitation, you can safely ignore this email.
                     </p>
                   </div>
 
                   <p style="color: #9ca3af; font-size: 12px; text-align: center; margin: 30px 0 0; line-height: 1.5;">
                     If the button doesn't work, copy and paste this link:<br>
-                    <a href="${invitationUrl}" style="color: #9d4edd;">${invitationUrl}</a>
+                    <a href="${invitationUrl}" style="color: #d6371c;">${invitationUrl}</a>
                   </p>
                 </td>
               </tr>
               <tr>
-                <td style="background: linear-gradient(135deg, rgba(7,200,249,0.05) 0%, rgba(157,78,221,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(157,78,221,0.1);">
-                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
+                <td style="background: linear-gradient(135deg, rgba(214,55,28,0.05) 0%, rgba(214,55,28,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(214,55,28,0.1);">
+                  <p style="color: #d6371c; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>
@@ -752,42 +752,42 @@ export async function sendEventChangeEmail({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Event Update: ${eventTitle}</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f5f6fb 0%, #fff5e6 100%); padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4ede0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f4ede0 0%, #f4ede0 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(245, 158, 11, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 24px rgba(189,129,28, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, #f59e0b 0%, #9d4edd 100%); padding: 48px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Event Updated</h1>
+                <td style="background: linear-gradient(135deg, #bd811c 0%, #d6371c 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: -0.5px; color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Event Updated</h1>
                   <p style="color: rgba(255,255,255,0.9); margin: 12px 0 0; font-size: 16px; font-weight: 500;">${eventTitle}</p>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #1c1813; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     ${guestName ? `Hi ${guestName},` : 'Hello,'}
                   </p>
                   <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">
                     The event details have been updated. Here's what changed:
                   </p>
 
-                  <div style="background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(157,78,221,0.08) 100%); border-radius: 12px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.15);">
+                  <div style="background: linear-gradient(135deg, rgba(189,129,28,0.08) 0%, rgba(214,55,28,0.08) 100%); border-radius: 3px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(189,129,28,0.15);">
                     <ul style="color: #4b5563; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
                       ${changesList}
                     </ul>
                   </div>
 
                   <div style="text-align: center;">
-                    <a href="${rsvpLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #9d4edd 100%); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(157, 78, 221, 0.3);">
+                    <a href="${rsvpLink}" style="display: inline-block; background: linear-gradient(135deg, #bd811c 0%, #d6371c 100%); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 3px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(214,55,28, 0.3);">
                       View Event Details
                     </a>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td style="background: linear-gradient(135deg, rgba(245,158,11,0.05) 0%, rgba(157,78,221,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(157,78,221,0.1);">
-                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
+                <td style="background: linear-gradient(135deg, rgba(189,129,28,0.05) 0%, rgba(214,55,28,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(214,55,28,0.1);">
+                  <p style="color: #d6371c; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>
@@ -848,9 +848,9 @@ export async function sendRsvpChangeNotification({
   };
 
   const statusColors: Record<string, string> = {
-    ATTENDING: '#10b981',
-    NOT_ATTENDING: '#ef4444',
-    MAYBE: '#f59e0b',
+    ATTENDING: '#d6371c',
+    NOT_ATTENDING: '#2f2a22',
+    MAYBE: '#bd811c',
     PENDING: '#6b7280',
   };
 
@@ -861,9 +861,9 @@ export async function sendRsvpChangeNotification({
   };
 
   const changeTypeColors = {
-    NEW: '#07c8f9',
-    UPDATED: '#f59e0b',
-    STATUS_CHANGED: '#6366f1',
+    NEW: '#d6371c',
+    UPDATED: '#bd811c',
+    STATUS_CHANGED: '#d6371c',
   };
 
   const guestName = guest.name || guest.email.split('@')[0];
@@ -874,9 +874,9 @@ export async function sendRsvpChangeNotification({
   if (changeType === 'STATUS_CHANGED' && previousStatus) {
     const prevStatusLabel = statusLabels[previousStatus] || previousStatus;
     statusChangeInfo = `
-      <div style="background: linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(157,78,221,0.1) 100%); border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 0 12px 12px 0; margin: 20px 0;">
-        <p style="margin: 0; color: #0a0f2c; font-size: 14px; font-weight: 600;">
-          Status Changed: <span style="color: #9d4edd;">${prevStatusLabel}</span> → <span style="color: #9d4edd;">${currentStatusLabel}</span>
+      <div style="background: linear-gradient(135deg, rgba(189,129,28,0.1) 0%, rgba(214,55,28,0.1) 100%); border-left: 4px solid #bd811c; padding: 12px 16px; border-radius: 0 12px 12px 0; margin: 20px 0;">
+        <p style="margin: 0; color: #1c1813; font-size: 14px; font-weight: 600;">
+          Status Changed: <span style="color: #d6371c;">${prevStatusLabel}</span> → <span style="color: #d6371c;">${currentStatusLabel}</span>
         </p>
       </div>
     `;
@@ -884,8 +884,8 @@ export async function sendRsvpChangeNotification({
 
   const additionalGuestsHtml = guest.additionalGuests && guest.additionalGuests.length > 0
     ? `
-      <div style="background: linear-gradient(135deg, rgba(7,200,249,0.06) 0%, rgba(157,78,221,0.06) 100%); padding: 16px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(157,78,221,0.1);">
-        <p style="margin: 0 0 8px 0; color: #0a0f2c; font-size: 14px; font-weight: 600;">Additional Guests:</p>
+      <div style="background: linear-gradient(135deg, rgba(214,55,28,0.06) 0%, rgba(214,55,28,0.06) 100%); padding: 16px; border-radius: 3px; margin: 20px 0; border: 1px solid rgba(214,55,28,0.1);">
+        <p style="margin: 0 0 8px 0; color: #1c1813; font-size: 14px; font-weight: 600;">Additional Guests:</p>
         <ul style="margin: 0; padding-left: 20px; color: #4b5563; font-size: 14px;">
           ${guest.additionalGuests.map(ag => `<li>${ag.name}</li>`).join('')}
         </ul>
@@ -895,8 +895,8 @@ export async function sendRsvpChangeNotification({
 
   const dietaryNotesHtml = guest.dietaryNotes
     ? `
-      <div style="background: linear-gradient(135deg, rgba(7,200,249,0.06) 0%, rgba(157,78,221,0.06) 100%); padding: 16px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(157,78,221,0.1);">
-        <p style="margin: 0 0 8px 0; color: #0a0f2c; font-size: 14px; font-weight: 600;">Dietary Notes:</p>
+      <div style="background: linear-gradient(135deg, rgba(214,55,28,0.06) 0%, rgba(214,55,28,0.06) 100%); padding: 16px; border-radius: 3px; margin: 20px 0; border: 1px solid rgba(214,55,28,0.1);">
+        <p style="margin: 0 0 8px 0; color: #1c1813; font-size: 14px; font-weight: 600;">Dietary Notes:</p>
         <p style="margin: 0; color: #4b5563; font-size: 14px;">${guest.dietaryNotes}</p>
       </div>
     `
@@ -910,19 +910,19 @@ export async function sendRsvpChangeNotification({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${changeTypeLabels[changeType]}</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f6fb;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f5f6fb 0%, #f5f6fb 100%); padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4ede0;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(180deg, #f4ede0 0%, #f4ede0 100%); padding: 40px 20px;">
         <tr>
           <td align="center">
-            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(157, 78, 221, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
+            <table width="100%" max-width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 4px; overflow: hidden; box-shadow: 0 4px 24px rgba(214,55,28, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);">
               <tr>
-                <td style="background: linear-gradient(135deg, ${changeTypeColors[changeType]} 0%, #9d4edd 100%); padding: 48px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">${changeTypeLabels[changeType]}</h1>
+                <td style="background: linear-gradient(135deg, ${changeTypeColors[changeType]} 0%, #d6371c 100%); padding: 48px 30px; text-align: center;">
+                  <h1 style="font-family: Georgia, 'Times New Roman', serif; letter-spacing: -0.5px; color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">${changeTypeLabels[changeType]}</h1>
                 </td>
               </tr>
               <tr>
                 <td style="padding: 40px 30px;">
-                  <p style="color: #0a0f2c; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
+                  <p style="color: #1c1813; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">
                     ${hostName ? `Hi ${hostName},` : 'Hello,'}
                   </p>
                   <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">
@@ -934,19 +934,19 @@ export async function sendRsvpChangeNotification({
                     }
                   </p>
 
-                  <div style="background: linear-gradient(135deg, rgba(7,200,249,0.08) 0%, rgba(157,78,221,0.08) 100%); border-radius: 12px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(157,78,221,0.15);">
-                    <h2 style="color: #0a0f2c; font-size: 22px; margin: 0 0 16px; font-weight: 700;">
+                  <div style="background: linear-gradient(135deg, rgba(214,55,28,0.08) 0%, rgba(214,55,28,0.08) 100%); border-radius: 3px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(214,55,28,0.15);">
+                    <h2 style="font-family: Georgia, 'Times New Roman', serif; color: #1c1813; font-size: 22px; margin: 0 0 16px; font-weight: 700;">
                       ${event.title}
                     </h2>
-                    <p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">When:</strong> ${formatDateTime(event.date)}</p>
-                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #9d4edd;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
+                    <p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #d6371c;">When:</strong> ${formatDateTime(event.date)}</p>
+                    ${hasAddress(event) ? `<p style="color: #4b5563; font-size: 14px; margin: 0 0 8px;"><strong style="color: #d6371c;">Where:</strong><br>${formatAddressForEmail(event)}</p>` : ''}
                   </div>
 
-                  <div style="background-color: #ffffff; border: 2px solid rgba(157,78,221,0.15); border-radius: 12px; padding: 24px; margin-bottom: 30px;">
-                    <h3 style="color: #0a0f2c; font-size: 18px; margin: 0 0 16px; font-weight: 700;">Guest Information</h3>
-                    <p style="color: #374151; font-size: 16px; margin: 0 0 8px;"><strong style="color: #9d4edd;">Name:</strong> ${guestName}</p>
-                    <p style="color: #374151; font-size: 16px; margin: 0 0 16px;"><strong style="color: #9d4edd;">Email:</strong> ${guest.email}</p>
-                    <div style="display: inline-block; background-color: ${currentStatusColor}20; color: ${currentStatusColor}; padding: 6px 12px; border-radius: 12px; font-size: 14px; font-weight: 600;">
+                  <div style="background-color: #ffffff; border: 2px solid rgba(214,55,28,0.15); border-radius: 3px; padding: 24px; margin-bottom: 30px;">
+                    <h3 style="color: #1c1813; font-size: 18px; margin: 0 0 16px; font-weight: 700;">Guest Information</h3>
+                    <p style="color: #374151; font-size: 16px; margin: 0 0 8px;"><strong style="color: #d6371c;">Name:</strong> ${guestName}</p>
+                    <p style="color: #374151; font-size: 16px; margin: 0 0 16px;"><strong style="color: #d6371c;">Email:</strong> ${guest.email}</p>
+                    <div style="display: inline-block; background-color: ${currentStatusColor}20; color: ${currentStatusColor}; padding: 6px 12px; border-radius: 3px; font-size: 14px; font-weight: 600;">
                       Status: ${currentStatusLabel}
                     </div>
                     ${statusChangeInfo}
@@ -955,15 +955,15 @@ export async function sendRsvpChangeNotification({
                   </div>
 
                   <div style="text-align: center;">
-                    <a href="${eventUrl}" style="display: inline-block; background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 100%); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(157, 78, 221, 0.3);">
+                    <a href="${eventUrl}" style="display: inline-block; background: linear-gradient(135deg, #d6371c 0%, #d6371c 100%); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 3px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(214,55,28, 0.3);">
                       View Event & Guest List
                     </a>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td style="background: linear-gradient(135deg, rgba(7,200,249,0.05) 0%, rgba(157,78,221,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(157,78,221,0.1);">
-                  <p style="color: #9d4edd; font-size: 12px; margin: 0; font-weight: 500;">
+                <td style="background: linear-gradient(135deg, rgba(214,55,28,0.05) 0%, rgba(214,55,28,0.05) 100%); padding: 20px 30px; text-align: center; border-top: 1px solid rgba(214,55,28,0.1);">
+                  <p style="color: #d6371c; font-size: 12px; margin: 0; font-weight: 500;">
                     Sent via OwnRSVP
                   </p>
                 </td>

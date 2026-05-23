@@ -126,8 +126,9 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee, prefillData
   if (submitted) {
     return (
       <div className="text-center py-8">
-        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-          <Check className="w-8 h-8 text-green-600" />
+        <div className="stamp stamp-skew text-primary border-primary mx-auto mb-4 animate-stamp text-sm py-2 px-3">
+          <Check className="w-5 h-5" />
+          Recorded
         </div>
         <h3 className="text-lg font-semibold mb-2">Thanks for responding!</h3>
         <p className="text-muted-foreground">
@@ -150,19 +151,19 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee, prefillData
           onClick={() => setSelectedStatus('ATTENDING')}
           data-testid="rsvp-status-attending"
           className={cn(
-            'p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2',
+            'p-4 rounded-[3px] border-2 transition-all flex flex-col items-center gap-2',
             selectedStatus === 'ATTENDING'
-              ? 'border-green-500 bg-green-50'
-              : 'border-gray-200 hover:border-green-300'
+              ? 'border-primary bg-primary/10'
+              : 'border-border hover:border-primary/50'
           )}
         >
           <div className={cn(
-            'w-10 h-10 rounded-full flex items-center justify-center',
-            selectedStatus === 'ATTENDING' ? 'bg-green-500' : 'bg-gray-100'
+            'w-10 h-10 rounded-[3px] flex items-center justify-center transition-colors',
+            selectedStatus === 'ATTENDING' ? 'bg-primary' : 'bg-muted'
           )}>
-            <Check className={cn('w-5 h-5', selectedStatus === 'ATTENDING' ? 'text-white' : 'text-gray-400')} />
+            <Check className={cn('w-5 h-5', selectedStatus === 'ATTENDING' ? 'text-primary-foreground' : 'text-muted-foreground')} />
           </div>
-          <span className={cn('font-medium', selectedStatus === 'ATTENDING' ? 'text-green-700' : 'text-gray-600')}>
+          <span className={cn('font-medium', selectedStatus === 'ATTENDING' ? 'text-primary' : 'text-muted-foreground')}>
             Attending
           </span>
         </button>
@@ -171,19 +172,19 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee, prefillData
           onClick={() => setSelectedStatus('MAYBE')}
           data-testid="rsvp-status-maybe"
           className={cn(
-            'p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2',
+            'p-4 rounded-[3px] border-2 transition-all flex flex-col items-center gap-2',
             selectedStatus === 'MAYBE'
-              ? 'border-amber-500 bg-amber-50'
-              : 'border-gray-200 hover:border-amber-300'
+              ? 'border-accent bg-accent/10'
+              : 'border-border hover:border-accent/50'
           )}
         >
           <div className={cn(
-            'w-10 h-10 rounded-full flex items-center justify-center',
-            selectedStatus === 'MAYBE' ? 'bg-amber-500' : 'bg-gray-100'
+            'w-10 h-10 rounded-[3px] flex items-center justify-center transition-colors',
+            selectedStatus === 'MAYBE' ? 'bg-accent' : 'bg-muted'
           )}>
-            <HelpCircle className={cn('w-5 h-5', selectedStatus === 'MAYBE' ? 'text-white' : 'text-gray-400')} />
+            <HelpCircle className={cn('w-5 h-5', selectedStatus === 'MAYBE' ? 'text-accent-foreground' : 'text-muted-foreground')} />
           </div>
-          <span className={cn('font-medium', selectedStatus === 'MAYBE' ? 'text-amber-700' : 'text-gray-600')}>
+          <span className={cn('font-medium', selectedStatus === 'MAYBE' ? 'text-accent' : 'text-muted-foreground')}>
             Maybe
           </span>
         </button>
@@ -192,19 +193,19 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee, prefillData
           onClick={() => setSelectedStatus('NOT_ATTENDING')}
           data-testid="rsvp-status-not-attending"
           className={cn(
-            'p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2',
+            'p-4 rounded-[3px] border-2 transition-all flex flex-col items-center gap-2',
             selectedStatus === 'NOT_ATTENDING'
-              ? 'border-red-500 bg-red-50'
-              : 'border-gray-200 hover:border-red-300'
+              ? 'border-foreground bg-foreground/5'
+              : 'border-border hover:border-foreground/40'
           )}
         >
           <div className={cn(
-            'w-10 h-10 rounded-full flex items-center justify-center',
-            selectedStatus === 'NOT_ATTENDING' ? 'bg-red-500' : 'bg-gray-100'
+            'w-10 h-10 rounded-[3px] flex items-center justify-center transition-colors',
+            selectedStatus === 'NOT_ATTENDING' ? 'bg-foreground' : 'bg-muted'
           )}>
-            <X className={cn('w-5 h-5', selectedStatus === 'NOT_ATTENDING' ? 'text-white' : 'text-gray-400')} />
+            <X className={cn('w-5 h-5', selectedStatus === 'NOT_ATTENDING' ? 'text-background' : 'text-muted-foreground')} />
           </div>
-          <span className={cn('font-medium', selectedStatus === 'NOT_ATTENDING' ? 'text-red-700' : 'text-gray-600')}>
+          <span className={cn('font-medium', selectedStatus === 'NOT_ATTENDING' ? 'text-foreground' : 'text-muted-foreground')}>
             Can&apos;t Go
           </span>
         </button>
@@ -326,7 +327,7 @@ export function PublicRsvpForm({ eventId, slug, maxGuestsPerInvitee, prefillData
               Add Another Guest
             </Button>
             {!canAddMoreGuests && maxGuestsPerInvitee !== null && maxGuestsPerInvitee !== undefined && (
-              <p className="text-xs text-amber-600 dark:text-amber-400">
+              <p className="text-xs text-accent">
                 You&apos;ve reached the maximum number of guests allowed ({maxGuestsPerInvitee} total including yourself)
               </p>
             )}

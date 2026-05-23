@@ -123,78 +123,66 @@ All API routes are in `src/app/api/`:
 - Feature components directly in `src/components/`
 - Uses `class-variance-authority` for component variants
 
-## Aurora Borealis Theme
+## The Printed Invitation — Design System
 
-All UI changes MUST adhere to the Aurora Borealis design system. This includes components, pages, and email templates.
+OwnRSVP uses a **Letterpress Editorial** design system: ink on warm paper, evoking a boutique invitation press. All UI changes (components, pages, AND email templates) MUST adhere to it. The aesthetic is deliberately distinctive and characterful — not generic SaaS.
 
-### Core Color Palette
+### Identity
+- **Concept**: a printed invitation / event poster — confident typography, hairline rules, rubber-stamp accents, paper grain.
+- **One dominant accent** (vermilion) + one secondary (ochre) on warm paper/ink neutrals. NO rainbow gradients.
+- Light mode = ivory **Paper**; dark mode = warm near-black **Ink**.
 
-| Color | Hex | HSL | Usage |
-|-------|-----|-----|-------|
-| Cyan (Primary) | `#07c8f9` | `189 94% 43%` | Primary actions, links, focus rings |
-| Purple (Secondary) | `#9d4edd` | `258 90% 66%` | Secondary actions, accents, borders |
-| Pink (Accent) | `#f5267e` | `330 81% 60%` | Highlights, special emphasis |
-| Amber (CTA) | `#f59e0b` | `38 92% 50%` | Call-to-action buttons, warnings |
-| Dark Navy | `#0a0f2c` | `240 40% 10%` | Text in light mode, background in dark |
-| Light Background | `#f5f6fb` | `240 30% 97%` | Page background (light mode) |
+### Core Color Palette (HSL tokens in `globals.css`)
 
-### Gradients
+| Role | Token | Light (Paper) | Dark (Ink) | Usage |
+|------|-------|---------------|-----------|-------|
+| Primary (Vermilion) | `--primary` | `10 80% 47%` (#d6371c) | `12 88% 58%` | Primary actions, links, emphasis, stamps |
+| Accent (Ochre) | `--accent` | `36 74% 42%` (#bd811c) | `38 78% 56%` | Secondary emphasis, "maybe", info/warnings |
+| Foreground (Ink) | `--foreground` | `28 18% 12%` | `38 40% 90%` | Body text; "not attending" status |
+| Background (Paper) | `--background` | `38 44% 92%` | `32 22% 7%` | Page background |
+| Card | `--card` | `40 46% 96%` | `30 20% 10%` | Card surfaces |
+| Muted | `--muted` | `38 30% 86%` | `30 14% 16%` | Subtle fills, "pending" status |
+| Border | `--border` | `34 22% 74%` | `32 16% 22%` | Hairline rules & borders |
+| Destructive | `--destructive` | `0 72% 42%` | `2 70% 52%` | Delete / danger only |
 
-Use these standard gradient patterns:
-```css
-/* Primary Aurora gradient (headers, hero sections) */
-background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 50%, #f5267e 100%);
+**Always use semantic tokens** (`bg-primary`, `text-accent`, `border-border`, `bg-muted`, …). NEVER hardcode Tailwind palette colors (`violet-500`, `green-600`, `slate-900`, gradients, etc.).
 
-/* Cyan to Purple (buttons, cards) */
-background: linear-gradient(135deg, #07c8f9 0%, #9d4edd 100%);
-
-/* Purple to Pink (accents) */
-background: linear-gradient(135deg, #9d4edd 0%, #f5267e 100%);
-
-/* Amber CTA button */
-background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-
-/* Subtle background tint */
-background: linear-gradient(180deg, #f5f6fb 0%, #fff5e6 100%);
-```
+### Typography
+- **Display (headlines)**: `Fraunces` — editorial serif. Use `font-display`; auto-applied to `h1`–`h6` and `CardTitle`.
+- **Body**: `Hanken Grotesk` — `font-sans` (default).
+- **Metadata / labels**: `Spline Sans Mono` — `font-mono`; use `.label-mono` for uppercase tracked labels (WHEN / WHERE / RSVP BY / section kickers).
+- Loaded via `next/font` in `src/app/layout.tsx` (vars `--font-display`, `--font-body`, `--font-mono`).
 
 ### Design Tokens
+- **Border radius**: crisp. `--radius: 0.25rem`. Use `rounded-[3px]` / `rounded-[2px]` for letterpress sharpness. Avoid pills / `rounded-xl`.
+- **Shadows**: soft ink, not neon. Cards: `0 1px 0 hsl(var(--foreground)/0.04), 0 14px 34px -22px hsl(var(--foreground)/0.35)`.
+- **Borders**: 1px hairlines using `--border`.
+- **Paper grain**: a faint global noise overlay (`body::after`) — do not remove.
 
-- **Border Radius**: `12px` (small), `16px` (cards/modals), `1rem` (default)
-- **Shadows**: Always use purple-tinted shadows
-  - Cards: `box-shadow: 0 4px 24px rgba(157, 78, 221, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);`
-  - Buttons: `box-shadow: 0 4px 14px rgba(157, 78, 221, 0.3);`
-- **Borders**: Use `rgba(157, 78, 221, 0.15)` for subtle borders
+### Letterpress Motifs (utilities in `globals.css`)
+- `.label-mono` — uppercase tracked mono label.
+- `.headline` — tight editorial display headline.
+- `.stamp` (+ `.stamp-skew`) — outlined rubber-stamp badge (statuses, confirmations).
+- `.ink-rule` / `.ink-rule-double` — hairline / double editorial dividers.
+- `.perf-top` — dashed perforation edge (tear-off RSVP sections).
+- `.aurora-bg` — warm paper background with faint radial tint (legacy class name, retained).
+- `.card-glow` — subtle hover lift. `.glass` — frosted paper nav bar. `.gradient-text` — vermilion italic display emphasis.
 
-### Email Template Guidelines
+**Status color convention**: Attending → `primary` (vermilion); Maybe → `accent` (ochre); Not Attending → `foreground` (ink); Pending → `muted`. (Canonical guest statuses: `PENDING`, `ATTENDING`, `NOT_ATTENDING`, `MAYBE`.)
 
-For inline HTML email styles:
-- Body background: `#f5f6fb`
-- Outer table: gradient background
-- Card container: white with `border-radius: 16px` and purple-tinted shadow
-- Headers: Full-width aurora gradient (`#07c8f9` → `#9d4edd` → `#f5267e`)
-- Text colors: `#0a0f2c` (headings), `#374151` (body), `#4b5563` (secondary)
-- Accent text: `#9d4edd`
-- CTA buttons: Amber gradient with `border-radius: 12px`
-- Footer: Subtle gradient background, `#9d4edd` text
+### Email Template Guidelines (`src/lib/email.ts`)
+Inline HTML; web fonts don't load in mail clients, so headings use a `Georgia, 'Times New Roman', serif` stack.
+- Body background: `#f4ede0` (paper)
+- Card: white, `border-radius: 3–4px`, soft ink shadow
+- Headers: solid vermilion `#d6371c` block with white serif title
+- Text: `#1c1813` (headings), `#374151` (body), `#4b5563` (secondary)
+- Accent text / links: `#d6371c`; secondary accent `#bd811c`
+- RSVP buttons: Yes = vermilion `#d6371c`, Maybe = ochre `#bd811c`, No = ink `#2f2a22`
 
-### Tailwind Classes
-
-Use these custom classes from `globals.css`:
-- `.aurora-bg` - Adds subtle aurora radial gradients
-- `.aurora-animated` - Animated aurora background effect
-- `.gradient-text` - Animated gradient text
-- `.glass` - Glassmorphism card effect
-- `.glow-border` - Gradient border glow on hover
-- `.btn-aurora` - Primary aurora gradient button
-- `.card-glow` - Card hover glow effect
-- `.mesh-gradient` - Complex mesh gradient background
-
-### CSS Variables (for Tailwind)
-
-Access theme colors via CSS variables:
+### CSS Variables
 ```css
---primary: 189 94% 43%;    /* Cyan */
---secondary: 258 90% 66%;  /* Purple */
---accent: 330 81% 60%;     /* Pink */
+--primary: 10 80% 47%;    /* Vermilion */
+--accent: 36 74% 42%;     /* Ochre */
+--foreground: 28 18% 12%; /* Ink (light mode) */
+--background: 38 44% 92%; /* Paper (light mode) */
 ```

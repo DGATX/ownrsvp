@@ -100,7 +100,8 @@ export default async function DashboardPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold">{isAdmin ? 'All Events' : 'Your Events'}</h1>
+          <p className="label-mono mb-2">{isAdmin ? 'Administration' : 'Your desk'}</p>
+          <h1 className="headline text-4xl">{isAdmin ? 'All Events' : 'Your Events'}</h1>
           <p className="text-muted-foreground mt-1">
             {isAdmin ? 'Manage all events across the system' : 'Manage your event invitations and track RSVPs'}
           </p>
@@ -116,8 +117,8 @@ export default async function DashboardPage() {
       {eventsWithPermissions.length === 0 ? (
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-16">
-            <div className="w-16 h-16 rounded-full bg-violet-100 flex items-center justify-center mb-4">
-              <Calendar className="w-8 h-8 text-violet-600" />
+            <div className="w-16 h-16 rounded-[3px] bg-primary/10 flex items-center justify-center mb-4">
+              <Calendar className="w-8 h-8 text-primary" />
             </div>
             <h3 className="text-lg font-semibold mb-2">No events yet</h3>
             <p className="text-muted-foreground text-center mb-6 max-w-sm">
@@ -136,7 +137,7 @@ export default async function DashboardPage() {
           {upcomingEvents.length > 0 && (
             <section>
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-violet-600" />
+                <Clock className="w-5 h-5 text-primary" />
                 Upcoming Events
               </h2>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -146,20 +147,20 @@ export default async function DashboardPage() {
                   const pending = event.guests.filter((g: typeof event.guests[0]) => g.status === 'PENDING').length;
                   
                   return (
-                    <Card key={event.id} className="h-full hover:shadow-lg transition-shadow group overflow-hidden flex flex-col relative">
+                    <Card key={event.id} className="h-full card-glow group overflow-hidden flex flex-col relative">
                       <EventCardActions eventId={event.id} eventTitle={event.title} canManage={event.canManage} />
                       <Link href={`/dashboard/events/${event.id}`} className="flex-1">
                         {event.coverImage && (
-                          <div className="w-full h-40 overflow-hidden">
+                          <div className="w-full h-40 overflow-hidden bg-muted">
                             <img
                               src={event.coverImage}
                               alt={event.title}
-                              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                           </div>
                         )}
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-lg group-hover:text-violet-600 transition-colors line-clamp-1 pr-8">
+                          <CardTitle className="text-lg group-hover:text-primary transition-colors line-clamp-1 pr-8">
                             {event.title}
                           </CardTitle>
                           <CardDescription>
@@ -179,12 +180,12 @@ export default async function DashboardPage() {
                             </p>
                           )}
                           <div className="flex items-center gap-4 text-sm">
-                            <div className="flex items-center gap-1">
-                              <Users className="w-4 h-4 text-green-600" />
+                            <div className="flex items-center gap-1 text-primary font-medium">
+                              <Users className="w-4 h-4" />
                               <span>{attending} attending</span>
                             </div>
                             {pending > 0 && (
-                              <div className="text-amber-600">
+                              <div className="text-accent font-medium">
                                 {pending} pending
                               </div>
                             )}

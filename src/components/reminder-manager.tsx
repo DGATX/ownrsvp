@@ -210,7 +210,7 @@ function EditReminderForm({ reminder, onSave, onCancel, disabled }: EditReminder
           disabled={disabled}
           className="h-8 w-8 p-0"
         >
-          <Check className="w-4 h-4 text-green-600" />
+          <Check className="w-4 h-4 text-primary" />
         </Button>
         <Button
           variant="ghost"
@@ -259,7 +259,7 @@ function AddReminderForm({ reminder, onChange, onSave, onCancel }: AddReminderFo
       <span className="text-sm text-muted-foreground">before</span>
       <div className="flex gap-1 ml-auto">
         <Button variant="ghost" size="sm" onClick={onSave} className="h-8 w-8 p-0">
-          <Check className="w-4 h-4 text-green-600" />
+          <Check className="w-4 h-4 text-primary" />
         </Button>
         <Button variant="ghost" size="sm" onClick={onCancel} className="h-8 w-8 p-0">
           <X className="w-4 h-4" />

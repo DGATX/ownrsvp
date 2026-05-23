@@ -239,15 +239,15 @@ function ProfilePageContent() {
       <div className="space-y-6">
         {/* Email Update Warning */}
         {showEmailWarning && (
-          <Card className="border-0 shadow-xl bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800">
+          <Card className="border-l-2 border-l-accent bg-accent/[0.07]">
             <CardContent className="pt-6">
               <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">
+                  <h3 className="font-semibold text-foreground mb-1">
                     Email Address Required
                   </h3>
-                  <p className="text-sm text-amber-800 dark:text-amber-200">
+                  <p className="text-sm text-muted-foreground">
                     A valid email address is required for password reset functionality. Please update your email address below to continue using all features.
                   </p>
                 </div>
@@ -257,11 +257,11 @@ function ProfilePageContent() {
         )}
 
         {/* Profile Settings */}
-        <Card className="border-0 shadow-xl">
+        <Card>
           <CardHeader>
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center">
-                <User className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 rounded-[3px] bg-primary/10 flex items-center justify-center">
+                <User className="w-8 h-8 text-primary" />
               </div>
               <div>
                 <CardTitle className="text-2xl">Profile Settings</CardTitle>
@@ -326,11 +326,11 @@ function ProfilePageContent() {
         </Card>
 
         {/* Password Settings */}
-        <Card className="border-0 shadow-xl">
+        <Card>
           <CardHeader>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
-                <Lock className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-[3px] bg-accent/15 flex items-center justify-center">
+                <Lock className="w-6 h-6 text-accent" />
               </div>
               <div>
                 <CardTitle className="text-xl">Change Password</CardTitle>
@@ -432,11 +432,11 @@ function ProfilePageContent() {
         </Card>
 
         {/* Notification Settings */}
-        <Card className="border-0 shadow-xl">
+        <Card>
           <CardHeader>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                <Bell className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-[3px] bg-foreground/10 flex items-center justify-center">
+                <Bell className="w-6 h-6 text-foreground" />
               </div>
               <div>
                 <CardTitle className="text-xl">Email Notifications</CardTitle>
@@ -511,7 +511,7 @@ export default function ProfilePage() {
     <Suspense fallback={
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
       </div>
     }>
